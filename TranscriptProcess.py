@@ -54,7 +54,7 @@ class CallHome:
         end_time = int(input_str[stamp_split + 1:stamp_end]) / 1000
         return start_time, end_time
 
-    def get_file_annotation(self, start_with_zero: bool = True = True, allow_overlap = False): # -> list[tuple[str, float, float]]:
+    def get_file_annotation(self, start_with_zero: bool = True, allow_overlap = True): # -> list[tuple[str, float, float]]:
         """
         Return the annotation (speaker id, start and end time of each line) of a transcript
         :param start_with_zero: boolean that determine if the annotation should begin with 0 second and
@@ -76,8 +76,45 @@ class CallHome:
                     start = False
                     if start_with_zero:
                         annotation.append((speaker, line_start_time - file_start_time, line_end_time - file_start_time))
+        if not allow_overlap:
+            annotation = self.solve_overlap(annotation)
         return annotation
 
+    def solve_overlap(self, annotation):
+        delete = []
+        change = {} # #number: new_tuple
+        for i in range(len(annotation)-1):
+            for j in range(i+1, len(annotation)):
+                intersection = self.compute_intersection_length(annotation[i],annotation[j])
+                if intersection > 0:
+                    if annotation[j][2] < annotation[i][2]: # annotation2 within annotation1, delete annotation2
+                        delete.append(j)
+                    else:
+                        change[j] = (annotation[j][0],annotation[i][2], annotation[j][2]) #start time change to annotation1's start time
+        
+        new_annotation = []
+        for i in range(len(annotation)):
+            if i in delete:
+                continue
+            elif i in change.keys():
+                new_annotation.append(change[i])
+            else:
+                new_annotation.append(annotation[i])
+        return new_annotation
+
+    
+    def compute_intersection_length(self, A, B):
+        """Compute the intersection length of two tuples.
+        Args:
+            A: a (speaker, start, end) tuple of type (string, float, float)
+            B: a (speaker, start, end) tuple of type (string, float, float)
+        Returns:
+            a float number of the intersection between `A` and `B`
+        """
+        max_start = max(A[1], B[1])
+        min_end = min(A[2], B[2])
+        return max(0.0, min_end - max_start)
+    
     @staticmethod
     def change_time_stamp(input_str: str) -> str:
         """
