@@ -1,3 +1,6 @@
+import json
+
+
 class CallHome:
 
     def __init__(self, file_name: str):
@@ -127,10 +130,31 @@ class CallHome:
 
 class RevAI:
 
-    def __int__(self, file_name: str):
+    def __init__(self, file_name: str):
         self.file_name = file_name
 
-    # def get_annotation(self) -> list[tuple[str, float, float]]:
+    def get_annotation(self) -> list[tuple[str, float, float]]:
+        """
+        Return the annotation (speaker id, start and end time of each line) of a transcript from rev.ai,
+        this method assumes that the time will start at the very beginning (0 or close to 0)
+        :return: a list that each element is a tuple containing the speaker id (in str), the start and
+        end time in float
+        """
+        annotation = []
+        with open("CallHome_eval/rev/4074_cut.json") as file:
+            data = json.load(file)
+            for monologue in data["monologues"]:
+                speaker_id = monologue["speaker"]
+                for element in monologue["elements"]:
+                    if "ts" in element:
+                        start_time = element["ts"]
+                        break
+                for element in reversed(monologue["elements"]):
+                    if "end_ts" in element:
+                        end_time = element["end_ts"]
+                        break
+                annotation.append((str(speaker_id), start_time, end_time))
+        return annotation
 
 
 if __name__ == "__main__":
@@ -138,7 +162,7 @@ if __name__ == "__main__":
     # print(transcript_4093.get_file_start_time())
     # for line_annote in transcript_4093.get_file_annotation(True):
     #     print(line_annote)
-    with open("CallHome_eval/rev/4074_cut.txt") as file:
-        for line in file.readlines():
-            print(line)
-            print(line.split())
+    rev_4074 = RevAI("CallHome_eval/rev/4074_cut.json")
+    print(rev_4074.get_annotation())
+
+
