@@ -54,7 +54,7 @@ class CallHome:
         end_time = int(input_str[stamp_split + 1:stamp_end]) / 1000
         return start_time, end_time
 
-    def get_file_annotation(self, start_with_zero: bool) -> list[tuple[str, float, float]]:
+    def get_file_annotation(self, start_with_zero: bool = True) -> list[tuple[str, float, float]]:
         """
         Return the annotation (speaker id, start and end time of each line) of a transcript
         :param start_with_zero: boolean that determine if the annotation should begin with 0 second and
@@ -133,7 +133,7 @@ class RevAI:
     def __init__(self, file_name: str):
         self.file_name = file_name
 
-    def get_annotation(self) -> list[tuple[str, float, float]]:
+    def get_file_annotation(self) -> list[tuple[str, float, float]]:
         """
         Return the annotation (speaker id, start and end time of each line) of a transcript from rev.ai,
         this method assumes that the time will start at the very beginning (0 or close to 0)
@@ -158,11 +158,11 @@ class RevAI:
 
 
 if __name__ == "__main__":
-    # transcript_4093 = CallHome("CallHome_eval/transcripts/4093.cha")
-    # print(transcript_4093.get_file_start_time())
-    # for line_annote in transcript_4093.get_file_annotation(True):
-    #     print(line_annote)
-    rev_4074 = RevAI("CallHome_eval/rev/4074_cut.json")
-    print(rev_4074.get_annotation())
+    transcript_4093 = CallHome("CallHome_eval/transcripts/4093.cha")
+    print(transcript_4093.get_file_start_time())
+    for line_annote in transcript_4093.get_file_annotation():
+        print(line_annote)
+    # rev_4074 = RevAI("CallHome_eval/rev/4074_cut.json")
+    # print(rev_4074.get_annotation())
 
 
