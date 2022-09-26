@@ -1,4 +1,5 @@
 import json
+from symbol import pass_stmt
 
 
 class CallHome:
@@ -178,7 +179,7 @@ class RevAI:
         end time in float
         """
         annotation = []
-        with open("CallHome_eval/rev/4074_cut.json") as file:
+        with open(self.file_name) as file:
             data = json.load(file)
             for monologue in data["monologues"]:
                 speaker_id = monologue["speaker"]
@@ -193,13 +194,33 @@ class RevAI:
                 annotation.append((str(speaker_id), start_time, end_time))
         return annotation
 
-
+class Amazon:
+    
+    def __init__(self, file_name: str):
+        self.file_name = file_name
+    
+    def get_file_annotation(self):
+        annotation = []
+        with open(self.file_name) as file:
+            data = json.load(file)
+            for segment in data["results"]["speaker_labels"]["segments"]:
+                annotation.append((str(segment["speaker_label"]), float(segment["start_time"]), float(segment["end_time"])))
+        return annotation
+    
+    
 if __name__ == "__main__":
-    transcript_4093 = CallHome("CallHome_eval/transcripts/4093.cha")
-    print(transcript_4093.get_file_start_time())
-    for line_annote in transcript_4093.get_file_annotation():
-        print(line_annote)
+    # transcript_4093 = CallHome("CallHome_eval/transcripts/4093.cha")
+    # print(transcript_4093.get_file_start_time())
+    # for line_annote in transcript_4093.get_file_annotation():
+    #     print(line_annote)
     # rev_4074 = RevAI("CallHome_eval/rev/4074_cut.json")
     # print(rev_4074.get_annotation())
+    
+    # amazon = open("CallHome_eval/amazon/4093.json")
+    # data = json.load(amazon)
+    # print(data["results"]["speaker_labels"]["segments"][0].keys())
+    
+    amazon_test = Amazon("CallHome_eval/amazon/4093.json")
+    print(amazon_test.get_file_annotation())
 
 
