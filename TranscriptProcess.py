@@ -1,5 +1,8 @@
+from asyncore import file_dispatcher
 import json
+import os
 from symbol import pass_stmt
+from tokenize import String
 
 
 class CallHome:
@@ -198,15 +201,49 @@ class Amazon:
     
     def __init__(self, file_name: str):
         self.file_name = file_name
-    
+        self.basename = self.get_file_basename()
+        with open(self.file_name) as file:
+            self.data = json.load(file)
+            
+    def get_file_basename(self):
+        with_extension = os.path.basename(self.file_name)
+        basename = with_extension[:with_extension.find(".")]
+        return basename
+        
     def get_file_annotation(self):
         annotation = []
-        with open(self.file_name) as file:
-            data = json.load(file)
-            for segment in data["results"]["speaker_labels"]["segments"]:
-                annotation.append((str(segment["speaker_label"]), float(segment["start_time"]), float(segment["end_time"])))
+        for segment in self.data["results"]["speaker_labels"]["segments"]:
+            annotation.append((str(segment["speaker_label"]), float(segment["start_time"]), float(segment["end_time"])))
         return annotation
     
+    def get_utterences_by_spkID(self): 
+        """
+            output: [(speaker_id, "utterence"), (), ...]
+        """
+        output = []
+        item_count = 0
+        for segment in self.data["results"]["speaker_labels"]["segments"]:
+            utterence = ""
+            speaker_id = segment["speaker_label"]
+            for i in range(len(segment["items"])):
+                if self.data["results"]["items"][item_count]["type"] == "punctuation":
+                    item_count += 1
+                utterence += " "
+                utterence += self.data["results"]["items"][item_count]["alternatives"][0]["content"]
+                item_count += 1
+                
+            output.append((speaker_id, utterence))
+        return output
+    
+    def write_txt_transcripts(self, path: String):
+        output = self.get_utterences_by_spkID()
+        file_path = path+self.basename+".txt"
+        print(file_path)
+        file = open(file_path, "w")
+        for utterence in output:
+            line = utterence[0] + ": " + utterence[1] + "\n"
+            file.write(line)
+
     
 if __name__ == "__main__":
     # transcript_4093 = CallHome("CallHome_eval/transcripts/4093.cha")
@@ -216,11 +253,25 @@ if __name__ == "__main__":
     # rev_4074 = RevAI("CallHome_eval/rev/4074_cut.json")
     # print(rev_4074.get_annotation())
     
-    # amazon = open("CallHome_eval/amazon/4093.json")
+    # amazon = open("CallHome_eval/amazon/4074.json")
     # data = json.load(amazon)
-    # print(data["results"]["speaker_labels"]["segments"][0].keys())
+    # for i in range(8):
+    #     print(data["results"]["items"][i]["alternatives"][0]["content"])
+    # print("\n")
+    # print(len(data["results"]["speaker_labels"]["segments"][0]["items"]))
     
-    amazon_test = Amazon("CallHome_eval/amazon/4093.json")
-    print(amazon_test.get_file_annotation())
+    amazon_test = Amazon("CallHome_eval/amazon/4074.json")
+    # print(amazon_test.get_file_annotation())
+    # amazon_test.get_utterences_by_spkID()
+    # print(amazon_test.get_file_basename())
+    # amazon_test.write_txt_transcripts("CallHome_eval/amazon/txt/")
+    
+    amazon_path = "CallHome_eval/amazon/"
+    files = os.listdir(amazon_path)
+    for file in files:
+        file_path = amazon_path + file
+        if os.path.isdir(file_path):
+            continue
+        Amazon(file_path).write_txt_transcripts("CallHome_eval/amazon/txt/")
 
 

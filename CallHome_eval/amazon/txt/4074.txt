@@ -1,0 +1,112 @@
+spk_0:  so anyway how are you doing these days
+spk_1:  things are going very well I think I had mentioned before that um that uh that uh there's a company now that I'm working with um uh which is very much just just myself and chris
+spk_1:  no you haven't mentioned that Okay okay so you
+spk_0:  told me that you were leaving the company that you were at and you were entertaining offers and uh
+spk_1:  well well it seems to make sense since I had a client to just kind of set up my own company of sorts So um some things are going extremely well So I had one client who said that he'd pay me a minimum amount you know he there would be a minimum amount of work of about a a day a week for the next 23 years which is sufficient to pay all my bills and so I decided that it would make sense to do this and um
+spk_1:  and I've been getting substantially more work than that so I'm quite pleased Quite pleased
+spk_0:  Well that's good
+spk_1:  So um so I have a bunch of work I need to do on my flat this year I've been telling you that I needed to do that roof for quite some time but it should it should come out this year
+spk_0:  Oh well that's good it
+spk_1:  should be done in a few months
+spk_0:  You're talking a little bit about it at one point
+spk_1:  Yeah Yeah
+spk_1:  so you have no intentions of coming over this way anytime soon
+spk_0:  Um I don't see the finances occurring
+spk_1:  for a
+spk_0:  while
+spk_0:  Um actually right at the moment finances are not going real well but
+spk_1:  I'm working
+spk_0:  On that one it's
+spk_1:  just
+spk_0:  uh uh the the main reason for that is I have not really anticipated a few expenses that recently came
+spk_1:  up uh
+spk_0:  related to a couple of burglaries that I had
+spk_0:  Yeah but not a whole lot I can do about that now
+spk_1:  to
+spk_0:  deal with the situation and so that's what I'm doing But um
+spk_0:  anyway uh one of the main reasons that I've been such a pathetic correspondence has been work I've actually been doing a lot of it I turned in my master's thesis back in May and I'm actually presently working on um several uh articles
+spk_1:  Oh okay impressive
+spk_0:  Yeah actually it turns out that one thing one little
+spk_0:  bit and what I was doing uh is going to turn out to be very important in the end
+spk_0:  and uh
+spk_0:  from what I had been reading in the literature see the one very annoying thing about all of this was my advisor has been in France for a year and a half and this made writing my thesis very annoying because there wasn't much discussion
+spk_1:  yep yep yep
+spk_0:  um
+spk_0:  anyway I had been
+spk_0:  kind of telling him that you know from my reading of the literature I thought that this one little alteration I had made in my model was kind of clever and unique
+spk_1:  and
+spk_0:  it made
+spk_0:  the one type of solution occur which was seen experimentally but none of the other models had uh had basically I'm looking at um multi mode lasers And one of the things that they find experimentally are what they call anti phased states where
+spk_0:  if you look at the total intensity
+spk_1:  the
+spk_0:  laser you get an insulation which is characterized by one frequency
+spk_1:  Yes Okay
+spk_0:  If you look if you separate out the different modes of the laser
+spk_1:  and look at
+spk_0:  one of those you get more than one frequency
+spk_1:  So
+spk_0:  what's happening is that the modes are oscillating out of phase so that they completely mask each other's
+spk_1:  oscillations
+spk_0:  on these other frequencies And
+spk_0:  uh
+spk_0:  you can with a pretty simple model you can find that frequency in a transient but you can't find that frequency in a driven frequency you can't find so that it will sustain
+spk_1:  So
+spk_0:  you know that that particular frequency according to most models damps out very quickly And so you shouldn't actually really be able to ever see it
+spk_1:  The
+spk_0:  only thing is that when you do the experiment you see it
+spk_1:  got it got it
+spk_0:  So um I found a simple modification of the original formula which unfortunately makes the solutions horrendously nasty and in most cases insoluble but
+spk_0:  it gives the driving term
+spk_1:  So
+spk_0:  it actually creates a situation where you get the right sort of answer you just can't always write it down very easily
+spk_1:  Oh wow So so so you're pushing forward the bounds of theoretical laser laser uh whatever it is
+spk_0:  but which is kind of interesting considering that that's not really my thing
+spk_1:  Indeed indeed being
+spk_0:  an experimentalist not a theorist but um
+spk_1:  indeed Oh wow Oh impressive So so so so you're gonna get an article in nature or something
+spk_0:  Um actually
+spk_0:  I'm not sure if we're shooting for I think optics Letters is probably the one that we're shooting for or else perhaps though
+spk_0:  I don't think it's quite that significant would be letters
+spk_0:  but uh we want to write a letter and then a couple of articles and
+spk_0:  I I don't know how much you know about scientific literature but letters are much more prestigious than articles
+spk_1:  Oh okay I didn't realize that Yeah
+spk_0:  so that's that's why it's actually a big deal You know writing a couple articles based on your master's thesis is not at all unusual and physics and uh it's the fact that I would be writing a letter that is the impressive part of it all And what's actually kind of interesting is I kept telling meal that I thought that this was kind of significant
+spk_0:  and Neil kept writing back that I should tone this part of the thesis down that
+spk_1:  people
+spk_0:  have been seeing you know people see the anti phase motion and it's true they do in the transients and I was having a lot of trouble getting across to him that all of the literature isn't has this frequency in the transient and not driven and uh what happened was after I had turned in my thesis
+spk_0:  but before I saw Neil again he went to a conference in Rochester and there this was a big issue among the people who were doing this work was that their models couldn't show this as a driven frequency yet Their experiments showed driven frequency And so Neil then
+spk_1:  like a week
+spk_0:  later came to Branmar and he said hey low we got to write this up
+spk_1:  Exactly I
+spk_0:  was like well I've been telling you that deal
+spk_0:  So
+spk_1:  cool That's cool
+spk_0:  That's mostly the sort of stuff that I'm spending a lot of time on now
+spk_1:  looking on your C V Your resume so you might as well spend the time
+spk_0:  Yes Well no it's definitely worth doing Um and I would have been spending more time on it if it weren't for uh dealing with the burglary
+spk_1:  issues have been dealing with So you still living in the house in the middle of the park
+spk_0:  Yes And the thing is that this place is incredibly easy to break into if you want to It's not a question of whether or not
+spk_0:  Yeah that that was easy it was just that no one really knew it was worth breaking into
+spk_1:  Exactly Exactly
+spk_0:  And so the problem is that now they found out that it's worth breaking into
+spk_0:  unfortunately well it's kind of odd they've stolen very weird things for the most part As far as you know it's like the first time they broke in they what they stole was just bizarre mostly worthless stuff
+spk_0:  And uh the most worthwhile thing as far as monetary value in that they stole was the pre amplifier of my stereo Unfortunately because it's a nice pre amplifier it has an off board power supply which they didn't steal which makes the thing that they stole absolutely worthless
+spk_0:  Uh
+spk_1:  huh
+spk_1:  So so so so when they book in the second time did they steal the uh the uh
+spk_0:  actually know all they stole the second time was my bike
+spk_1:  which
+spk_0:  was actually where the major problem came
+spk_1:  Exactly I
+spk_0:  suddenly had no transportation And so I then had to go bike hunting and eventually get another bike And
+spk_1:  that
+spk_0:  that cost me a lot of time
+spk_0:  spending a lot of time hunting for bikes and
+spk_1:  and then
+spk_0:  Getting one purchased and then having to go get it and things like that But
+spk_0:  that's dealt with at least And so
+spk_0:  uh that's
+spk_0:  at least dealt with now I just have to work on the financial aspects of all of this But at
+spk_1:  least
+spk_0:  during the summer I can actually
+spk_0:  uh according to the stipulations of my grant or my fellowship I can actually earn money during the summer
