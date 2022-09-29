@@ -54,11 +54,11 @@ class CallHome:
             if input_str[i] == '' and stamp_start != 0 and stamp_end == 0:
                 stamp_end = i
                 continue
-        start_time = int(input_str[stamp_start + 1:stamp_split]) / 1000
-        end_time = int(input_str[stamp_split + 1:stamp_end]) / 1000
+        start_time = int(input_str[stamp_start + 1:stamp_split])/1000
+        end_time = int(input_str[stamp_split + 1:stamp_end])/1000
         return start_time, end_time
-
-    def get_file_annotation(self, start_with_zero: bool = True, allow_overlap = True): # -> list[tuple[str, float, float]]:
+    
+    def get_file_annotation(self, start_with_zero: bool = True, allow_overlap = True, with_utterances=False): # -> list[tuple[str, float, float]]:
         """
         Return the annotation (speaker id, start and end time of each line) of a transcript
         :param start_with_zero: boolean that determine if the annotation should begin with 0 second and
@@ -71,15 +71,27 @@ class CallHome:
         file_start_time = self.get_file_start_time()
         start = False
         with open(self.file_name) as file:
+            utterance = ""
             for line in file.readlines():
                 if line[0] == '*' and not start:
                     speaker = line[1]
                     start = True
+                    if "" not in line:
+                        utterance = line[line.find(":")+1:]
                 if "" in line and start:
                     line_start_time, line_end_time = CallHome.get_line_time_stamp(line)
                     start = False
-                    if start_with_zero:
-                        annotation.append((speaker, line_start_time - file_start_time, line_end_time - file_start_time))
+                    if with_utterances:
+                        utterance = utterance + " " + line[line.find(":")+1:line.find("")]
+                        utterance = self.clean_utterance(utterance)
+                        annotation.append((speaker, line_start_time - file_start_time, line_end_time - file_start_time, utterance))
+                        utterance = ""  
+                        continue
+                    else:
+                        annotation.append((speaker, line_start_time - file_start_time, line_end_time - file_start_time))  
+                        utterance = ""
+                elif not start:    
+                    utterance = utterance + " " + line[line.find(":")+1:]
         if not allow_overlap:
             annotation = self.solve_overlap(annotation)
         return annotation
@@ -147,6 +159,10 @@ class CallHome:
         else:
             return input_str
 
+    def clean_utterance(self, input:str):
+        input = input.replace("\t", "").replace("\n", "")
+        return CallHome.remove_tag(input)
+    
     @staticmethod
     def remove_tag(input_str: str) -> str:
         """
@@ -173,7 +189,15 @@ class RevAI:
 
     def __init__(self, file_name: str):
         self.file_name = file_name
+        self.basename = self.get_file_basename()
+        with open(self.file_name) as file:
+            self.data = json.load(file)
 
+    def get_file_basename(self):
+        with_extension = os.path.basename(self.file_name)
+        basename = with_extension[:with_extension.find(".")]
+        return basename
+    
     def get_file_annotation(self): # -> list[tuple[str, float, float]]
         """
         Return the annotation (speaker id, start and end time of each line) of a transcript from rev.ai,
@@ -197,6 +221,17 @@ class RevAI:
                 annotation.append((str(speaker_id), start_time, end_time))
         return annotation
 
+    def get_spk_time_token(self):
+        # (spk_id, start_time, end_time, token)
+        res = []
+        segments = self.data["monologues"]
+        for segment in segments:
+            spk_id = segment["speaker"]
+            for token in segment["elements"]:
+                if token["type"] != "punct":
+                    res.append((spk_id, token["ts"], token["end_ts"], token["value"]))
+        return res
+    
 class Amazon:
     
     def __init__(self, file_name: str):
@@ -250,8 +285,9 @@ if __name__ == "__main__":
     # print(transcript_4093.get_file_start_time())
     # for line_annote in transcript_4093.get_file_annotation():
     #     print(line_annote)
-    # rev_4074 = RevAI("CallHome_eval/rev/4074_cut.json")
-    # print(rev_4074.get_annotation())
+    rev_4074 = RevAI("CallHome_eval/rev/4074_cut.json")
+    annotation = rev_4074.get_spk_time_token()
+    print(len(annotation))
     
     # amazon = open("CallHome_eval/amazon/4074.json")
     # data = json.load(amazon)
@@ -266,12 +302,12 @@ if __name__ == "__main__":
     # print(amazon_test.get_file_basename())
     # amazon_test.write_txt_transcripts("CallHome_eval/amazon/txt/")
     
-    amazon_path = "CallHome_eval/amazon/"
-    files = os.listdir(amazon_path)
-    for file in files:
-        file_path = amazon_path + file
-        if os.path.isdir(file_path):
-            continue
-        Amazon(file_path).write_txt_transcripts("CallHome_eval/amazon/txt/")
+    # amazon_path = "CallHome_eval/amazon/"
+    # files = os.listdir(amazon_path)
+    # for file in files:
+    #     file_path = amazon_path + file
+    #     if os.path.isdir(file_path):
+    #         continue
+    #     Amazon(file_path).write_txt_transcripts("CallHome_eval/amazon/txt/")
 
 
