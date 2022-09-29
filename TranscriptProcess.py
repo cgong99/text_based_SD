@@ -1,7 +1,7 @@
 import json
 import os
-from symbol import pass_stmt
 from tokenize import String
+from alignment import Token
 
 
 class CallHome:
@@ -130,6 +130,22 @@ class CallHome:
         min_end = min(A[2], B[2])
         return max(0.0, min_end - max_start)
     
+    def get_token_list(self):
+        """
+
+        Returns:
+            List: a list of Tokens containing word, spk_id
+        """
+        tokens = []
+        annotations = self.get_file_annotation(with_utterances=True)
+        for segment in annotations:
+            utterance = segment[3]
+            spk_id = segment[0]
+            words = utterance.split()
+            for word in words:
+                tokens.append(Token(word, spk_id))
+        return tokens
+    
     @staticmethod
     def change_time_stamp(input_str: str) -> str:
         """
@@ -159,8 +175,8 @@ class CallHome:
             return input_str
 
     def clean_utterance(self, input:str):
-        input = input.replace("\t", "").replace("\n", "")
-        return CallHome.remove_tag(input)
+        input = CallHome.remove_tag(input)
+        return ''.join(e for e in input if e.isalnum() or e == " ")
     
     @staticmethod
     def remove_tag(input_str: str) -> str:
@@ -282,13 +298,16 @@ class Amazon:
 
     
 if __name__ == "__main__":
-    # transcript_4093 = CallHome("CallHome_eval/transcripts/4093.cha")
+    transcript_4093 = CallHome("CallHome_eval/transcripts/4093.cha")
     # print(transcript_4093.get_file_start_time())
-    # for line_annote in transcript_4093.get_file_annotation():
-    #     print(line_annote)
-    rev_4074 = RevAI("CallHome_eval/rev/4074_cut.json")
-    annotation = rev_4074.get_spk_time_token()
-    print(len(annotation))
+    # print(transcript_4093.get_file_annotation())
+    tokens = transcript_4093.get_token_list()
+    for token in tokens:
+        print(token)
+    
+    # rev_4074 = RevAI("CallHome_eval/rev/4074_cut.json")
+    # annotation = rev_4074.get_spk_time_token()
+    # print(len(annotation))
     
     # amazon = open("CallHome_eval/amazon/4074.json")
     # data = json.load(amazon)
@@ -297,7 +316,7 @@ if __name__ == "__main__":
     # print("\n")
     # print(len(data["results"]["speaker_labels"]["segments"][0]["items"]))
     
-    amazon_test = Amazon("CallHome_eval/amazon/4074.json")
+    # amazon_test = Amazon("CallHome_eval/amazon/4074.json")
     # print(amazon_test.get_file_annotation())
     # amazon_test.get_utterences_by_spkID()
     # print(amazon_test.get_file_basename())
