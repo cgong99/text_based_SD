@@ -249,6 +249,14 @@ class RevAI:
                     res.append((spk_id, token["ts"], token["end_ts"], token["value"]))
         return res
     
+    def get_token_list(self):
+        tokens = []
+        annotations = self.get_spk_time_token()
+        for token in annotations:
+            tokens.append(Token(token[3], token[0], start=token[1], end=token[2]))
+        return tokens
+    
+    
 class Amazon:
     
     def __init__(self, file_name: str):
@@ -268,7 +276,7 @@ class Amazon:
             annotation.append((str(segment["speaker_label"]), float(segment["start_time"]), float(segment["end_time"])))
         return annotation
     
-    def get_utterences_by_spkID(self): 
+    def get_utterances_by_spkID(self): 
         """
             output: [(speaker_id, "utterence"), (), ...]
         """
@@ -287,8 +295,18 @@ class Amazon:
             output.append((speaker_id, utterence))
         return output
     
+    def get_token_list(self):
+        tokens = []
+        utterances = self.get_utterances_by_spkID()
+        for utterance in utterances:
+            spk_id = utterance[0]
+            words = utterance[1].split()
+            for word in words:
+                tokens.append(Token(word, spk_id))
+        return tokens
+    
     def write_txt_transcripts(self, path: String):
-        output = self.get_utterences_by_spkID()
+        output = self.get_utterances_by_spkID()
         file_path = path+self.basename+".txt"
         print(file_path)
         file = open(file_path, "w")
@@ -301,13 +319,15 @@ if __name__ == "__main__":
     transcript_4093 = CallHome("CallHome_eval/transcripts/4093.cha")
     # print(transcript_4093.get_file_start_time())
     # print(transcript_4093.get_file_annotation())
-    tokens = transcript_4093.get_token_list()
-    for token in tokens:
-        print(token)
+    # tokens = transcript_4093.get_token_list()
+    # for token in tokens:
+    #     print(token)
     
     # rev_4074 = RevAI("CallHome_eval/rev/4074_cut.json")
-    # annotation = rev_4074.get_spk_time_token()
-    # print(len(annotation))
+    # # annotation = rev_4074.get_spk_time_token()
+    # tokens = rev_4074.get_token_list()
+    # for token in tokens:
+    #     print(token)
     
     # amazon = open("CallHome_eval/amazon/4074.json")
     # data = json.load(amazon)
@@ -316,8 +336,10 @@ if __name__ == "__main__":
     # print("\n")
     # print(len(data["results"]["speaker_labels"]["segments"][0]["items"]))
     
-    # amazon_test = Amazon("CallHome_eval/amazon/4074.json")
-    # print(amazon_test.get_file_annotation())
+    amazon_test = Amazon("CallHome_eval/amazon/4074.json")
+    tokens = amazon_test.get_token_list()
+    for token in tokens:
+        print(token)
     # amazon_test.get_utterences_by_spkID()
     # print(amazon_test.get_file_basename())
     # amazon_test.write_txt_transcripts("CallHome_eval/amazon/txt/")

@@ -16,7 +16,7 @@ class Token:
 
   def __str__(self):
     res = ""
-    res = res + "(" + self.word + "," + self.spk_id + ")"
+    res = res + "(" + str(self.word) + "," + str(self.spk_id) + ")"
     return res
   
   def match_score():
