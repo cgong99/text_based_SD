@@ -1,0 +1,79 @@
+A:  so anyway how are you doing these days
+B:  things are going very well I think I had mentioned before that um that uh that uh there's a company now that I'm working with um uh which is very much just just myself and chris no you haven't mentioned that Okay okay so you
+A:  told me that you were leaving the company that you were at and you were entertaining offers and uh
+B:  well well it seems to make sense since I had a client to just kind of set up my own company of sorts So um some things are going extremely well So I had one client who said that he'd pay me a minimum amount you know he there would be a minimum amount of work of about a a day a week for the next 23 years which is sufficient to pay all my bills and so I decided that it would make sense to do this and um and I've been getting substantially more work than that so I'm quite pleased Quite pleased
+A:  Well that's good
+B:  So um so I have a bunch of work I need to do on my flat this year I've been telling you that I needed to do that roof for quite some time but it should it should come out this year
+A:  Oh well that's good it
+B:  should be done in a few months
+A:  You're talking a little bit about it at one point
+B:  Yeah Yeah so you have no intentions of coming over this way anytime soon
+A:  Um I don't see the finances occurring
+B:  for a
+A:  while Um actually right at the moment finances are not going real well but
+B:  I'm working
+A:  On that one it's
+B:  just
+A:  uh uh the the main reason for that is I have not really anticipated a few expenses that recently came
+B:  up uh
+A:  related to a couple of burglaries that I had Yeah but not a whole lot I can do about that now
+B:  to
+A:  deal with the situation and so that's what I'm doing But um anyway uh one of the main reasons that I've been such a pathetic correspondence has been work I've actually been doing a lot of it I turned in my master's thesis back in May and I'm actually presently working on um several uh articles
+B:  Oh okay impressive
+A:  Yeah actually it turns out that one thing one little bit and what I was doing uh is going to turn out to be very important in the end and uh from what I had been reading in the literature see the one very annoying thing about all of this was my advisor has been in France for a year and a half and this made writing my thesis very annoying because there wasn't much discussion
+B:  yep yep yep
+A:  um anyway I had been kind of telling him that you know from my reading of the literature I thought that this one little alteration I had made in my model was kind of clever and unique
+B:  and
+A:  it made the one type of solution occur which was seen experimentally but none of the other models had uh had basically I'm looking at um multi mode lasers And one of the things that they find experimentally are what they call anti phased states where if you look at the total intensity
+B:  the
+A:  laser you get an insulation which is characterized by one frequency
+B:  Yes Okay
+A:  If you look if you separate out the different modes of the laser
+B:  and look at
+A:  one of those you get more than one frequency
+B:  So
+A:  what's happening is that the modes are oscillating out of phase so that they completely mask each other's
+B:  oscillations
+A:  on these other frequencies And uh you can with a pretty simple model you can find that frequency in a transient but you can't find that frequency in a driven frequency you can't find so that it will sustain
+B:  So
+A:  you know that that particular frequency according to most models damps out very quickly And so you shouldn't actually really be able to ever see it
+B:  The
+A:  only thing is that when you do the experiment you see it
+B:  got it got it
+A:  So um I found a simple modification of the original formula which unfortunately makes the solutions horrendously nasty and in most cases insoluble but it gives the driving term
+B:  So
+A:  it actually creates a situation where you get the right sort of answer you just can't always write it down very easily
+B:  Oh wow So so so you're pushing forward the bounds of theoretical laser laser uh whatever it is
+A:  but which is kind of interesting considering that that's not really my thing
+B:  Indeed indeed being
+A:  an experimentalist not a theorist but um
+B:  indeed Oh wow Oh impressive So so so so you're gonna get an article in nature or something
+A:  Um actually I'm not sure if we're shooting for I think optics Letters is probably the one that we're shooting for or else perhaps though I don't think it's quite that significant would be letters but uh we want to write a letter and then a couple of articles and I I don't know how much you know about scientific literature but letters are much more prestigious than articles
+B:  Oh okay I didn't realize that Yeah
+A:  so that's that's why it's actually a big deal You know writing a couple articles based on your master's thesis is not at all unusual and physics and uh it's the fact that I would be writing a letter that is the impressive part of it all And what's actually kind of interesting is I kept telling meal that I thought that this was kind of significant and Neil kept writing back that I should tone this part of the thesis down that
+B:  people
+A:  have been seeing you know people see the anti phase motion and it's true they do in the transients and I was having a lot of trouble getting across to him that all of the literature isn't has this frequency in the transient and not driven and uh what happened was after I had turned in my thesis but before I saw Neil again he went to a conference in Rochester and there this was a big issue among the people who were doing this work was that their models couldn't show this as a driven frequency yet Their experiments showed driven frequency And so Neil then
+B:  like a week
+A:  later came to Branmar and he said hey low we got to write this up
+B:  Exactly I
+A:  was like well I've been telling you that deal So
+B:  cool That's cool
+A:  That's mostly the sort of stuff that I'm spending a lot of time on now
+B:  looking on your C V Your resume so you might as well spend the time
+A:  Yes Well no it's definitely worth doing Um and I would have been spending more time on it if it weren't for uh dealing with the burglary
+B:  issues have been dealing with So you still living in the house in the middle of the park
+A:  Yes And the thing is that this place is incredibly easy to break into if you want to It's not a question of whether or not Yeah that that was easy it was just that no one really knew it was worth breaking into
+B:  Exactly Exactly
+A:  And so the problem is that now they found out that it's worth breaking into unfortunately well it's kind of odd they've stolen very weird things for the most part As far as you know it's like the first time they broke in they what they stole was just bizarre mostly worthless stuff And uh the most worthwhile thing as far as monetary value in that they stole was the pre amplifier of my stereo Unfortunately because it's a nice pre amplifier it has an off board power supply which they didn't steal which makes the thing that they stole absolutely worthless Uh
+B:  huh So so so so when they book in the second time did they steal the uh the uh
+A:  actually know all they stole the second time was my bike
+B:  which
+A:  was actually where the major problem came
+B:  Exactly I
+A:  suddenly had no transportation And so I then had to go bike hunting and eventually get another bike And
+B:  that
+A:  that cost me a lot of time spending a lot of time hunting for bikes and
+B:  and then
+A:  Getting one purchased and then having to go get it and things like that But that's dealt with at least And so uh that's at least dealt with now I just have to work on the financial aspects of all of this But at
+B:  least
+A:  during the summer I can actually uh according to the stipulations of my grant or my fellowship I can actually earn money during the summer

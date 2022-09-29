@@ -69,12 +69,14 @@ class CallHome:
         annotation = []
         file_start_time = self.get_file_start_time()
         start = False
+        header = True  # skip the header information to the first line with "*"
         with open(self.file_name) as file:
             utterance = ""
             for line in file.readlines():
                 if line[0] == '*' and not start:
                     speaker = line[1]
                     start = True
+                    header = False
                     if "" not in line:
                         utterance = line[line.find(":")+1:]
                 if "" in line and start:
@@ -89,7 +91,7 @@ class CallHome:
                     else:
                         annotation.append((speaker, line_start_time - file_start_time, line_end_time - file_start_time))  
                         utterance = ""
-                elif not start:    
+                elif not start and not header:    
                     utterance = utterance + " " + line[line.find(":")+1:]
         if not allow_overlap:
             annotation = self.solve_overlap(annotation)
@@ -314,7 +316,26 @@ class Amazon:
             line = utterence[0] + ": " + utterence[1] + "\n"
             file.write(line)
 
-    
+def whole_string_by_spker(tokens: Token):
+  res = ""
+  spk_map = {}
+  spk = tokens[0].spk_id
+  spk_map[spk] = "A"
+  res = res + str(spk_map[spk]) + ": "
+  for token in tokens:
+    if token.spk_id not in spk_map:
+        spk_map[token.spk_id] = "B"
+    if token.spk_id != spk:
+        spk = token.spk_id
+        res = res + "\n" + str(spk_map[spk]) + ": "
+    res = res + " " + token.value
+  return res
+
+def txt_transcripts_for_manual_eval(opened_file, output_file_name):
+    output = whole_string_by_spker(opened_file.get_token_list())
+    f = open(output_file_name, 'w')
+    f.write(output)
+
 if __name__ == "__main__":
     transcript_4093 = CallHome("CallHome_eval/transcripts/4093.cha")
     # print(transcript_4093.get_file_start_time())
@@ -338,8 +359,9 @@ if __name__ == "__main__":
     
     amazon_test = Amazon("CallHome_eval/amazon/4074.json")
     tokens = amazon_test.get_token_list()
-    for token in tokens:
-        print(token)
+    output = whole_string_by_spker(tokens)
+    
+    
     # amazon_test.get_utterences_by_spkID()
     # print(amazon_test.get_file_basename())
     # amazon_test.write_txt_transcripts("CallHome_eval/amazon/txt/")
@@ -353,3 +375,9 @@ if __name__ == "__main__":
     #     Amazon(file_path).write_txt_transcripts("CallHome_eval/amazon/txt/")
 
 
+    callHome_4074 = CallHome("CallHome_eval/transcripts/4074.cha")
+    amazon_4074 = Amazon("CallHome_eval/amazon/4074.json")
+    rev_4074 = RevAI("CallHome_eval/rev/4074_cut.json")
+    txt_transcripts_for_manual_eval(callHome_4074, "./4074_ground_truth.txt")
+    txt_transcripts_for_manual_eval(amazon_4074, "./4074_amazon.txt")
+    txt_transcripts_for_manual_eval(rev_4074, "./4074_rev.txt")
