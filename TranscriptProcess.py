@@ -91,7 +91,7 @@ class CallHome:
                     else:
                         annotation.append((speaker, line_start_time - file_start_time, line_end_time - file_start_time))  
                         utterance = ""
-                elif not start and not header:    
+                elif not header:    
                     utterance = utterance + " " + line[line.find(":")+1:]
         if not allow_overlap:
             annotation = self.solve_overlap(annotation)
@@ -147,6 +147,17 @@ class CallHome:
             for word in words:
                 tokens.append(Token(word, spk_id))
         return tokens
+    
+    def get_overlapped_part(self):
+        """get utterances that entirely overlapped with other utterance
+        """
+        annotations = self.get_file_annotation(with_utterances=True)
+        for i in range(len(annotations)-1):
+            for j in range(i+1, len(annotations)):
+                intersection = self.compute_intersection_length(annotations[i],annotations[j])
+                if annotations[i][1] < annotations[j][1] and annotations[i][2] > annotations[j][2]:
+                    print(annotations[i],"\n", annotations[j])
+
     
     @staticmethod
     def change_time_stamp(input_str: str) -> str:
@@ -338,8 +349,6 @@ def txt_transcripts_for_manual_eval(opened_file, output_file_name):
 
 if __name__ == "__main__":
     transcript_4093 = CallHome("CallHome_eval/transcripts/4093.cha")
-    # print(transcript_4093.get_file_start_time())
-    # print(transcript_4093.get_file_annotation())
     # tokens = transcript_4093.get_token_list()
     # for token in tokens:
     #     print(token)
@@ -376,8 +385,11 @@ if __name__ == "__main__":
 
 
     callHome_4074 = CallHome("CallHome_eval/transcripts/4074.cha")
-    amazon_4074 = Amazon("CallHome_eval/amazon/4074.json")
+    callHome_4074.get_overlapped_part()
+    # amazon_4074 = Amazon("CallHome_eval/amazon/4074.json")
     rev_4074 = RevAI("CallHome_eval/rev/4074_cut.json")
+    # for token in rev_4074.get_token_list():
+    #     print(token)
     txt_transcripts_for_manual_eval(callHome_4074, "./4074_ground_truth.txt")
-    txt_transcripts_for_manual_eval(amazon_4074, "./4074_amazon.txt")
-    txt_transcripts_for_manual_eval(rev_4074, "./4074_rev.txt")
+    # txt_transcripts_for_manual_eval(amazon_4074, "./4074_amazon.txt")
+    # txt_transcripts_for_manual_eval(rev_4074, "./4074_rev.txt")
