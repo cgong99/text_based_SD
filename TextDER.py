@@ -36,7 +36,7 @@ def whole_string(tokens: Token):
 def F1(gt_to_noise, noise_to_gt, gt_tokens, hyp_tokens):
   p = percision(noise_to_gt, gt_tokens, hyp_tokens)
   r = recall(gt_to_noise, gt_tokens, hyp_tokens)
-  f1 = p*r/(p+r)
+  f1 = 2*p*r/(p+r)
   print("P=", p)
   print("R=",r)
   print("F1=", f1)
@@ -50,8 +50,8 @@ def percision(noise_to_gt, gt_tokens, hyp_tokens):
       print("unmatched")
     hyp_spk = hyp_tokens[i].spk_id
     gt_spk = gt_tokens[gt_index].spk_id
-    # if gt_spk == amazon_to_gt[hyp_spk]:
-    if gt_spk == rev_to_gt[hyp_spk]:
+    if gt_spk == amazon_to_gt[hyp_spk]:
+    # if gt_spk == rev_to_gt[hyp_spk]:
       correct_count += 1
   
   print(correct_count)
@@ -64,8 +64,8 @@ def recall(gt_to_noise, gt_tokens, hyp_tokens):
     
     gt_spk = gt_tokens[i].spk_id
     hyp_spk = hyp_tokens[hyp_index].spk_id
-    # if gt_spk == amazon_to_gt[hyp_spk]:
-    if gt_spk == rev_to_gt[hyp_spk]:
+    if gt_spk == amazon_to_gt[hyp_spk]:
+    # if gt_spk == rev_to_gt[hyp_spk]:
       correct_count += 1
   return correct_count/len(gt_to_noise)
 
@@ -78,8 +78,8 @@ def check_cross(mapping):
 amazon = Amazon("CallHome_eval/amazon/4074.json")
 tokens = amazon.get_token_list()
 
-rev = RevAI("CallHome_eval/rev/4074_cut.json")
-tokens = rev.get_token_list()
+# rev = RevAI("CallHome_eval/rev/4074_cut.json")
+# tokens = rev.get_token_list()
 
 gt = CallHome("CallHome_eval/transcripts/4074.cha")
 gt_tokens = gt.get_token_list()

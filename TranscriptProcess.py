@@ -73,6 +73,8 @@ class CallHome:
         with open(self.file_name) as file:
             utterance = ""
             for line in file.readlines():
+                if line[0] == '*' and start and "" not in line :
+                    utterance = utterance + " " + line[line.find(":")+1:]
                 if line[0] == '*' and not start:
                     speaker = line[1]
                     start = True
@@ -91,7 +93,7 @@ class CallHome:
                     else:
                         annotation.append((speaker, line_start_time - file_start_time, line_end_time - file_start_time))  
                         utterance = ""
-                elif not header:    
+                elif line[0] != '*' and not header:
                     utterance = utterance + " " + line[line.find(":")+1:]
         if not allow_overlap:
             annotation = self.solve_overlap(annotation)
@@ -386,10 +388,11 @@ if __name__ == "__main__":
 
     callHome_4074 = CallHome("CallHome_eval/transcripts/4074.cha")
     callHome_4074.get_overlapped_part()
-    # amazon_4074 = Amazon("CallHome_eval/amazon/4074.json")
+    amazon_4074 = Amazon("CallHome_eval/amazon/4074.json")
     rev_4074 = RevAI("CallHome_eval/rev/4074_cut.json")
+    print(len(amazon_4074.get_token_list()))
     # for token in rev_4074.get_token_list():
     #     print(token)
-    txt_transcripts_for_manual_eval(callHome_4074, "./4074_ground_truth.txt")
+    # txt_transcripts_for_manual_eval(callHome_4074, "./4074_ground_truth.txt")
     # txt_transcripts_for_manual_eval(amazon_4074, "./4074_amazon.txt")
     # txt_transcripts_for_manual_eval(rev_4074, "./4074_rev.txt")
