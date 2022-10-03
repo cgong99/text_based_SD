@@ -271,6 +271,8 @@ class RevAI:
             tokens.append(Token(token[3], token[0], start=token[1], end=token[2]))
         return tokens
     
+    def remove_special_token(self):
+        pass
     
 class Amazon:
     
