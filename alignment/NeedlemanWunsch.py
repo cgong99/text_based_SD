@@ -1,5 +1,7 @@
 import numpy as np
 from numpy import ndarray
+from data.TranscriptProcess import *
+from data.alignment import Token
 
 
 def edit_distance(token1: str, token2: str) -> int:
@@ -113,3 +115,16 @@ def backtrack(seq1: list[str], seq2: list[str], score: ndarray) -> tuple[list[st
 def needleman_wunsch(seq1: list[str], seq2: list[str]) -> tuple[list[str], ndarray, list[str], ndarray]:
     score = get_scoring_matrix(seq1, seq2)
     return backtrack(seq1, seq2, score)
+
+
+if __name__ == "__main__":
+    seq1 = [token.value for token in RevAI("../data/CallHome_eval/rev/4074_cut.json").get_token_list() if token.spk_id == 0]
+    seq2 = [token.value for token in RevAI("../data/CallHome_eval/rev/4074_cut.json").get_token_list() if token.spk_id == 1]
+    seq3 = [token.value for token in CallHome("../data/CallHome_eval/transcripts/4074.cha").get_token_list()]
+    align13, map13, align31, map31 = needleman_wunsch(seq1, seq3)
+    align23, map23, align32, map32 = needleman_wunsch(seq2, seq3)
+    print(align13)
+    print(align31)
+    print(align23)
+    print(align32)
+

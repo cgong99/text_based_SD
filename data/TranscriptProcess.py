@@ -1,7 +1,7 @@
 import json
 import os
 from tokenize import String
-from alignment import Token
+from data.alignment import Token
 
 
 class CallHome:
