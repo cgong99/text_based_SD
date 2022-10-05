@@ -108,3 +108,8 @@ def backtrack(seq1: list[str], seq2: list[str], score: ndarray) -> tuple[list[st
     align2 = align2[::-1]
 
     return align1, align1_to_align2, align2, align2_to_align1
+
+
+def needleman_wunsch(seq1: list[str], seq2: list[str]) -> tuple[list[str], ndarray, list[str], ndarray]:
+    score = get_scoring_matrix(seq1, seq2)
+    return backtrack(seq1, seq2, score)
