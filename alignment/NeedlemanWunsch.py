@@ -9,13 +9,13 @@ def edit_distance(token1: str, token2: str) -> int:
     :param token2: token as string
     :return: Levenshtein distance in int
     """
-    matrix = np.zeros(len(token1) + 1, len(token2) + 1)
+    matrix = np.zeros((len(token1) + 1, len(token2) + 1))
     for i in range(1, len(token1) + 1):
         matrix[i][0] = i
     for j in range(1, len(token2) + 1):
         matrix[0][j] = j
-    for i in range(1, len(token1)):
-        for j in range(1, len(token2)):
+    for i in range(1, len(token1) + 1):
+        for j in range(1, len(token2) + 1):
             substitution = 0 if token1[i - 1] == token2[j - 1] else 1
             matrix[i][j] = min(matrix[i - 1][j] + 1, matrix[i][j - 1] + 1, matrix[i - 1][j - 1] + substitution)
     return matrix[len(token1)][len(token2)]
