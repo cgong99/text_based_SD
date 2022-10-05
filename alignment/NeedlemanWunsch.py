@@ -1,5 +1,6 @@
 import numpy as np
 from numpy import ndarray
+from types import list, tuple
 
 
 def edit_distance(token1: str, token2: str) -> int:
@@ -108,3 +109,6 @@ def backtrack(seq1: str, seq2: str, score: ndarray) -> tuple[list[str], ndarray,
     align2 = align2[::-1]
 
     return align1, align1_to_align2, align2, align2_to_align1
+
+if __name__ == "__main__":
+    s1 = ""
