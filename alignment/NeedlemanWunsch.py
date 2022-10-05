@@ -1,6 +1,9 @@
 import numpy as np
 from numpy import ndarray
 from types import list, tuple
+from data.TranscriptProcess import *
+from data.alignment import Token
+
 
 
 def edit_distance(token1: str, token2: str) -> int:
@@ -10,13 +13,13 @@ def edit_distance(token1: str, token2: str) -> int:
     :param token2: token as string
     :return: Levenshtein distance in int
     """
-    matrix = np.zeros(len(token1) + 1, len(token2) + 1)
+    matrix = np.zeros((len(token1) + 1, len(token2) + 1))
     for i in range(1, len(token1) + 1):
         matrix[i][0] = i
     for j in range(1, len(token2) + 1):
         matrix[0][j] = j
-    for i in range(1, len(token1)):
-        for j in range(1, len(token2)):
+    for i in range(1, len(token1) + 1):
+        for j in range(1, len(token2) + 1):
             substitution = 0 if token1[i - 1] == token2[j - 1] else 1
             matrix[i][j] = min(matrix[i - 1][j] + 1, matrix[i][j - 1] + 1, matrix[i - 1][j - 1] + substitution)
     return matrix[len(token1)][len(token2)]
@@ -63,7 +66,7 @@ def get_scoring_matrix(seq1: list[str], seq2: list[str]) -> ndarray:
     return score
 
 
-def backtrack(seq1: str, seq2: str, score: ndarray) -> tuple[list[str], ndarray, list[str], ndarray]:
+def backtrack(seq1: list[str], seq2: list[str], score: ndarray) -> tuple[list[str], ndarray, list[str], ndarray]:
     """
     Backtrack according to the scoring matrix to get the alignment result
     :param seq1: list of words from the dialogue, same as get scoring matrix
@@ -110,5 +113,20 @@ def backtrack(seq1: str, seq2: str, score: ndarray) -> tuple[list[str], ndarray,
 
     return align1, align1_to_align2, align2, align2_to_align1
 
+
+
+def needleman_wunsch(seq1: list[str], seq2: list[str]) -> tuple[list[str], ndarray, list[str], ndarray]:
+    score = get_scoring_matrix(seq1, seq2)
+    return backtrack(seq1, seq2, score)
+
+
 if __name__ == "__main__":
-    s1 = ""
+    seq1 = [token.value for token in RevAI("../data/CallHome_eval/rev/4074_cut.json").get_token_list() if token.spk_id == 0]
+    seq2 = [token.value for token in RevAI("../data/CallHome_eval/rev/4074_cut.json").get_token_list() if token.spk_id == 1]
+    seq3 = [token.value for token in CallHome("../data/CallHome_eval/transcripts/4074.cha").get_token_list()]
+    align13, map13, align31, map31 = needleman_wunsch(seq1, seq3)
+    align23, map23, align32, map32 = needleman_wunsch(seq2, seq3)
+    print(align13)
+    print(align31)
+    print(align23)
+    print(align32)
