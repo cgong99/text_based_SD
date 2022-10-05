@@ -62,7 +62,7 @@ def get_scoring_matrix(seq1: list[str], seq2: list[str]) -> ndarray:
     return score
 
 
-def backtrack(seq1: str, seq2: str, score: ndarray) -> tuple[list[str], ndarray, list[str], ndarray]:
+def backtrack(seq1: list[str], seq2: list[str], score: ndarray) -> tuple[list[str], ndarray, list[str], ndarray]:
     """
     Backtrack according to the scoring matrix to get the alignment result
     :param seq1: list of words from the dialogue, same as get scoring matrix
