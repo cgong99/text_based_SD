@@ -42,14 +42,13 @@ def compare(token1: str, token2: str, distance_bound: int = 2) -> int:
         return mis_match
 
 
-def get_scoring_matrix(seq1: List[str], seq2: List[str]) -> ndarray:
+def get_scoring_matrix(seq1: List[str], seq2: List[str], gap = -1) -> ndarray:
     """
     Compute the scoring matrix for Needleman-Wunsch algorithm
     :param seq1: list of words from the dialogue
     :param seq2: list of words from the dialogue
     :return: 2d numpy array as the scoring matrix
     """
-    gap = -1
     # compute scoring matrix
     score = np.zeros((len(seq1) + 1, len(seq2) + 1))
     for i in range(0, len(seq1) + 1):

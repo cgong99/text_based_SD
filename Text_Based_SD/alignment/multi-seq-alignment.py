@@ -50,15 +50,15 @@ class MultiSeqAlign:
     if axes == 'xy':
       x = self.m
       y = self.n
-      table = get_scoring_matrix(seq1=self.target, seq2=self.seq1)
+      table = get_scoring_matrix(seq1=self.target, seq2=self.seq1, gap=self.gap)
     elif axes == 'yz':
       y = self.n
       z = self.d
-      table = get_scoring_matrix(seq1=self.seq1, seq2=self.seq2)
+      table = get_scoring_matrix(seq1=self.seq1, seq2=self.seq2, gap=self.gap)
     elif axes == 'xz':
       x = self.m
       z = self.d
-      table = get_scoring_matrix(seq1=self.target, seq2=self.seq2)
+      table = get_scoring_matrix(seq1=self.target, seq2=self.seq2, gap=self.gap)
     else:
       print("dimension error: ", axes, " should be xy yz or xz")
     
