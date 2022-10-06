@@ -1,7 +1,6 @@
 from genalog.text import alignment
 from genalog.text import anchor
-from TranscriptProcess import *
-from alignment import Token
+from TranscriptProcess import CallHome, RevAI, Amazon, Token
 
 gt_txt = "But uh, yeah, it's still, it's still fairly it's still a fairly expensive call but &uh but it's a_lot less expensive if we do it that way than if we"
 noise_txt = "but uh yeah it's still it's still fairly fairly expensive call but uh but it's a lot less expensive if we do it "

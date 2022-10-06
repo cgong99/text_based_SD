@@ -1,0 +1,7 @@
+nltk==3.6.5
+# genalog==0.1.0
+# whisper==1.0
+simpleder==0.0.3
+pydub==0.25.1
+pyannote.metrics==3.2.1
+numpy==1.18.1

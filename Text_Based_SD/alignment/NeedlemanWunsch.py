@@ -1,10 +1,7 @@
 import numpy as np
 from numpy import ndarray
-from types import list, tuple
-from data.TranscriptProcess import *
-from data.alignment import Token
-
-
+from typing import List, Tuple
+from Text_Based_SD.data.TranscriptProcess import *
 
 def edit_distance(token1: str, token2: str) -> int:
     """
@@ -45,7 +42,7 @@ def compare(token1: str, token2: str, distance_bound: int = 2) -> int:
         return mis_match
 
 
-def get_scoring_matrix(seq1: list[str], seq2: list[str]) -> ndarray:
+def get_scoring_matrix(seq1: List[str], seq2: List[str]) -> ndarray:
     """
     Compute the scoring matrix for Needleman-Wunsch algorithm
     :param seq1: list of words from the dialogue
@@ -66,7 +63,7 @@ def get_scoring_matrix(seq1: list[str], seq2: list[str]) -> ndarray:
     return score
 
 
-def backtrack(seq1: list[str], seq2: list[str], score: ndarray) -> tuple[list[str], ndarray, list[str], ndarray]:
+def backtrack(seq1: List[str], seq2: List[str], score: ndarray) -> Tuple[List[str], ndarray, List[str], ndarray]:
     """
     Backtrack according to the scoring matrix to get the alignment result
     :param seq1: list of words from the dialogue, same as get scoring matrix
@@ -115,7 +112,7 @@ def backtrack(seq1: list[str], seq2: list[str], score: ndarray) -> tuple[list[st
 
 
 
-def needleman_wunsch(seq1: list[str], seq2: list[str]) -> tuple[list[str], ndarray, list[str], ndarray]:
+def needleman_wunsch(seq1: List[str], seq2: List[str]) -> Tuple[List[str], ndarray, List[str], ndarray]:
     score = get_scoring_matrix(seq1, seq2)
     return backtrack(seq1, seq2, score)
 
@@ -124,9 +121,9 @@ if __name__ == "__main__":
     seq1 = [token.value for token in RevAI("../data/CallHome_eval/rev/4074_cut.json").get_token_list() if token.spk_id == 0]
     seq2 = [token.value for token in RevAI("../data/CallHome_eval/rev/4074_cut.json").get_token_list() if token.spk_id == 1]
     seq3 = [token.value for token in CallHome("../data/CallHome_eval/transcripts/4074.cha").get_token_list()]
-    align13, map13, align31, map31 = needleman_wunsch(seq1, seq3)
+    # align13, map13, align31, map31 = needleman_wunsch(seq1, seq3)
     align23, map23, align32, map32 = needleman_wunsch(seq2, seq3)
-    print(align13)
-    print(align31)
+    # print(align13)
+    # print(align31)
     print(align23)
     print(align32)
