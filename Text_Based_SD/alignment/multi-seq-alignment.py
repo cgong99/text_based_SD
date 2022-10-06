@@ -6,6 +6,18 @@ from typing import List, Tuple
 from sklearn.metrics import get_scorer
 from NeedlemanWunsch import edit_distance, get_scoring_matrix
 
+def score(token1, token2, token3) -> int:
+  """return compare score for three tokens
+
+  Args:
+      token1 (string): 
+      token2 (string): 
+      token3 (string): 
+
+  Returns:
+      int: score
+  """
+  pass
 
 class MultiSeqAlign:
   def __init__(self, target, seq1, seq2) -> None:
@@ -74,7 +86,21 @@ class MultiSeqAlign:
             self.matrix[i,j,k] = table[i,k]
             
   def compute_matrix(self):
-    pass        
+    for i in range(self.m):
+      for j in range(self.n):
+        for k in range(self.d):
+          #self.matrix[i,j,k] = 
+          xi = self.target[i]
+          yj = self.seq1[j]
+          zk = self.seq2[k]
+          xGap = score('-',yj,zk) + self.matrix[i,j-1,k-1]
+          yGap = score(xi,'-',zk) + self.matrix[i-1,j,k-1]
+          zGap = score(xi,yj,'-') + self.matrix[i-1,j-1,k]
+          yzGap = score(xi,'-','-') + self.matrix[i-1,j,k]
+          xzGap = score('-',yj,'-') + self.matrix[i,j-1,k]
+          xyGap = score('-','-',zk) + self.matrix[i,j,k-1]
+          allMatch = score(xi,yj,zk) + self.matrix[i-1,j-1,k-1]
+          self.matrix[i,j,k] = max([xGap, yGap, zGap, yzGap, xyGap, xzGap, allMatch])
             
 if __name__ == "__main__":
   target = "AGTTG"
