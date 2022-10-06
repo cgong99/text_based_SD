@@ -1,7 +1,6 @@
 import json
 import os
 from tokenize import String
-import nltk
 
 
 class Token:
@@ -20,7 +19,7 @@ class Token:
         pass
 
     def get_distance(self, other):
-        return nltk.metrics.edit_distance(self.value, other.value)
+        pass
 
 
 class CallHome:
