@@ -10,14 +10,19 @@ def score(token1, token2, token3) -> int:
   """return compare score for three tokens
 
   Args:
-      token1 (string): 
-      token2 (string): 
-      token3 (string): 
+      token1 (string): from target sequence
+      token2 (string): from speaker 1
+      token3 (string): from speaker 2
 
   Returns:
       int: score
   """
-  pass
+  if token1 != '-' and token2 != '-' and  edit_distance(token1, token2) < 2:
+    return 2
+  elif token1 != '-' and token3 != '-' and edit_distance(token1,token3) < 2:
+    return 2
+
+  return -1
 
 class MultiSeqAlign:
   def __init__(self, target, seq1, seq2) -> None:
@@ -86,13 +91,13 @@ class MultiSeqAlign:
             self.matrix[i,j,k] = table[i,k]
             
   def compute_matrix(self):
-    for i in range(self.m):
-      for j in range(self.n):
-        for k in range(self.d):
+    for i in range(1, self.m):
+      for j in range(1, self.n):
+        for k in range(1, self.d):
           #self.matrix[i,j,k] = 
-          xi = self.target[i]
-          yj = self.seq1[j]
-          zk = self.seq2[k]
+          xi = self.target[i-1]
+          yj = self.seq1[j-1]
+          zk = self.seq2[k-1]
           xGap = score('-',yj,zk) + self.matrix[i,j-1,k-1]
           yGap = score(xi,'-',zk) + self.matrix[i-1,j,k-1]
           zGap = score(xi,yj,'-') + self.matrix[i-1,j-1,k]
@@ -109,3 +114,5 @@ if __name__ == "__main__":
   align = MultiSeqAlign(target, seq1, seq2)
   print(align.matrix)
   print(align.matrix.shape)
+  align.compute_matrix()
+  print(align.matrix)
