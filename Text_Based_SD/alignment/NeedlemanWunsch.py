@@ -3,6 +3,7 @@ from numpy import ndarray
 from typing import List, Tuple
 from Text_Based_SD.data.TranscriptProcess import *
 
+
 def edit_distance(token1: str, token2: str) -> int:
     """
     Compute the Levenshtein distance between two string
@@ -42,7 +43,7 @@ def compare(token1: str, token2: str, distance_bound: int = 2) -> int:
         return mis_match
 
 
-def get_scoring_matrix(seq1: List[str], seq2: List[str], gap = -1) -> ndarray:
+def get_scoring_matrix(seq1: List[str], seq2: List[str], gap=-1) -> ndarray:
     """
     Compute the scoring matrix for Needleman-Wunsch algorithm
     :param seq1: list of words from the dialogue
@@ -110,15 +111,16 @@ def backtrack(seq1: List[str], seq2: List[str], score: ndarray) -> Tuple[List[st
     return align1, align1_to_align2, align2, align2_to_align1
 
 
-
 def needleman_wunsch(seq1: List[str], seq2: List[str]) -> Tuple[List[str], ndarray, List[str], ndarray]:
     score = get_scoring_matrix(seq1, seq2)
     return backtrack(seq1, seq2, score)
 
 
 if __name__ == "__main__":
-    seq1 = [token.value for token in RevAI("../data/CallHome_eval/rev/4074_cut.json").get_token_list() if token.spk_id == 0]
-    seq2 = [token.value for token in RevAI("../data/CallHome_eval/rev/4074_cut.json").get_token_list() if token.spk_id == 1]
+    seq1 = [token.value for token in RevAI("../data/CallHome_eval/rev/4074_cut.json").get_token_list() if
+            token.spk_id == 0]
+    seq2 = [token.value for token in RevAI("../data/CallHome_eval/rev/4074_cut.json").get_token_list() if
+            token.spk_id == 1]
     seq3 = [token.value for token in CallHome("../data/CallHome_eval/transcripts/4074.cha").get_token_list()]
     # align13, map13, align31, map31 = needleman_wunsch(seq1, seq3)
     align23, map23, align32, map32 = needleman_wunsch(seq2, seq3)

@@ -6,8 +6,14 @@ from typing import List, Tuple
 from sklearn.metrics import get_scorer
 from NeedlemanWunsch import edit_distance, get_scoring_matrix
 
+
 def score(token1, token2, token3) -> int:
-  """return compare score for three tokens
+    """return compare score for three tokens
+
+    Args:
+        token1 (string):
+        token2 (string):
+        token3 (string):
 
   Args:
       token1 (string): from target sequence
@@ -17,12 +23,12 @@ def score(token1, token2, token3) -> int:
   Returns:
       int: score
   """
-  if token1 != '-' and token2 != '-' and  edit_distance(token1, token2) < 2:
-    return 2
-  elif token1 != '-' and token3 != '-' and edit_distance(token1,token3) < 2:
-    return 2
+    if token1 != '-' and token2 != '-' and  edit_distance(token1, token2) < 2:
+      return 2
+    elif token1 != '-' and token3 != '-' and edit_distance(token1,token3) < 2:
+      return 2
 
-  return -1
+    return -1
 
 class MultiSeqAlign:
   def __init__(self, target, seq1, seq2) -> None:
