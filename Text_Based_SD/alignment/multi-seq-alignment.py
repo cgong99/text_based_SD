@@ -4,11 +4,11 @@ from numpy import ndarray
 from typing import List, Tuple
 
 from sklearn.metrics import get_scorer
-from NeedlemanWunsch import edit_distance, get_scoring_matrix
+from NeedlemanWunsch import edit_distance, get_scoring_matrix, compare
 
 
 def score(token1, token2, token3) -> int:
-    """return compare score for three tokens
+  """return compare score for three tokens
 
     Args:
         token1 (string):
@@ -23,12 +23,13 @@ def score(token1, token2, token3) -> int:
   Returns:
       int: score
   """
-    if token1 != '-' and token2 != '-' and  edit_distance(token1, token2) < 2:
-      return 2
-    elif token1 != '-' and token3 != '-' and edit_distance(token1,token3) < 2:
-      return 2
-
-    return -1
+  if token1 != '-' and token2 != '-' and token3 == '-' and  edit_distance(token1, token2) < 2:
+    return 2
+  elif token1 != '-' and token3 != '-' and token2 == '-' and edit_distance(token1,token3) < 2:
+    return 2
+  if token1 != '-' and token2 != '-' and token3 != '-':
+    return 0
+  return -2
 
 class MultiSeqAlign:
   def __init__(self, target, seq1, seq2) -> None:
@@ -112,13 +113,151 @@ class MultiSeqAlign:
           xyGap = score('-','-',zk) + self.matrix[i,j,k-1]
           allMatch = score(xi,yj,zk) + self.matrix[i-1,j-1,k-1]
           self.matrix[i,j,k] = max([xGap, yGap, zGap, yzGap, xyGap, xzGap, allMatch])
+    print("compute done")
+          
+  def backtrack(self):
+    i = self.m - 1
+    j = self.n - 1
+    k = self.d - 1
+    target, seq1, seq2 = [], [], []
+    while i > 0 and j > 0 and k > 0:
+      xi = self.target[i-1]
+      yj = self.seq1[j-1]
+      zk = self.seq2[k-1]
+      if self.matrix[i,j,k] == score('-',yj,zk) + self.matrix[i,j-1,k-1]:
+        target.append('-')
+        seq1.append(yj)
+        seq2.append(zk)
+        j -= 1
+        k -= 1
+      elif self.matrix[i,j,k] == score(xi,'-',zk) + self.matrix[i-1,j,k-1]:
+        target.append(xi)
+        seq1.append('-')
+        seq2.append(zk)
+        i -= 1
+        k -= 1
+      elif self.matrix[i,j,k] == score(xi,yj,'-') + self.matrix[i-1,j-1,k]:
+        target.append(xi)
+        seq1.append(yj)
+        seq2.append('-')
+        i -= 1
+        j -= 1      
+      elif self.matrix[i,j,k] == score(xi,'-','-') + self.matrix[i-1,j,k]:
+        target.append(xi)
+        seq1.append('-')
+        seq2.append('-')
+        i -= 1
+      elif self.matrix[i,j,k] == score('-',yj,'-') + self.matrix[i,j-1,k]:
+        target.append('-')
+        seq1.append(yj)
+        seq2.append('-')
+        j -= 1
+      elif self.matrix[i,j,k] == score('-','-',zk) + self.matrix[i,j,k-1]:
+        target.append('-')
+        seq1.append('-')
+        seq2.append(zk)
+        k -= 1
+      elif self.matrix[i,j,k] == score(xi,yj,zk) + self.matrix[i-1,j-1,k-1]:
+        target.append(xi)
+        seq1.append(yj)
+        seq2.append(zk)
+        i -= 1
+        j -= 1
+        k -= 1
+    
+    # one of the dimension is 0, on a surface now
+    while i > 0 and j > 0:
+      xi = self.target[i-1]
+      yj = self.seq1[j-1]
+      if self.matrix[i,j,k] == compare(xi, yj) + self.matrix[i-1,j-1,k]:  # 2d using NeedlemanWunsch's compare
+        target.append(xi)
+        seq1.append(yj)
+        seq2.append('-')
+        i -= 1
+        j -= 1      
+      elif self.matrix[i,j,k] == self.matrix[i-1,j,k] + self.gap:     # self.gap computes 2d pairwise alignment
+        target.append(xi)
+        seq1.append('-')
+        seq2.append('-')
+        i -= 1
+      elif self.matrix[i,j,k] == self.matrix[i,j-1,k] + self.gap:
+        target.append('-')
+        seq1.append(yj)
+        seq2.append('-')
+        j -= 1
+    
+    while i > 0 and k > 0:
+      xi = self.target[i-1]
+      zk = self.seq2[k-1]
+      if self.matrix[i,j,k] == compare(xi, zk) + self.matrix[i-1,j,k-1]: # 2d using NeedlemanWunsch's compare
+        target.append(xi)
+        seq1.append('-')
+        seq2.append(zk)
+        i -= 1
+        k -= 1
+      elif self.matrix[i,j,k] == self.matrix[i-1,j,k] + self.gap:
+        target.append(xi)
+        seq1.append('-')
+        seq2.append('-')
+        i -= 1
+      elif self.matrix[i,j,k] == self.matrix[i,j,k-1] + self.gap:
+        target.append('-')
+        seq1.append('-')
+        seq2.append(zk)
+        k -= 1
+    
+    while j > 0 and k > 0:
+      yj = self.seq1[j-1]
+      zk = self.seq2[k-1]
+      if self.matrix[i,j,k] == compare(yj,zk) + self.matrix[i,j-1,k-1]: # 2d using NeedlemanWunsch's compare
+        target.append('-')
+        seq1.append(yj)
+        seq2.append(zk)
+        j -= 1
+        k -= 1
+      elif self.matrix[i,j,k] == self.matrix[i,j-1,k] + self.gap:
+        target.append('-')
+        seq1.append(yj)
+        seq2.append('-')
+        j -= 1
+      elif self.matrix[i,j,k] == self.matrix[i,j,k-1] + self.gap:
+        target.append('-')
+        seq1.append('-')
+        seq2.append(zk)
+        k -= 1
+    
+    while i > 0:
+      xi = self.target[i-1]
+      target.append(xi)
+      seq1.append('-')
+      seq2.append('-')
+      i -= 1
+    
+    while j > 0:
+      yj = self.seq1[j-1]
+      target.append('-')
+      seq1.append(yj)
+      seq2.append('-')
+      j -= 1
+    
+    while k > 0:
+      zk = self.seq2[k-1]
+      target.append('-')
+      seq1.append('-')
+      seq2.append(zk)
+      k -= 1
+    return target[::-1], seq1[::-1], seq2[::-1]
             
 if __name__ == "__main__":
-  target = "AGTTG"
-  seq1 = "AG"
-  seq2 = "GTT"
-  align = MultiSeqAlign(target, seq1, seq2)
+  # target = "AGTTG"
+  # seq1 = "AG"
+  # seq2 = "GTTG"
+  target = "I'm going to you know uhm Georige"
+  seq1 = "I'm gonna go to uhm Georige"
+  seq2 = "you know"
+  # align = MultiSeqAlign(target, seq1, seq2)
+  align = MultiSeqAlign(target.split(), seq1.split(), seq2.split())
   print(align.matrix)
   print(align.matrix.shape)
   align.compute_matrix()
-  print(align.matrix)
+  print(align.backtrack())
