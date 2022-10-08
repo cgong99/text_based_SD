@@ -5,6 +5,7 @@ from typing import List, Tuple
 
 from sklearn.metrics import get_scorer
 from NeedlemanWunsch import edit_distance, get_scoring_matrix, compare
+from Text_Based_SD.data.TranscriptProcess import RevAI, CallHome
 
 
 def score(token1, token2, token3) -> int:
@@ -252,12 +253,20 @@ if __name__ == "__main__":
   # target = "AGTTG"
   # seq1 = "AG"
   # seq2 = "GTTG"
-  target = "I'm going to you know uhm Georige"
-  seq1 = "I'm gonna go to uhm Georige"
-  seq2 = "you know"
+  # target = "I'm going to you know uhm Georige"
+  # seq1 = "I'm gonna go to uhm Georige"
+  # seq2 = "you know"
   # align = MultiSeqAlign(target, seq1, seq2)
-  align = MultiSeqAlign(target.split(), seq1.split(), seq2.split())
+  seq1 = [token.value for token in RevAI("../data/CallHome_eval/rev/4074_cut.json").get_token_list() if
+          token.spk_id == 0]
+  seq2 = [token.value for token in RevAI("../data/CallHome_eval/rev/4074_cut.json").get_token_list() if
+          token.spk_id == 1]
+  target = [token.value for token in CallHome("../data/CallHome_eval/transcripts/4074.cha").get_token_list()]
+  align = MultiSeqAlign(target, seq1, seq2)
   print(align.matrix)
   print(align.matrix.shape)
   align.compute_matrix()
-  print(align.backtrack())
+  target_align, seq1_align, seq2_align = align.backtrack()
+  print(seq1_align)
+  print(seq2_align)
+  print(target_align)
