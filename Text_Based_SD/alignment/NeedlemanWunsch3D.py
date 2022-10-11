@@ -1,39 +1,13 @@
-import math
-
-import numpy as np
-from numpy import ndarray
-from typing import List, Tuple
-from numba import jit
-from NeedlemanWunsch import edit_distance, get_scoring_matrix, compare
-from Text_Based_SD.data.TranscriptProcess import CallHome, Amazon
 import csv
+import math
 from multiprocessing import Pool
 
+import numpy as np
+from numba import jit
+from numpy import ndarray
 
-@jit(nopython=True)
-def score(token1, token2, token3) -> int:
-    """return compare score for three tokens
-
-    Args:
-        token1 (string):
-        token2 (string):
-        token3 (string):
-
-  Args:
-      token1 (string): from target sequence
-      token2 (string): from speaker 1
-      token3 (string): from speaker 2
-
-  Returns:
-      int: score
-  """
-    if token1 != '-' and token2 != '-' and token3 == '-' and edit_distance(token1, token2) < 2:
-        return 2
-    elif token1 != '-' and token3 != '-' and token2 == '-' and edit_distance(token1, token3) < 2:
-        return 2
-    if token1 != '-' and token2 != '-' and token3 != '-':
-        return 0
-    return -2
+from NeedlemanWunsch import edit_distance, compare
+from Text_Based_SD.data.TranscriptProcess import CallHome, Amazon
 
 
 @jit(nopython=True)
@@ -56,12 +30,26 @@ def get_scoring_matrix_3d(seq1: list[str], seq2: list[str], seq3: list[str], fil
     print(f"length of three sequence for {file_code}: {len(seq1)}, {len(seq2)}, {len(seq3)}")
     print(f"total number of parameters for {file_code}: {parameter_number}")
     score = np.zeros((len(seq1) + 1, len(seq2) + 1, len(seq3) + 1))
+    # initial three edges and three surfaces
     for i in range(0, len(seq1) + 1):
         score[i][0][0] = gap * i
     for j in range(0, len(seq2) + 1):
         score[0][j][0] = gap * j
     for k in range(0, len(seq3) + 1):
         score[0][0][k] = gap * k
+    for i in range(1, len(seq1) + 1):
+        for j in range(1, len(seq2) + 1):
+            score[i][j][0] = max(score[i - 1][j - 1][0] + compare(seq1[i - 1], seq2[j - 1]),
+                              score[i - 1][j][0] + gap, score[i][j - 1][0] + gap)
+    for i in range(1, len(seq1) + 1):
+        for k in range(1, len(seq3) + 1):
+            score[i][0][k] = max(score[i - 1][0][k - 1] + compare(seq1[i - 1], seq3[k - 1]),
+                              score[i - 1][0][k] + gap, score[i][0][k - 1] + gap)
+    for j in range(1, len(seq2) + 1):
+        for k in range(1, len(seq3) + 1):
+            score[0][j][k] = max(score[0][j - 1][k - 1] + compare(seq2[j - 1], seq3[k - 1]),
+                              score[0][j - 1][k] + gap, score[0][j][k - 1] + gap)
+
     for i in range(1, len(seq1) + 1):
         for j in range(1, len(seq2) + 1):
             for k in range(1, len(seq3) + 1):
@@ -99,7 +87,7 @@ def backtrack(seq1, seq2, seq3, matrix, file_code:str):
         xi = seq1[i - 1]
         yj = seq2[j - 1]
         zk = seq3[k - 1]
-        if matrix[i, j, k] == score('-', yj, zk) + matrix[i, j - 1, k - 1]:
+        if matrix[i, j, k] == compare_3d('-', yj, zk) + matrix[i, j - 1, k - 1]:
             align1.append('-')
             align2.append(yj)
             align2_to_align1[j] = -1
@@ -107,38 +95,38 @@ def backtrack(seq1, seq2, seq3, matrix, file_code:str):
             align3_to_align1[k] = -1
             j -= 1
             k -= 1
-        elif matrix[i, j, k] == score(xi, '-', zk) + matrix[i - 1, j, k - 1]:
+        elif matrix[i, j, k] == compare_3d(xi, '-', zk) + matrix[i - 1, j, k - 1]:
             align1.append(xi)
             align2.append('-')
             align3.append(zk)
             align3_to_align1[k] = i
             i -= 1
             k -= 1
-        elif matrix[i, j, k] == score(xi, yj, '-') + matrix[i - 1, j - 1, k]:
+        elif matrix[i, j, k] == compare_3d(xi, yj, '-') + matrix[i - 1, j - 1, k]:
             align1.append(xi)
             align2.append(yj)
             align2_to_align1[j] = i
             align3.append('-')
             i -= 1
             j -= 1
-        elif matrix[i, j, k] == score(xi, '-', '-') + matrix[i - 1, j, k]:
+        elif matrix[i, j, k] == compare_3d(xi, '-', '-') + matrix[i - 1, j, k]:
             align1.append(xi)
             align2.append('-')
             align3.append('-')
             i -= 1
-        elif matrix[i, j, k] == score('-', yj, '-') + matrix[i, j - 1, k]:
+        elif matrix[i, j, k] == compare_3d('-', yj, '-') + matrix[i, j - 1, k]:
             align1.append('-')
             align2.append(yj)
             align2_to_align1[j] = -1
             align3.append('-')
             j -= 1
-        elif matrix[i, j, k] == score('-', '-', zk) + matrix[i, j, k - 1]:
+        elif matrix[i, j, k] == compare_3d('-', '-', zk) + matrix[i, j, k - 1]:
             align1.append('-')
             align2.append('-')
             align3.append(zk)
             align3_to_align1[k] = -1
             k -= 1
-        elif matrix[i, j, k] == score(xi, yj, zk) + matrix[i - 1, j - 1, k - 1]:
+        elif matrix[i, j, k] == compare_3d(xi, yj, zk) + matrix[i - 1, j - 1, k - 1]:
             align1.append(xi)
             align2.append(yj)
             align2_to_align1[j] = i
