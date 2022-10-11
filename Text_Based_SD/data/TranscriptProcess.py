@@ -4,7 +4,7 @@ from tokenize import String
 
 
 class Token:
-    def __init__(self, value, spk_id, start=None, end=None):
+    def __init__(self, value, spk_id, start: float =None, end: float =None):
         self.value = value
         self.spk_id = spk_id
         self.start = start
@@ -12,7 +12,10 @@ class Token:
 
     def __str__(self):
         res = ""
-        res = res + "(" + str(self.value) + "," + str(self.spk_id) + ")"
+        res = res + "(" + str(self.value) + "," + str(self.spk_id)
+        if self.start or self.end:
+            res = res + ", " + str(self.start) + ", " + str(self.end)
+        res += ")"
         return res
 
     def match_score(self):
@@ -156,16 +159,24 @@ class CallHome:
         """
 
         Returns:
-            List: a list of Tokens containing word, spk_id
+            List: a list of Tokens containing word, spk_id, with (start_time, end_time) if the first or last token in an utterance
         """
         tokens = []
         annotations = self.get_file_annotation(with_utterances=True)
         for segment in annotations:
             utterance = segment[3]
             spk_id = segment[0]
+            start, end = segment[1], segment[2]
             words = utterance.split()
-            for word in words:
-                tokens.append(Token(word, spk_id))
+            for i in range(len(words)):
+                if i == 0:
+                    tokens.append(Token(words[i], spk_id, start=start))
+                elif i == len(words)-1:
+                    tokens.append(Token(words[i], spk_id, end=end))
+                else:
+                    tokens.append(Token(words[i], spk_id))
+                
+                
         return tokens
     
     def get_overlapped_part(self):
@@ -332,12 +343,25 @@ class Amazon:
     
     def get_token_list(self):
         tokens = []
-        utterances = self.get_utterances_by_spkID()
-        for utterance in utterances:
-            spk_id = utterance[0]
-            words = utterance[1].split()
-            for word in words:
-                tokens.append(Token(word, spk_id))
+        # utterances = self.get_utterances_by_spkID()
+        # for utterance in utterances:
+        #     spk_id = utterance[0]
+        #     words = utterance[1].split()
+        #     for word in words:
+        #         tokens.append(Token(word, spk_id))
+        item_count = 0
+        for segment in self.data["results"]["speaker_labels"]["segments"]:
+            utterence = ""
+            speaker_id = segment["speaker_label"]
+            for i in range(len(segment["items"])):
+                if self.data["results"]["items"][item_count]["type"] == "punctuation":
+                    item_count += 1
+                utterence += " "
+                word = self.data["results"]["items"][item_count]["alternatives"][0]["content"]
+                start = self.data["results"]["items"][item_count]["start_time"]
+                end = self.data["results"]["items"][item_count]["end_time"]
+                tokens.append(Token(word, speaker_id, start=float(start), end=float(end)))  
+                item_count += 1
         return tokens
     
     def write_txt_transcripts(self, path: String):
@@ -369,6 +393,62 @@ def txt_transcripts_for_manual_eval(opened_file, output_file_name):
     f = open(output_file_name, 'w')
     f.write(output)
 
+def segment_token_lists(gt: list[Token], output: list[Token]) -> tuple(list[list], list[list]): 
+    """segment ground truth tokens and output tokens using time stamp.
+
+    Args:
+        gt (list[Token]): grond truth tokens from get_token_list()
+        output (list[Token]): transcriber tokens from get_token_list()
+
+    Returns:
+        list[segment1[token..], segment2[token...]....], list[segment1[token..], segment2[token...]....]
+    """
+    time_window = 100 # make a segment every about 100 seconds
+    gt_res = []
+    output_res = []
+    cuts = []
+    end = 0
+    # while end < gt[-1].end - time_window:
+    for token in gt:
+        if token.end and token.end - end > time_window:
+            if token.end > gt[-1].end - time_window:
+                break
+            end = token.end
+            cuts.append(end)
+    print("cut points: ", cuts)
+    gt_count, output_count = 0, 0 
+    ### Test
+    # append_count = 0
+    for cut_point in cuts:
+        gt_tokens, output_tokens = [], []
+        while not gt[gt_count].end or gt[gt_count].end <= cut_point:
+            # if append_count < 1:
+                # print(gt[gt_count])
+            gt_tokens.append(gt[gt_count])
+            gt_count += 1
+            if gt[gt_count].end == cut_point: break
+        while output[output_count].end <= cut_point + 0.5: # 0.5s tolerance 
+            output_tokens.append(output[output_count])
+            output_count += 1
+    
+        gt_res.append(gt_tokens)
+        output_res.append(output_tokens)
+        # append_count = 1
+        
+    gt_tokens = []
+    while gt_count < len(gt):
+        gt_tokens.append(gt[gt_count])
+        gt_count += 1
+    gt_res.append(gt_tokens)
+    output_tokens = []
+    while output_count < len(output):
+        output_tokens.append(output[output_count])
+        output_count += 1
+    output_res.append(output_tokens)
+    return gt_res, output_res
+              
+        
+    
 if __name__ == "__main__":
     transcript_4093 = CallHome("CallHome_eval/transcripts/4093.cha")
     # tokens = transcript_4093.get_token_list()
@@ -407,12 +487,26 @@ if __name__ == "__main__":
 
 
     callHome_4074 = CallHome("CallHome_eval/transcripts/4074.cha")
-    callHome_4074.get_overlapped_part()
+    # callHome_4074.get_overlapped_part()
     amazon_4074 = Amazon("CallHome_eval/amazon/4074.json")
     rev_4074 = RevAI("CallHome_eval/rev/4074_cut.json")
-    print(len(amazon_4074.get_token_list()))
-    # for token in rev_4074.get_token_list():
+    gt = callHome_4074.get_token_list()
+    amazon = amazon_4074.get_token_list()
+    rev = rev_4074.get_token_list()
+    # print(gt[-10:])
+    # for token in gt[-30:]:
     #     print(token)
+    # for token in rev[-30:]:
+    #     print(token)
+    print(len(amazon))
+
+    gt_seg, output_seg = segment_token_lists(gt, amazon)
+    sum = 0
+    for l in output_seg:
+        sum += len(l)
+        print(len(l))
+    print(sum)
+
     # txt_transcripts_for_manual_eval(callHome_4074, "./4074_ground_truth.txt")
     # txt_transcripts_for_manual_eval(amazon_4074, "./4074_amazon.txt")
     # txt_transcripts_for_manual_eval(rev_4074, "./4074_rev.txt")

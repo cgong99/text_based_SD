@@ -7,7 +7,8 @@ from numba import jit
 
 # from sklearn.metrics import get_scorer
 from NeedlemanWunsch import edit_distance, get_scoring_matrix, compare
-from Text_Based_SD.data.TranscriptProcess import RevAI, CallHome
+from Text_Based_SD.data.TranscriptProcess import Amazon, RevAI, CallHome
+from Text_Based_SD.data.TranscriptProcess import *
 import csv
 
 
@@ -442,6 +443,29 @@ def test_matrix():
   with open("4074_test.csv", 'w') as file:
     output = csv.writer(file)
     output.writerows([align2, align3, align1])
+    
+def test_segments():
+  gt = CallHome("../data/CallHome_eval/transcripts/4074.cha").get_token_list()
+  target = Amazon("../data/CallHome_eval/amazon/4074.json").get_token_list()
+  gt_segs, target_segs = segment_token_lists(gt, target)
+  segment_count = len(gt_segs)
+  gt_tokens = gt_segs[0]
+  target_tokens = target_segs[0]
+  seq1 = [token.value for token in gt_tokens if token.spk_id == 'A']
+  seq2 = [token.value for token in gt_tokens if token.spk_id == 'B']
+  target = [token.value for token in target_tokens]
+  
+  print(len(seq1))
+  print(len(target))
+  print(target)
+  target2 = [token.value for token in target_segs[1]]
+  # print(target2)
+  align1, align2, align3 = backtrack(target, seq1, seq2, get_scoring_matrix_3d(target, seq1, seq2))
+  with open("4074_segment_test.csv", 'w') as file:
+    output = csv.writer(file)
+    output.writerows([align2, align3, align1])
+  # for i in range(segment_count):
+    
 
 if __name__ == "__main__":
   # seq1 = [token.value for token in RevAI("../data/CallHome_eval/rev/4074_cut.json").get_token_list() if
@@ -458,4 +482,5 @@ if __name__ == "__main__":
   # print(seq2_align)
   # print(target_align)
 
-  print(timeit.Timer(test_matrix).timeit(number=1))
+  # print(timeit.Timer(test_matrix).timeit(number=1))
+  test_segments()
