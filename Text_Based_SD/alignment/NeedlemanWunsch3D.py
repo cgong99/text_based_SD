@@ -87,7 +87,12 @@ def backtrack(seq1, seq2, seq3, matrix, file_code:str):
     align1, align2, align3 = [], [], []
     align2_to_align1 = np.zeros(j + 1)
     align3_to_align1 = np.zeros(k + 1)
+    progress = 0
+    parameter_number = (len(seq1)) * (len(seq2)) * (len(seq3))
     while i > 0 and j > 0 and k > 0:
+        if (i * j * k) % int(parameter_number / 100) == 0:
+            print(f"transcript {file_code}: backtrack progress {progress}%, i={i}, j={j}, k={k}")
+            progress += 1
         xi = seq1[i - 1]
         yj = seq2[j - 1]
         zk = seq3[k - 1]
@@ -142,6 +147,9 @@ def backtrack(seq1, seq2, seq3, matrix, file_code:str):
 
     # one of the dimension is 0, on a surface now
     while i > 0 and j > 0:
+        if (i * j * k) % int(parameter_number / 100) == 0:
+            print(f"transcript {file_code}: backtrack progress {progress}%, i={i}, j={j}, k={k}")
+            progress += 1
         xi = seq1[i - 1]
         yj = seq2[j - 1]
         if matrix[i, j, k] == compare(xi, yj) + matrix[i - 1, j - 1, k]:  # 2d using NeedlemanWunsch's compare
@@ -164,6 +172,9 @@ def backtrack(seq1, seq2, seq3, matrix, file_code:str):
             j -= 1
 
     while i > 0 and k > 0:
+        if (i * j * k) % int(parameter_number / 100) == 0:
+            print(f"transcript {file_code}: backtrack progress {progress}%, i={i}, j={j}, k={k}")
+            progress += 1
         xi = seq1[i - 1]
         zk = seq3[k - 1]
         if matrix[i, j, k] == compare(xi, zk) + matrix[i - 1, j, k - 1]:  # 2d using NeedlemanWunsch's compare
@@ -186,6 +197,9 @@ def backtrack(seq1, seq2, seq3, matrix, file_code:str):
             k -= 1
 
     while j > 0 and k > 0:
+        if (i * j * k) % int(parameter_number / 100) == 0:
+            print(f"transcript {file_code}: backtrack progress {progress}%, i={i}, j={j}, k={k}")
+            progress += 1
         yj = seq2[j - 1]
         zk = seq3[k - 1]
         if matrix[i, j, k] == compare(yj, zk) + matrix[i, j - 1, k - 1]:  # 2d using NeedlemanWunsch's compare
@@ -210,6 +224,9 @@ def backtrack(seq1, seq2, seq3, matrix, file_code:str):
             k -= 1
 
     while i > 0:
+        if (i * j * k) % int(parameter_number / 100) == 0:
+            print(f"transcript {file_code}: backtrack progress {progress}%, i={i}, j={j}, k={k}")
+            progress += 1
         xi = seq1[i - 1]
         align1.append(xi)
         align2.append('-')
@@ -217,6 +234,9 @@ def backtrack(seq1, seq2, seq3, matrix, file_code:str):
         i -= 1
 
     while j > 0:
+        if (i * j * k) % int(parameter_number / 100) == 0:
+            print(f"transcript {file_code}: backtrack progress {progress}%, i={i}, j={j}, k={k}")
+            progress += 1
         yj = seq2[j - 1]
         align1.append('-')
         align2.append(yj)
@@ -225,6 +245,9 @@ def backtrack(seq1, seq2, seq3, matrix, file_code:str):
         j -= 1
 
     while k > 0:
+        if (i * j * k) % int(parameter_number / 100) == 0:
+            print(f"transcript {file_code}: backtrack progress {progress}%, i={i}, j={j}, k={k}")
+            progress += 1
         zk = seq3[k - 1]
         align1.append('-')
         align2.append('-')
