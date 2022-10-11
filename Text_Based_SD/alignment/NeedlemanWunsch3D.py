@@ -49,6 +49,7 @@ def compare_3d(token1, token2, token3) -> int:
 def get_scoring_matrix_3d(seq1: list[str], seq2: list[str], seq3: list[str], file_code: str) -> ndarray:
     gap = -1
     count = 0
+    progress = 0
     parameter_number = (len(seq1) + 1) * (len(seq2) + 1) * (len(seq3) + 1)
     print(f"length of three sequence: {len(seq1)}, {len(seq2)}, {len(seq3)}")
     print(f"total number of parameters for {file_code}: {parameter_number}")
@@ -63,8 +64,8 @@ def get_scoring_matrix_3d(seq1: list[str], seq2: list[str], seq3: list[str], fil
         for j in range(1, len(seq2) + 1):
             for k in range(1, len(seq3) + 1):
                 if count % int(parameter_number / 100) == 0:
-                    print(f"transcript {file_code}: matrix calculation progress {count}%, i={i}, j={j}, k={k}")
-                    count += 1
+                    print(f"transcript {file_code}: matrix calculation progress {progress}%, i={i}, j={j}, k={k}")
+                    progress += 1
                 spec1 = score[i][j - 1][k - 1] + compare_3d('-', seq2[j - 1], seq3[k - 1])
                 spec2 = score[i - 1][j][k - 1] + compare_3d(seq1[i - 1], '-', seq3[k - 1])
                 spec3 = score[i - 1][j - 1][k] + compare_3d(seq1[i - 1], seq2[j - 1], '-')
@@ -73,6 +74,7 @@ def get_scoring_matrix_3d(seq1: list[str], seq2: list[str], seq3: list[str], fil
                 spec6 = score[i][j][k - 1] + compare_3d('-', '-', seq3[k - 1])
                 spec7 = score[i - 1][j - 1][k - 1] + compare_3d(seq1[i - 1], seq2[j - 1], seq3[k - 1])
                 score[i][j][k] = max(spec1, spec2, spec3, spec4, spec5, spec6, spec7)
+                count += 1
     return score
 
 
