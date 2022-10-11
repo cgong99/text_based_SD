@@ -1,3 +1,5 @@
+import math
+
 import numpy as np
 from numpy import ndarray
 from typing import List, Tuple
@@ -51,7 +53,7 @@ def get_scoring_matrix_3d(seq1: list[str], seq2: list[str], seq3: list[str], fil
     count = 0
     progress = 0
     parameter_number = (len(seq1) + 1) * (len(seq2) + 1) * (len(seq3) + 1)
-    print(f"length of three sequence: {len(seq1)}, {len(seq2)}, {len(seq3)}")
+    print(f"length of three sequence for {file_code}: {len(seq1)}, {len(seq2)}, {len(seq3)}")
     print(f"total number of parameters for {file_code}: {parameter_number}")
     score = np.zeros((len(seq1) + 1, len(seq2) + 1, len(seq3) + 1))
     for i in range(0, len(seq1) + 1):
@@ -88,12 +90,12 @@ def backtrack(seq1, seq2, seq3, matrix, file_code:str):
     align1, align2, align3 = [], [], []
     align2_to_align1 = np.zeros(j + 1)
     align3_to_align1 = np.zeros(k + 1)
-    progress = 0
+    progress = 100
     parameter_number = (len(seq1)) * (len(seq2)) * (len(seq3))
     while i > 0 and j > 0 and k > 0:
-        if (i * j * k) % int(parameter_number / 100) == 0:
+        if math.floor(i * j * k * 100 / parameter_number) < progress:
             print(f"transcript {file_code}: backtrack progress {progress}%, i={i}, j={j}, k={k}")
-            progress += 1
+            progress -= 1
         xi = seq1[i - 1]
         yj = seq2[j - 1]
         zk = seq3[k - 1]
@@ -148,9 +150,9 @@ def backtrack(seq1, seq2, seq3, matrix, file_code:str):
 
     # one of the dimension is 0, on a surface now
     while i > 0 and j > 0:
-        if (i * j * k) % int(parameter_number / 100) == 0:
+        if math.floor(i * j * k * 100 / parameter_number) < progress:
             print(f"transcript {file_code}: backtrack progress {progress}%, i={i}, j={j}, k={k}")
-            progress += 1
+            progress -= 1
         xi = seq1[i - 1]
         yj = seq2[j - 1]
         if matrix[i, j, k] == compare(xi, yj) + matrix[i - 1, j - 1, k]:  # 2d using NeedlemanWunsch's compare
@@ -173,9 +175,9 @@ def backtrack(seq1, seq2, seq3, matrix, file_code:str):
             j -= 1
 
     while i > 0 and k > 0:
-        if (i * j * k) % int(parameter_number / 100) == 0:
+        if math.floor(i * j * k * 100 / parameter_number) < progress:
             print(f"transcript {file_code}: backtrack progress {progress}%, i={i}, j={j}, k={k}")
-            progress += 1
+            progress -= 1
         xi = seq1[i - 1]
         zk = seq3[k - 1]
         if matrix[i, j, k] == compare(xi, zk) + matrix[i - 1, j, k - 1]:  # 2d using NeedlemanWunsch's compare
@@ -198,9 +200,9 @@ def backtrack(seq1, seq2, seq3, matrix, file_code:str):
             k -= 1
 
     while j > 0 and k > 0:
-        if (i * j * k) % int(parameter_number / 100) == 0:
+        if math.floor(i * j * k * 100 / parameter_number) < progress:
             print(f"transcript {file_code}: backtrack progress {progress}%, i={i}, j={j}, k={k}")
-            progress += 1
+            progress -= 1
         yj = seq2[j - 1]
         zk = seq3[k - 1]
         if matrix[i, j, k] == compare(yj, zk) + matrix[i, j - 1, k - 1]:  # 2d using NeedlemanWunsch's compare
@@ -225,9 +227,9 @@ def backtrack(seq1, seq2, seq3, matrix, file_code:str):
             k -= 1
 
     while i > 0:
-        if (i * j * k) % int(parameter_number / 100) == 0:
+        if math.floor(i * j * k * 100 / parameter_number) < progress:
             print(f"transcript {file_code}: backtrack progress {progress}%, i={i}, j={j}, k={k}")
-            progress += 1
+            progress -= 1
         xi = seq1[i - 1]
         align1.append(xi)
         align2.append('-')
@@ -235,9 +237,9 @@ def backtrack(seq1, seq2, seq3, matrix, file_code:str):
         i -= 1
 
     while j > 0:
-        if (i * j * k) % int(parameter_number / 100) == 0:
+        if math.floor(i * j * k * 100 / parameter_number) < progress:
             print(f"transcript {file_code}: backtrack progress {progress}%, i={i}, j={j}, k={k}")
-            progress += 1
+            progress -= 1
         yj = seq2[j - 1]
         align1.append('-')
         align2.append(yj)
@@ -246,9 +248,9 @@ def backtrack(seq1, seq2, seq3, matrix, file_code:str):
         j -= 1
 
     while k > 0:
-        if (i * j * k) % int(parameter_number / 100) == 0:
+        if math.floor(i * j * k * 100 / parameter_number) < progress:
             print(f"transcript {file_code}: backtrack progress {progress}%, i={i}, j={j}, k={k}")
-            progress += 1
+            progress -= 1
         zk = seq3[k - 1]
         align1.append('-')
         align2.append('-')
@@ -260,11 +262,14 @@ def backtrack(seq1, seq2, seq3, matrix, file_code:str):
 
 
 def write_csv_amazon(file_code: str):
-    seq1 = [token.value for token in Amazon(f"../data/CallHome_eval/amazon/{file_code}.json").get_token_list() if
-            token.spk_id == "spk_0"]
-    seq2 = [token.value for token in Amazon(f"../data/CallHome_eval/amazon/{file_code}.json").get_token_list() if
-            token.spk_id == "spk_1"]
-    target = [token.value for token in CallHome(f"../data/CallHome_eval/transcripts/{file_code}.cha").get_token_list()]
+    seq1 = [token.value for token in CallHome(f"../data/CallHome_eval/transcripts/{file_code}.cha").get_token_list() if token.spk_id == 'A']
+    seq2 = [token.value for token in CallHome(f"../data/CallHome_eval/transcripts/{file_code}.cha").get_token_list() if token.spk_id == 'B']
+    # seq1 = [token.value for token in Amazon(f"../data/CallHome_eval/amazon/{file_code}.json").get_token_list() if
+    #         token.spk_id == "spk_0"]
+    # seq2 = [token.value for token in Amazon(f"../data/CallHome_eval/amazon/{file_code}.json").get_token_list() if
+    #         token.spk_id == "spk_1"]
+    # target = [token.value for token in CallHome(f"../data/CallHome_eval/transcripts/{file_code}.cha").get_token_list()]
+    target = [token.value for token in Amazon(f"../data/CallHome_eval/amazon/{file_code}.json").get_token_list()]
     align1, align2, align3, align2_to_align1, align3_to_align1 = backtrack(target, seq1, seq2, get_scoring_matrix_3d(target, seq1, seq2, file_code), file_code)
     with open(f"{file_code}_result_amazon.csv", 'w') as file:
         output = csv.writer(file)
@@ -273,6 +278,6 @@ def write_csv_amazon(file_code: str):
 
 
 if __name__ == "__main__":
-    with Pool(1) as pool:
-        # pool.map(write_csv_amazon, ["4074", "4093", "4247", "4315", "4325", "4335", "4571", "4595", "4660", "4290"])
-        pool.map(write_csv_amazon, ["4315", "4325", "4335", "4571", "4595", "4660", "4290"])
+    with Pool(2) as pool:
+        pool.map(write_csv_amazon, ["4074", "4093", "4247", "4315", "4325", "4335", "4571", "4595", "4660", "4290"])
+        # pool.map(write_csv_amazon, ["4315", "4325", "4335", "4571", "4595", "4660", "4290"])
