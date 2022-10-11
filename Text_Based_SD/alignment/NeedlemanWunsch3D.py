@@ -75,6 +75,7 @@ def get_scoring_matrix_3d(seq1: list[str], seq2: list[str], seq3: list[str], fil
                 spec7 = score[i - 1][j - 1][k - 1] + compare_3d(seq1[i - 1], seq2[j - 1], seq3[k - 1])
                 score[i][j][k] = max(spec1, spec2, spec3, spec4, spec5, spec6, spec7)
                 count += 1
+    print(f"transcript {file_code}: matrix calculation complete!")
     return score
 
 
