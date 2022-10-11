@@ -444,7 +444,7 @@ def test_matrix():
     output = csv.writer(file)
     output.writerows([align2, align3, align1])
     
-def test_segments():
+def test_single_segments():
   gt = CallHome("../data/CallHome_eval/transcripts/4074.cha").get_token_list()
   target = Amazon("../data/CallHome_eval/amazon/4074.json").get_token_list()
   gt_segs, target_segs = segment_token_lists(gt, target)
@@ -453,19 +453,45 @@ def test_segments():
   target_tokens = target_segs[0]
   seq1 = [token.value for token in gt_tokens if token.spk_id == 'A']
   seq2 = [token.value for token in gt_tokens if token.spk_id == 'B']
-  target = [token.value for token in target_tokens]
+  target_seq = [token.value for token in target_tokens]
+
+  # print(len(seq1))
+  # print(len(target))
+  # print(seq1)
+  # print(seq2)
+  # print(target_seq)
+  # align = MultiSeqAlign(target_seq, seq1, seq2)
+  # align.compute_matrix()
+  # target_align, seq1_align, seq2_align = align.backtrack()
+
+  align1, align2, align3 = backtrack(target_seq, seq1, seq2, get_scoring_matrix_3d(target_seq, seq1, seq2))
+  with open("4074_single_segment_test2.csv", 'w') as file:
+    output = csv.writer(file)
+    # output.writerows([seq1_align, seq2_align, target_align])
+    output.writerows([align2, align3, align1])
   
-  print(len(seq1))
-  print(len(target))
-  print(target)
-  target2 = [token.value for token in target_segs[1]]
-  # print(target2)
-  align1, align2, align3 = backtrack(target, seq1, seq2, get_scoring_matrix_3d(target, seq1, seq2))
+
+def test_segments():
+  gt = CallHome("../data/CallHome_eval/transcripts/4074.cha").get_token_list()
+  target = Amazon("../data/CallHome_eval/amazon/4074.json").get_token_list()
+  gt_segs, target_segs = segment_token_lists(gt, target)
+  segment_count = len(gt_segs)
+  print("segments: ", segment_count)
+  all_target, all_align1, all_align2 = [], [], []
+  for i in range(segment_count):
+    print("\ncomputing segment: ", i+1)
+    seq1 = [token.value for token in gt_segs[i] if token.spk_id == 'A']
+    seq2 = [token.value for token in gt_segs[i] if token.spk_id == 'B']
+    target_seq = [token.value for token in target_segs[i]]
+    print(target_seq)
+    align_target, align1, align2 = backtrack(target_seq, seq1, seq2, get_scoring_matrix_3d(target_seq, seq1, seq2))
+    all_align1.extend(align1)
+    all_align2.extend(align2)
+    all_target.extend(align_target)
+    
   with open("4074_segment_test.csv", 'w') as file:
     output = csv.writer(file)
-    output.writerows([align2, align3, align1])
-  # for i in range(segment_count):
-    
+    output.writerows([align1, align2, all_target])
 
 if __name__ == "__main__":
   # seq1 = [token.value for token in RevAI("../data/CallHome_eval/rev/4074_cut.json").get_token_list() if
@@ -483,4 +509,5 @@ if __name__ == "__main__":
   # print(target_align)
 
   # print(timeit.Timer(test_matrix).timeit(number=1))
-  test_segments()
+  test_single_segments()
+  # test_segments()
