@@ -1,9 +1,13 @@
+import timeit
+
 import numpy as np
 from numpy import ndarray
+from numba import jit
 from typing import List, Tuple
 from Text_Based_SD.data.TranscriptProcess import *
 
 
+@jit(nopython=True)
 def edit_distance(token1: str, token2: str) -> int:
     """
     Compute the Levenshtein distance between two string
@@ -23,6 +27,7 @@ def edit_distance(token1: str, token2: str) -> int:
     return matrix[len(token1)][len(token2)]
 
 
+@jit(nopython=True)
 def compare(token1: str, token2: str, distance_bound: int = 2) -> int:
     """
     Compare two string and determine if they are match,
@@ -42,7 +47,7 @@ def compare(token1: str, token2: str, distance_bound: int = 2) -> int:
     else:
         return mis_match
 
-
+@jit(nopython=True)
 def get_scoring_matrix(seq1: List[str], seq2: List[str], gap=-1) -> ndarray:
     """
     Compute the scoring matrix for Needleman-Wunsch algorithm
@@ -62,7 +67,7 @@ def get_scoring_matrix(seq1: List[str], seq2: List[str], gap=-1) -> ndarray:
                               score[i - 1][j] + gap, score[i][j - 1] + gap)
     return score
 
-
+@jit(nopython=True)
 def backtrack(seq1: List[str], seq2: List[str], score: ndarray) -> Tuple[List[str], ndarray, List[str], ndarray]:
     """
     Backtrack according to the scoring matrix to get the alignment result
@@ -116,15 +121,19 @@ def needleman_wunsch(seq1: List[str], seq2: List[str]) -> Tuple[List[str], ndarr
     return backtrack(seq1, seq2, score)
 
 
-if __name__ == "__main__":
+def test_needleman_wunsch():
     seq1 = [token.value for token in RevAI("../data/CallHome_eval/rev/4074_cut.json").get_token_list() if
             token.spk_id == 0]
     seq2 = [token.value for token in RevAI("../data/CallHome_eval/rev/4074_cut.json").get_token_list() if
             token.spk_id == 1]
     seq3 = [token.value for token in CallHome("../data/CallHome_eval/transcripts/4074.cha").get_token_list()]
-    # align13, map13, align31, map31 = needleman_wunsch(seq1, seq3)
+    align13, map13, align31, map31 = needleman_wunsch(seq1, seq3)
     align23, map23, align32, map32 = needleman_wunsch(seq2, seq3)
-    # print(align13)
-    # print(align31)
+    print(align13)
+    print(align31)
     print(align23)
     print(align32)
+
+
+if __name__ == "__main__":
+    print(timeit.Timer(test_needleman_wunsch).timeit(number=1))
