@@ -164,7 +164,7 @@ class CallHome:
         tokens = []
         annotations = self.get_file_annotation(with_utterances=True)
         for segment in annotations:
-            utterance = segment[3]
+            utterance = str.lower(segment[3])
             spk_id = segment[0]
             start, end = segment[1], segment[2]
             words = utterance.split()
@@ -297,7 +297,8 @@ class RevAI:
         tokens = []
         annotations = self.get_spk_time_token()
         for token in annotations:
-            tokens.append(Token(token[3], token[0], start=token[1], end=token[2]))
+            word = str.lower(token[3])
+            tokens.append(Token(word, token[0], start=token[1], end=token[2]))
         return tokens
     
     def remove_special_token(self):
@@ -343,21 +344,13 @@ class Amazon:
     
     def get_token_list(self):
         tokens = []
-        # utterances = self.get_utterances_by_spkID()
-        # for utterance in utterances:
-        #     spk_id = utterance[0]
-        #     words = utterance[1].split()
-        #     for word in words:
-        #         tokens.append(Token(word, spk_id))
         item_count = 0
         for segment in self.data["results"]["speaker_labels"]["segments"]:
-            utterence = ""
             speaker_id = segment["speaker_label"]
             for i in range(len(segment["items"])):
                 if self.data["results"]["items"][item_count]["type"] == "punctuation":
                     item_count += 1
-                utterence += " "
-                word = self.data["results"]["items"][item_count]["alternatives"][0]["content"]
+                word = str.lower(self.data["results"]["items"][item_count]["alternatives"][0]["content"])
                 start = self.data["results"]["items"][item_count]["start_time"]
                 end = self.data["results"]["items"][item_count]["end_time"]
                 tokens.append(Token(word, speaker_id, start=float(start), end=float(end)))  
@@ -393,7 +386,7 @@ def txt_transcripts_for_manual_eval(opened_file, output_file_name):
     f = open(output_file_name, 'w')
     f.write(output)
 
-def segment_token_lists(gt: list[Token], output: list[Token]) -> tuple(list[list], list[list]): 
+def segment_token_lists(gt: list[Token], output: list[Token]) -> tuple[list[list], list[list]]: 
     """segment ground truth tokens and output tokens using time stamp.
 
     Args:
