@@ -1,9 +1,11 @@
-import timeit
+import csv
+from multiprocessing import Pool
+from typing import List, Tuple
 
 import numpy as np
-from numpy import ndarray
 from numba import jit
-from typing import List, Tuple
+from numpy import ndarray
+
 from Text_Based_SD.data.TranscriptProcess import *
 
 
@@ -47,6 +49,7 @@ def compare(token1: str, token2: str, distance_bound: int = 2) -> int:
     else:
         return mis_match
 
+
 @jit(nopython=True)
 def get_scoring_matrix(seq1: List[str], seq2: List[str], gap=-1) -> ndarray:
     """
@@ -66,6 +69,7 @@ def get_scoring_matrix(seq1: List[str], seq2: List[str], gap=-1) -> ndarray:
             score[i][j] = max(score[i - 1][j - 1] + compare(seq1[i - 1], seq2[j - 1]),
                               score[i - 1][j] + gap, score[i][j - 1] + gap)
     return score
+
 
 @jit(nopython=True)
 def backtrack(seq1: List[str], seq2: List[str], score: ndarray) -> Tuple[List[str], ndarray, List[str], ndarray]:
@@ -135,5 +139,30 @@ def test_needleman_wunsch():
     print(align32)
 
 
+def write_csv_amazon_combined(file_code: str):
+    seq1 = [token.value for token in CallHome(f"../data/CallHome_eval/transcripts/{file_code}.cha").get_token_list()]
+    seq2 = [token.value for token in Amazon(f"../data/CallHome_eval/amazon/{file_code}.json").get_token_list()]
+    align12, map12, align21, map21 = needleman_wunsch(seq1, seq2)
+    with open(f"../alignment/Result2DCombined/{file_code}_result_amazon.csv", 'w') as file:
+        output = csv.writer(file)
+        output.writerows([align12, align21, map12, map21])
+    print(f"{file_code} has been written.\n")
+
+
+def write_csv_amazon_separate(file_code: str):
+    seq1 = [token.value for token in CallHome(f"../data/CallHome_eval/transcripts/{file_code}.cha").get_token_list() if
+            token.spk_id == 'A']
+    seq2 = [token.value for token in CallHome(f"../data/CallHome_eval/transcripts/{file_code}.cha").get_token_list() if
+            token.spk_id == 'B']
+    target = [token.value for token in Amazon(f"../data/CallHome_eval/amazon/{file_code}.json").get_token_list()]
+    align13, map13, align31, map31 = needleman_wunsch(seq1, target)
+    align23, map23, align32, map32 = needleman_wunsch(seq2, target)
+    with open(f"../alignment/Result2DSeparated/{file_code}_result_amazon.csv", 'w') as file:
+        output = csv.writer(file)
+        output.writerows([align13, align31, align23, align32, map13, map31, map23, map32])
+    print(f"{file_code} has been written.\n")
+
+
 if __name__ == "__main__":
-    print(timeit.Timer(test_needleman_wunsch).timeit(number=1))
+    with Pool(5) as pool:
+        pool.map(write_csv_amazon_combined, ["4315", "4074", "4093", "4247", "4325", "4335", "4571", "4595", "4660", "4290"])

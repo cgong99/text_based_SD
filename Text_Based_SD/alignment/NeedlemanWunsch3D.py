@@ -40,15 +40,15 @@ def get_scoring_matrix_3d(seq1: list[str], seq2: list[str], seq3: list[str], fil
     for i in range(1, len(seq1) + 1):
         for j in range(1, len(seq2) + 1):
             score[i][j][0] = max(score[i - 1][j - 1][0] + compare(seq1[i - 1], seq2[j - 1]),
-                              score[i - 1][j][0] + gap, score[i][j - 1][0] + gap)
+                                 score[i - 1][j][0] + gap, score[i][j - 1][0] + gap)
     for i in range(1, len(seq1) + 1):
         for k in range(1, len(seq3) + 1):
             score[i][0][k] = max(score[i - 1][0][k - 1] + compare(seq1[i - 1], seq3[k - 1]),
-                              score[i - 1][0][k] + gap, score[i][0][k - 1] + gap)
+                                 score[i - 1][0][k] + gap, score[i][0][k - 1] + gap)
     for j in range(1, len(seq2) + 1):
         for k in range(1, len(seq3) + 1):
             score[0][j][k] = max(score[0][j - 1][k - 1] + compare(seq2[j - 1], seq3[k - 1]),
-                              score[0][j - 1][k] + gap, score[0][j][k - 1] + gap)
+                                 score[0][j - 1][k] + gap, score[0][j][k - 1] + gap)
 
     for i in range(1, len(seq1) + 1):
         for j in range(1, len(seq2) + 1):
@@ -70,7 +70,7 @@ def get_scoring_matrix_3d(seq1: list[str], seq2: list[str], seq3: list[str], fil
 
 
 @jit(nopython=True)
-def backtrack(seq1, seq2, seq3, matrix, file_code:str):
+def backtrack(seq1, seq2, seq3, matrix, file_code: str):
     gap = -1
     i = len(seq1)
     j = len(seq2)
@@ -250,15 +250,19 @@ def backtrack(seq1, seq2, seq3, matrix, file_code:str):
 
 
 def write_csv_amazon(file_code: str):
-    seq1 = [token.value for token in CallHome(f"../data/CallHome_eval/transcripts/{file_code}.cha").get_token_list() if token.spk_id == 'A']
-    seq2 = [token.value for token in CallHome(f"../data/CallHome_eval/transcripts/{file_code}.cha").get_token_list() if token.spk_id == 'B']
+    seq1 = [token.value for token in CallHome(f"../data/CallHome_eval/transcripts/{file_code}.cha").get_token_list() if
+            token.spk_id == 'A']
+    seq2 = [token.value for token in CallHome(f"../data/CallHome_eval/transcripts/{file_code}.cha").get_token_list() if
+            token.spk_id == 'B']
     # seq1 = [token.value for token in Amazon(f"../data/CallHome_eval/amazon/{file_code}.json").get_token_list() if
     #         token.spk_id == "spk_0"]
     # seq2 = [token.value for token in Amazon(f"../data/CallHome_eval/amazon/{file_code}.json").get_token_list() if
     #         token.spk_id == "spk_1"]
     # target = [token.value for token in CallHome(f"../data/CallHome_eval/transcripts/{file_code}.cha").get_token_list()]
     target = [token.value for token in Amazon(f"../data/CallHome_eval/amazon/{file_code}.json").get_token_list()]
-    align1, align2, align3, align2_to_align1, align3_to_align1 = backtrack(target, seq1, seq2, get_scoring_matrix_3d(target, seq1, seq2, file_code), file_code)
+    align1, align2, align3, align2_to_align1, align3_to_align1 = backtrack(target, seq1, seq2,
+                                                                           get_scoring_matrix_3d(target, seq1, seq2,
+                                                                                                 file_code), file_code)
     with open(f"{file_code}_result_amazon.csv", 'w') as file:
         output = csv.writer(file)
         output.writerows([align2, align3, align1, align2_to_align1, align3_to_align1])
@@ -267,5 +271,5 @@ def write_csv_amazon(file_code: str):
 
 if __name__ == "__main__":
     with Pool(2) as pool:
-        pool.map(write_csv_amazon, ["4074", "4093", "4247", "4315", "4325", "4335", "4571", "4595", "4660", "4290"])
+        pool.map(write_csv_amazon, ["4315", "4074", "4093", "4247", "4325", "4335", "4571", "4595", "4660", "4290"])
         # pool.map(write_csv_amazon, ["4315", "4325", "4335", "4571", "4595", "4660", "4290"])
