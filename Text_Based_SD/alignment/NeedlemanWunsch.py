@@ -17,7 +17,7 @@ def edit_distance(token1: str, token2: str) -> int:
     :param token2: token as string
     :return: Levenshtein distance in int
     """
-    matrix = np.zeros((len(token1) + 1, len(token2) + 1))
+    matrix = np.zeros((len(token1) + 1, len(token2) + 1), dtype="int32")
     for i in range(1, len(token1) + 1):
         matrix[i][0] = i
     for j in range(1, len(token2) + 1):
@@ -59,7 +59,7 @@ def get_scoring_matrix(seq1: List[str], seq2: List[str], gap=-1) -> ndarray:
     :return: 2d numpy array as the scoring matrix
     """
     # compute scoring matrix
-    score = np.zeros((len(seq1) + 1, len(seq2) + 1))
+    score = np.zeros((len(seq1) + 1, len(seq2) + 1), dtype="int32")
     for i in range(0, len(seq1) + 1):
         score[i][0] = gap * i
     for j in range(0, len(seq2) + 1):
@@ -84,9 +84,9 @@ def backtrack(seq1: List[str], seq2: List[str], score: ndarray) -> Tuple[List[st
     i = len(seq1)
     j = len(seq2)
     align1 = []
-    align1_to_align2 = np.zeros(i + 1)
+    align1_to_align2 = np.zeros(i + 1, dtype="int32")
     align2 = []
-    align2_to_align1 = np.zeros(j + 1)
+    align2_to_align1 = np.zeros(j + 1, dtype="int32")
     while i > 0 and j > 0:
         if score[i][j] == score[i - 1][j - 1] + compare(seq1[i - 1], seq2[j - 1]):
             align1.append(seq1[i - 1])
@@ -139,17 +139,17 @@ def test_needleman_wunsch():
     print(align32)
 
 
-def write_csv_amazon_combined(file_code: str):
+def write_csv_combined(file_code: str):
     seq1 = [token.value for token in CallHome(f"../data/CallHome_eval/transcripts/{file_code}.cha").get_token_list()]
-    seq2 = [token.value for token in Amazon(f"../data/CallHome_eval/amazon/{file_code}.json").get_token_list()]
+    seq2 = [token.value for token in RevAI(f"../data/CallHome_eval/rev/{file_code}_cut.json").get_token_list()]
     align12, map12, align21, map21 = needleman_wunsch(seq1, seq2)
-    with open(f"../alignment/Result2DCombined/{file_code}_result_amazon.csv", 'w') as file:
+    with open(f"../alignment/ResultRevAI/Result2DCombined/{file_code}_result_revai.csv", 'w') as file:
         output = csv.writer(file)
         output.writerows([align12, align21, map12, map21])
     print(f"{file_code} has been written.\n")
 
 
-def write_csv_amazon_separate(file_code: str):
+def write_csv_separate(file_code: str):
     seq1 = [token.value for token in CallHome(f"../data/CallHome_eval/transcripts/{file_code}.cha").get_token_list() if
             token.spk_id == 'A']
     seq2 = [token.value for token in CallHome(f"../data/CallHome_eval/transcripts/{file_code}.cha").get_token_list() if
@@ -165,4 +165,4 @@ def write_csv_amazon_separate(file_code: str):
 
 if __name__ == "__main__":
     with Pool(5) as pool:
-        pool.map(write_csv_amazon_combined, ["4315", "4074", "4093", "4247", "4325", "4335", "4571", "4595", "4660", "4290"])
+        pool.map(write_csv_combined, ["4315", "4074", "4093", "4247", "4325", "4335", "4571", "4595", "4660", "4290"])
