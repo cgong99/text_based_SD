@@ -1,8 +1,8 @@
-import simpleder
+# import simpleder
 from TranscriptProcess import *
 import os
-from pyannote.core import Segment, Timeline, Annotation
-from pyannote.metrics.diarization import DiarizationErrorRate
+# from pyannote.core import Segment, Timeline, Annotation
+# from pyannote.metrics.diarization import DiarizationErrorRate
 
 
 def precision(ref, hyp):
