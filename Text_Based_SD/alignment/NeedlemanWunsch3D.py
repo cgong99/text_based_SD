@@ -7,7 +7,7 @@ from numba import jit
 from numpy import ndarray
 
 from NeedlemanWunsch import edit_distance, compare
-from Text_Based_SD.data.TranscriptProcess import CallHome, Amazon
+from Text_Based_SD.data.TranscriptProcess import CallHome, Amazon, RevAI
 
 
 @jit(nopython=True)
@@ -29,7 +29,7 @@ def get_scoring_matrix_3d(seq1: list[str], seq2: list[str], seq3: list[str], fil
     parameter_number = (len(seq1) + 1) * (len(seq2) + 1) * (len(seq3) + 1)
     print(f"length of three sequence for {file_code}: {len(seq1)}, {len(seq2)}, {len(seq3)}")
     print(f"total number of parameters for {file_code}: {parameter_number}")
-    score = np.zeros((len(seq1) + 1, len(seq2) + 1, len(seq3) + 1))
+    score = np.zeros((len(seq1) + 1, len(seq2) + 1, len(seq3) + 1), dtype="int32")
     # initial three edges and three surfaces
     for i in range(0, len(seq1) + 1):
         score[i][0][0] = gap * i
@@ -76,8 +76,8 @@ def backtrack(seq1, seq2, seq3, matrix, file_code: str):
     j = len(seq2)
     k = len(seq3)
     align1, align2, align3 = [], [], []
-    align2_to_align1 = np.zeros(j + 1)
-    align3_to_align1 = np.zeros(k + 1)
+    align2_to_align1 = np.zeros(j + 1, dtype="int32")
+    align3_to_align1 = np.zeros(k + 1, dtype="int32")
     progress = 100
     parameter_number = (len(seq1)) * (len(seq2)) * (len(seq3))
     while i > 0 and j > 0 and k > 0:
@@ -259,17 +259,19 @@ def write_csv_amazon(file_code: str):
     # seq2 = [token.value for token in Amazon(f"../data/CallHome_eval/amazon/{file_code}.json").get_token_list() if
     #         token.spk_id == "spk_1"]
     # target = [token.value for token in CallHome(f"../data/CallHome_eval/transcripts/{file_code}.cha").get_token_list()]
-    target = [token.value for token in Amazon(f"../data/CallHome_eval/amazon/{file_code}.json").get_token_list()]
+
+    # target = [token.value for token in Amazon(f"../data/CallHome_eval/amazon/{file_code}.json").get_token_list()]
+    target = [token.value for token in RevAI(f"../data/CallHome_eval/rev/{file_code}_cut.json").get_token_list()]
     align1, align2, align3, align2_to_align1, align3_to_align1 = backtrack(target, seq1, seq2,
                                                                            get_scoring_matrix_3d(target, seq1, seq2,
                                                                                                  file_code), file_code)
-    with open(f"{file_code}_result_amazon.csv", 'w') as file:
+    with open(f"../alignment/ResultRevAI/Result3D/{file_code}_result_revai.csv", 'w') as file:
         output = csv.writer(file)
         output.writerows([align2, align3, align1, align2_to_align1, align3_to_align1])
     print(f"{file_code} has been written.\n")
 
 
 if __name__ == "__main__":
-    with Pool(2) as pool:
-        pool.map(write_csv_amazon, ["4315", "4074", "4093", "4247", "4325", "4335", "4571", "4595", "4660", "4290"])
+    with Pool(1) as pool:
+        pool.map(write_csv_amazon, ["4074", "4093", "4247", "4315", "4325", "4335", "4571", "4595", "4660", "4290"])
         # pool.map(write_csv_amazon, ["4315", "4325", "4335", "4571", "4595", "4660", "4290"])
