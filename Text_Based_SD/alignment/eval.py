@@ -41,7 +41,7 @@ def get_speaker_list(token_list):
   
 
 class Eval_3d:
-  def __init__(self, file_code, type) -> None:
+  def __init__(self, file_code, type, path=None) -> None:
     self.file_code = file_code
     self.type = type
     if type == "Amazon":
@@ -50,6 +50,8 @@ class Eval_3d:
     if type == "Rev":
       self.resultPath = f"ResultRevAI/Result3D/{self.file_code}_result_revai.csv"
       self.hyp_tokens = RevAI(f"../data/CallHome_eval/rev/{self.file_code}_cut.json").get_token_list()
+    if path:
+      self.resultPath = path #if specified result csv path
       
     self.spk1_align, self.spk2_align = self.read3dResult()
     self.gt_tokens = CallHome(f"../data/CallHome_eval/transcripts/{self.file_code}.cha").get_token_list()
@@ -91,13 +93,17 @@ class Eval_3d:
         error_count += 1
         spk2_error.append(i)
     
-    print("Error: ", error_count)
-    print("Correct: ", correct_count)
+    correct = max(correct_count, error_count)
+    error = min(correct_count, error_count)
+    recall = correct/len(self.gt_tokens)
+    print("Error: ", error)
+    print("Correct: ", correct)
     print("Gap: ", gap)
     print("Token Count: ", len(self.gt_tokens))
-    print("Correct Rate: ", correct_count/len(self.gt_tokens))
-    print("Error Rate: ", error_count/len(self.gt_tokens))
-    return error_count, correct_count, gap
+    print("Correct Rate: ", correct/len(self.gt_tokens))
+    print("Error Rate: ", error/len(self.gt_tokens))
+    print("Recall: ", correct/len(self.gt_tokens))
+    return error, correct, gap, recall
   
   def precision(self): # having two speaker alignment (ground truth to target), find the target to gt alignment and count precision
     token_num = len(self.hyp_tokens)
@@ -127,7 +133,10 @@ class Eval_3d:
     print(correct)
     print(error)
     print(gap)
-    return max(correct, error)/token_num
+    correct = max(correct, error)
+    error = min(correct, error)
+    
+    return correct/token_num, correct, error, gap
 
       
     
@@ -176,6 +185,7 @@ class Eval_2d():
     print("Token Count: ", len(self.gt_tokens))
     print("Correct Rate: ", correct_count/len(self.gt_tokens))
     print("Error Rate: ", error_count/len(self.gt_tokens))
+    print("Recall: ", correct_count/len(self.gt_tokens))
     return error_count, correct_count, gap
 
 
@@ -223,12 +233,12 @@ def output_3d_eval_csv():
       print("======= ", file_code)
       eval = Eval_3d(file_code=file_code, type="Rev")
       # eval = Eval_3d(file_code=file_code, type="Amazon")
-      error, correct, gap = eval.calculate()
-      precision = eval.precision()
+      error, correct, gap, recall = eval.calculate()
+      precision, hyp_correct, hyp_error, hyp_gap = eval.precision()
       token_len = len(eval.gt_tokens)
-      recall = max(error, correct) / token_len
+      hyp_token_len = len(eval.hyp_tokens)
       F1 = 2* precision * recall/ (precision + recall)
-      row = [file_code, error/token_len, correct/token_len, gap/token_len, error, correct, gap, token_len, recall, precision, F1]
+      row = [file_code, error/token_len, correct/token_len, gap/token_len, error, correct, gap, token_len, recall, precision, F1, hyp_correct, hyp_error, hyp_gap, hyp_token_len]
       output.writerow(row)
 
 def output_2d_eval_csv():
@@ -249,7 +259,13 @@ def output_2d_eval_csv():
 
 if __name__ == "__main__":
   file_code = 4074
-  eval = Eval_3d(file_code=file_code, type="Rev")
+  # eval = Eval_3d(file_code=file_code, type="Amazon", path="./4074_result_amazon_segments.csv")
+  # error, correct, gap, recall = eval.calculate()
+  # precision = eval.precision()
+  # print("precision: ", precision)
+  # print("F1: ",   2* precision * recall/ (precision + recall))
+  
+  # eval = Eval_3d(file_code=file_code, type="Rev")
   # eval.calculate()
   # eval.back_align()
   # print(eval.gt_spk_ids)
