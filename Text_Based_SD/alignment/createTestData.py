@@ -18,15 +18,17 @@ def extractAlignmentArray(name):
   spk1, spk2, output = readAlignment(name)
   print(len(spk1), len(spk2), len(output))
   spk1_to_output, spk2_to_output = [], []
+  outputGap = 0
   for i, token in enumerate(output):
-
+    if token == "-":
+      outputGap += 1
     if spk1[i] != "-" and token != "-":
-      spk1_to_output.append(i)
+      spk1_to_output.append(i-outputGap)
     elif spk1[i] != "-" and token == "-":
       spk1_to_output.append(-1)
       
     if spk2[i] != "-" and token != "-":
-      spk2_to_output.append(i)
+      spk2_to_output.append(i-outputGap)
     elif spk2[i] != "-" and token == "-":
       spk2_to_output.append(-1)
   
@@ -82,13 +84,27 @@ def generateErrors(name):
   writeFile("4074_test.csv", spk1, spk2, output)
 
 if __name__ == "__main__":
-  generateErrors("test1.csv")
+  # generateErrors("test1.csv")
   # spk1, spk2, output = readAlignment("test1.csv")
   # spk1, spk2, output = generateMissedWordsErrors(spk1, spk2, output)
   # writeFile("4074_test.csv", spk1, spk2, output)
   
-  spk1, spk2 = extractAlignmentArray("4074_test.csv")
-  print(spk1)
+  spk1_gt, spk2_gt = extractAlignmentArray("4074_test.csv")
+  spk1, spk2 = extractAlignmentArray("4074_correctness_test_result.csv")
+  # spk1 = spk1[1:]
+  # spk2 = spk2[1:]
+  print(len(spk1_gt), len(spk1))
+  print(spk2[0:50])
+  print(spk2_gt[0:50])
+  count = 0
+  for i in range(len(spk1_gt)):
+    if spk1[i] != spk1_gt[i]:
+      count += 1
+  for i in range(len(spk2_gt)):
+    if spk2[i] != spk2_gt[i]:
+      count += 1
+  print("difference count: ", count)
+  print("accuracy: ", ((len(spk1)+len(spk2))-count)/(len(spk1)+len(spk2)))
   
 
 
