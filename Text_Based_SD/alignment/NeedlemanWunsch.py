@@ -17,6 +17,8 @@ def edit_distance(token1: str, token2: str) -> int:
     :param token2: token as string
     :return: Levenshtein distance in int
     """
+    if token1 == token2:
+        return 0
     matrix = np.zeros((len(token1) + 1, len(token2) + 1), dtype="int32")
     for i in range(1, len(token1) + 1):
         matrix[i][0] = i
