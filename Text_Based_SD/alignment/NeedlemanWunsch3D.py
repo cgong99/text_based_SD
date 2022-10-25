@@ -20,16 +20,32 @@ def compare_3d(target_token, token1, token2) -> int:
         mode += 2
     if token2 == '-':
         mode += 1
-    mode_to_score = {
-        0: -1,
-        1: 3 if edit_distance(target_token, token1) < 2 else -1,
-        2: 3 if edit_distance(target_token, token2) < 2 else -1,
-        3: 1,
-        4: -1,
-        5: 1,
-        6: 1
-    }
-    return mode_to_score[mode]
+
+    if mode == 1:
+        if edit_distance(target_token, token1) < 2:
+            return 3
+        else:
+            return -1
+    elif mode == 2:
+        if edit_distance(target_token, token1) < 2:
+            return 3
+        else:
+            return -1
+    elif mode == 3 or mode == 5 or mode == 6:
+        return 1
+    elif mode == 0 or mode == 4:
+        return -1
+
+    # mode_to_score = {
+    #     0: -1,
+    #     1: 3 if edit_distance(target_token, token1) < 2 else -1,
+    #     2: 3 if edit_distance(target_token, token2) < 2 else -1,
+    #     3: 1,
+    #     4: -1,
+    #     5: 1,
+    #     6: 1
+    # }
+    # return mode_to_score[mode]
 
 
 @jit(nopython=True)
