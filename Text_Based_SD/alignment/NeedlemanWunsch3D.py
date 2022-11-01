@@ -21,20 +21,34 @@ def compare_3d(target_token, token1, token2) -> int:
     if token2 == '-':
         mode += 1
 
+    # if mode == 1:
+    #     if edit_distance(target_token, token1) < 2:
+    #         return 3
+    #     else:
+    #         return 0
+    # elif mode == 2:
+    #     if edit_distance(target_token, token2) < 2:
+    #         return 3
+    #     else:
+    #         return 0
+    # elif mode == 3 or mode == 5 or mode == 6:
+    #     return 0
+    # elif mode == 0 or mode == 4:
+    #     return 0
+
     if mode == 1:
         if edit_distance(target_token, token1) < 2:
             return 3
         else:
-            return -1
+            return 0
     elif mode == 2:
-        if edit_distance(target_token, token1) < 2:
+        if edit_distance(target_token, token2) < 2:
             return 3
         else:
-            return -1
-    elif mode == 3 or mode == 5 or mode == 6:
-        return 1
-    elif mode == 0 or mode == 4:
-        return -1
+            return 0
+    else:
+        return 0
+
 
     # mode_to_score = {
     #     0: -1,
@@ -319,3 +333,29 @@ if __name__ == "__main__":
     # with Pool(1) as pool:
     #     pool.map(write_csv, ["4074", "4093", "4247", "4315", "4325", "4335", "4571", "4595", "4660", "4290"])
     # pool.map(write_csv, ["4315", "4325", "4335", "4571", "4595", "4660", "4290"])
+
+    # file_code = "4074_correctness_test"
+    # with open("../alignment/tmpFiles/4074_correctness_test.csv", 'r') as test_file:
+    #     reader = csv.reader(test_file)
+    #     rows = [row for row in reader]
+    #     seq1 = [element for element in rows[0] if element != '-']
+    #     seq2 = [element for element in rows[1] if element != '-']
+    #     target = [element for element in rows[2] if element != '-']
+    #     align1, align2, align3, align2_to_align1, align3_to_align1 = backtrack(target, seq1, seq2,
+    #                                                                            get_scoring_matrix_3d(target, seq1, seq2,
+    #                                                                                                  file_code),
+    #                                                                            file_code)
+    #     print(align2)
+    #     print(len(align2))
+    #     print(align3)
+    #     print(len(align3))
+    #     print(align1)
+    #     print(len(align1))
+    #     with open(f"../alignment/tmpFiles/4074_correctness_test_result2.csv", 'w') as file:
+    #         output = csv.writer(file)
+    #         output.writerows([align2, align3, align1, align2_to_align1, align3_to_align1])
+    #     print(f"{file_code} has been written.\n")
+
+
+
+
