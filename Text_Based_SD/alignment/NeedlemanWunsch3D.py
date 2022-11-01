@@ -313,12 +313,12 @@ def write_csv(file_code: str):
 
 
 def test_performance():
-    file_code = "4074"
+    file_code = "4074_test"
     seq1 = [token.value for token in CallHome(f"../data/CallHome_eval/transcripts/{file_code}.cha").get_token_list() if
             token.spk_id == 'A']
     seq2 = [token.value for token in CallHome(f"../data/CallHome_eval/transcripts/{file_code}.cha").get_token_list() if
             token.spk_id == 'B']
-    target = [token.value for token in RevAI(f"../data/CallHome_eval/rev/{file_code}_cut.json").get_token_list()]
+    target = [token.value for token in RevAI(f"../data/CallHome_eval/rev/txt/{file_code}_cut.txt", istxt=True).get_token_list()]
     align1, align2, align3, align2_to_align1, align3_to_align1 = backtrack(target, seq1, seq2,
                                                                            get_scoring_matrix_3d(target, seq1, seq2,
                                                                                                  file_code), file_code)

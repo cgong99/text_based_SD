@@ -1,3 +1,4 @@
+from curses import newwin
 import json
 import os
 from tokenize import String
@@ -248,11 +249,16 @@ class CallHome:
 
 class RevAI:
 
-    def __init__(self, file_name: str):
+    def __init__(self, file_name: str, istxt=False):
         self.file_name = file_name
         self.basename = self.get_file_basename()
-        with open(self.file_name) as file:
-            self.data = json.load(file)
+        self.istxt = istxt
+        if istxt:
+            with open(self.file_name) as file:
+                self.data = file.readlines()
+        else:
+            with open(self.file_name) as file:
+                self.data = json.load(file)
 
     def get_file_basename(self):
         with_extension = os.path.basename(self.file_name)
@@ -266,6 +272,9 @@ class RevAI:
         :return: a list that each element is a tuple containing the speaker id (in str), the start and
         end time in float
         """
+        if self.istxt:
+            print("need to use json file")
+            return
         annotation = []
         with open(self.file_name) as file:
             data = json.load(file)
@@ -284,6 +293,9 @@ class RevAI:
 
     def get_spk_time_token(self):
         # (spk_id, start_time, end_time, token)
+        if self.istxt:
+            print("need to use json file")
+            return
         res = []
         segments = self.data["monologues"]
         for segment in segments:
@@ -294,23 +306,42 @@ class RevAI:
         return res
     
     def get_token_list(self):
-        tokens = []
-        annotations = self.get_spk_time_token()
-        for token in annotations:
-            word = str.lower(token[3])
-            tokens.append(Token(word, token[0], start=token[1], end=token[2]))
-        return tokens
+        if self.istxt:
+            tokens = []
+            for line in self.data:
+                arr = line.split(" ")
+                spk = arr[1]
+                utt = arr[9:-2]
+                for word in utt:
+                    if word[0] == "<":
+                        continue
+                    new_word = "".join(e for e in word if e.isalnum())
+                    new_word = new_word.lower()
+                    tokens.append(Token(new_word, spk))
+            return tokens
+        else:
+            tokens = []
+            annotations = self.get_spk_time_token()
+            for token in annotations:
+                word = str.lower(token[3])
+                tokens.append(Token(word, token[0], start=token[1], end=token[2]))
+            return tokens
     
     def remove_special_token(self):
         pass
     
 class Amazon:
     
-    def __init__(self, file_name: str):
+    def __init__(self, file_name: str, istxt=False):
         self.file_name = file_name
         self.basename = self.get_file_basename()
-        with open(self.file_name) as file:
-            self.data = json.load(file)
+        self.istxt = istxt
+        if istxt:
+            with open(self.file_name) as file:
+                self.data = file.readlines()
+        else:
+            with open(self.file_name) as file:
+                self.data = json.load(file)
             
     def get_file_basename(self):
         with_extension = os.path.basename(self.file_name)
@@ -318,6 +349,9 @@ class Amazon:
         return basename
         
     def get_file_annotation(self):
+        if self.istxt:
+            print("get annoataion need to be json file")
+            return
         annotation = []
         for segment in self.data["results"]["speaker_labels"]["segments"]:
             annotation.append((str(segment["speaker_label"]), float(segment["start_time"]), float(segment["end_time"])))
@@ -327,6 +361,9 @@ class Amazon:
         """
             output: [(speaker_id, "utterence"), (), ...]
         """
+        if self.istxt:
+            print("need to be json file")
+            return
         output = []
         item_count = 0
         for segment in self.data["results"]["speaker_labels"]["segments"]:
@@ -343,19 +380,22 @@ class Amazon:
         return output
     
     def get_token_list(self):
-        tokens = []
-        item_count = 0
-        for segment in self.data["results"]["speaker_labels"]["segments"]:
-            speaker_id = segment["speaker_label"]
-            for i in range(len(segment["items"])):
-                if self.data["results"]["items"][item_count]["type"] == "punctuation":
+        if self.istxt:
+            pass
+        else:
+            tokens = []
+            item_count = 0
+            for segment in self.data["results"]["speaker_labels"]["segments"]:
+                speaker_id = segment["speaker_label"]
+                for i in range(len(segment["items"])):
+                    if self.data["results"]["items"][item_count]["type"] == "punctuation":
+                        item_count += 1
+                    word = str.lower(self.data["results"]["items"][item_count]["alternatives"][0]["content"])
+                    start = self.data["results"]["items"][item_count]["start_time"]
+                    end = self.data["results"]["items"][item_count]["end_time"]
+                    tokens.append(Token(word, speaker_id, start=float(start), end=float(end)))  
                     item_count += 1
-                word = str.lower(self.data["results"]["items"][item_count]["alternatives"][0]["content"])
-                start = self.data["results"]["items"][item_count]["start_time"]
-                end = self.data["results"]["items"][item_count]["end_time"]
-                tokens.append(Token(word, speaker_id, start=float(start), end=float(end)))  
-                item_count += 1
-        return tokens
+            return tokens
     
     def write_txt_transcripts(self, path: String):
         output = self.get_utterances_by_spkID()
@@ -479,27 +519,31 @@ if __name__ == "__main__":
     #     Amazon(file_path).write_txt_transcripts("CallHome_eval/amazon/txt/")
 
 
-    callHome_4074 = CallHome("CallHome_eval/transcripts/4074.cha")
-    # callHome_4074.get_overlapped_part()
-    amazon_4074 = Amazon("CallHome_eval/amazon/4074.json")
-    rev_4074 = RevAI("CallHome_eval/rev/4074_cut.json")
-    gt = callHome_4074.get_token_list()
-    amazon = amazon_4074.get_token_list()
-    rev = rev_4074.get_token_list()
+    # callHome_4074 = CallHome("CallHome_eval/transcripts/4074.cha")
+    # # callHome_4074.get_overlapped_part()
+    # amazon_4074 = Amazon("CallHome_eval/amazon/4074.json")
+    # rev_4074 = RevAI("CallHome_eval/rev/4074_cut.json")
+    # gt = callHome_4074.get_token_list()
+    # amazon = amazon_4074.get_token_list()
+    # rev = rev_4074.get_token_list()
     # print(gt[-10:])
     # for token in gt[-30:]:
     #     print(token)
     # for token in rev[-30:]:
     #     print(token)
-    print(len(amazon))
+    # print(len(amazon))
 
-    gt_seg, output_seg = segment_token_lists(gt, amazon)
-    sum = 0
-    for l in output_seg:
-        sum += len(l)
-        print(len(l))
-    print(sum)
+    # gt_seg, output_seg = segment_token_lists(gt, amazon)
+    # sum = 0
+    # for l in output_seg:
+    #     sum += len(l)
+    #     print(len(l))
+    # print(sum)
 
     # txt_transcripts_for_manual_eval(callHome_4074, "./4074_ground_truth.txt")
     # txt_transcripts_for_manual_eval(amazon_4074, "./4074_amazon.txt")
     # txt_transcripts_for_manual_eval(rev_4074, "./4074_rev.txt")
+    
+    rev = RevAI("CallHome_eval/rev/txt/4074_cut.txt",istxt=True)
+    for token in rev.get_token_list():
+        print(token)
