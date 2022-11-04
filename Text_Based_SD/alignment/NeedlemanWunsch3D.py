@@ -53,7 +53,6 @@ def compare_3d(target_token, token1, token2) -> int:
     else:
         return -1
 
-
     # mode_to_score = {
     #     0: -1,
     #     1: 3 if edit_distance(target_token, token1) < 2 else -1,
@@ -88,7 +87,7 @@ def get_scoring_matrix_3d(target_seq: list[str], seq1: list[str], seq2: list[str
                                  score[i - 1][j][0] + gap, score[i][j - 1][0] + gap)
     for i in range(1, len(target_seq) + 1):
         for k in range(1, len(seq2) + 1):
-            score[i][0][k] = max(score[i - 1][0][k - 1] + compare_3d(target_seq[i - 1],"-", seq2[k - 1]),
+            score[i][0][k] = max(score[i - 1][0][k - 1] + compare_3d(target_seq[i - 1], "-", seq2[k - 1]),
                                  score[i - 1][0][k] + gap, score[i][0][k - 1] + gap)
     for j in range(1, len(seq1) + 1):
         for k in range(1, len(seq2) + 1):
@@ -105,7 +104,7 @@ def get_scoring_matrix_3d(target_seq: list[str], seq1: list[str], seq2: list[str
                 spec2 = score[i - 1][j][k - 1] + compare_3d(target_seq[i - 1], '-', seq2[k - 1])
                 spec3 = score[i - 1][j - 1][k] + compare_3d(target_seq[i - 1], seq1[j - 1], '-')
                 spec4 = score[i - 1][j][k] + compare_3d(target_seq[i - 1], '-', '-')
-                spec5 = score[i ][j-1][k] + compare_3d('-', seq1[j - 1], '-')
+                spec5 = score[i][j - 1][k] + compare_3d('-', seq1[j - 1], '-')
                 spec6 = score[i][j][k - 1] + compare_3d('-', '-', seq2[k - 1])
                 # spec7 = score[i - 1][j - 1][k - 1] + compare_3d(target_seq[i - 1], seq1[j - 1], seq2[k - 1])
                 score[i][j][k] = max(spec2, spec3, spec4, spec5, spec6)
@@ -130,12 +129,7 @@ def backtrack(target_seq, seq1, seq2, matrix, file_code: str):
     align1, align2, align3 = [], [], []
     align2_to_align1 = np.zeros(j + 1, dtype="int32")
     align3_to_align1 = np.zeros(k + 1, dtype="int32")
-    progress = 100
-    parameter_number = (len(target_seq)) * (len(seq1)) * (len(seq2))
     while i > 0 and j > 0 and k > 0:
-        if math.floor(i * j * k * 100 / parameter_number) < progress:
-            print(f"transcript {file_code}: backtrack progress {progress}%, i={i}, j={j}, k={k}")
-            progress -= 1
         xi = target_seq[i - 1]
         yj = seq1[j - 1]
         zk = seq2[k - 1]
@@ -190,9 +184,6 @@ def backtrack(target_seq, seq1, seq2, matrix, file_code: str):
 
     # one of the dimension is 0, on a surface now
     while i > 0 and j > 0:
-        if math.floor(i * j * k * 100 / parameter_number) < progress:
-            print(f"transcript {file_code}: backtrack progress {progress}%, i={i}, j={j}, k={k}")
-            progress -= 1
         xi = target_seq[i - 1]
         yj = seq1[j - 1]
         if matrix[i, j, k] == compare_3d(xi, yj, "-") + matrix[i - 1, j - 1, k]:  # 2d using NeedlemanWunsch's compare
@@ -215,9 +206,6 @@ def backtrack(target_seq, seq1, seq2, matrix, file_code: str):
             j -= 1
 
     while i > 0 and k > 0:
-        if math.floor(i * j * k * 100 / parameter_number) < progress:
-            print(f"transcript {file_code}: backtrack progress {progress}%, i={i}, j={j}, k={k}")
-            progress -= 1
         xi = target_seq[i - 1]
         zk = seq2[k - 1]
         if matrix[i, j, k] == compare_3d(xi, "-", zk) + matrix[i - 1, j, k - 1]:  # 2d using NeedlemanWunsch's compare
@@ -240,9 +228,6 @@ def backtrack(target_seq, seq1, seq2, matrix, file_code: str):
             k -= 1
 
     while j > 0 and k > 0:
-        if math.floor(i * j * k * 100 / parameter_number) < progress:
-            print(f"transcript {file_code}: backtrack progress {progress}%, i={i}, j={j}, k={k}")
-            progress -= 1
         yj = seq1[j - 1]
         zk = seq2[k - 1]
         if matrix[i, j, k] == compare_3d("-", yj, zk) + matrix[i, j - 1, k - 1]:  # 2d using NeedlemanWunsch's compare
@@ -267,9 +252,6 @@ def backtrack(target_seq, seq1, seq2, matrix, file_code: str):
             k -= 1
 
     while i > 0:
-        if math.floor(i * j * k * 100 / parameter_number) < progress:
-            print(f"transcript {file_code}: backtrack progress {progress}%, i={i}, j={j}, k={k}")
-            progress -= 1
         xi = target_seq[i - 1]
         align1.append(xi)
         align2.append('-')
@@ -277,9 +259,6 @@ def backtrack(target_seq, seq1, seq2, matrix, file_code: str):
         i -= 1
 
     while j > 0:
-        if math.floor(i * j * k * 100 / parameter_number) < progress:
-            print(f"transcript {file_code}: backtrack progress {progress}%, i={i}, j={j}, k={k}")
-            progress -= 1
         yj = seq1[j - 1]
         align1.append('-')
         align2.append(yj)
@@ -288,9 +267,6 @@ def backtrack(target_seq, seq1, seq2, matrix, file_code: str):
         j -= 1
 
     while k > 0:
-        if math.floor(i * j * k * 100 / parameter_number) < progress:
-            print(f"transcript {file_code}: backtrack progress {progress}%, i={i}, j={j}, k={k}")
-            progress -= 1
         zk = seq2[k - 1]
         align1.append('-')
         align2.append('-')
@@ -324,12 +300,13 @@ def write_csv(file_code: str):
 
 
 def test_performance():
-    file_code = "4074_test"
+    file_code = "4074"
     seq1 = [token.value for token in CallHome(f"../data/CallHome_eval/transcripts/{file_code}.cha").get_token_list() if
             token.spk_id == 'A']
     seq2 = [token.value for token in CallHome(f"../data/CallHome_eval/transcripts/{file_code}.cha").get_token_list() if
             token.spk_id == 'B']
-    target = [token.value for token in RevAI(f"../data/CallHome_eval/rev/txt/{file_code}_cut.txt", istxt=True).get_token_list()]
+    target = [token.value for token in
+              RevAI(f"../data/CallHome_eval/rev/txt/{file_code}_cut.txt", istxt=True).get_token_list()]
     # seq1 = ["what", "doing", "uh"]
     # seq2 = ["oh", "okay", "impressive"]
     # target = ["oh", "okay", "impressive", "little", "what", "doing"]
@@ -349,6 +326,7 @@ def test_performance():
         output.writerows([align2, align3, align1, align2_to_align1, align3_to_align1])
     print("test complete!")
 
+
 def printMatrix(mat) -> None:
     print(mat.shape)
     print(len(mat))
@@ -356,33 +334,37 @@ def printMatrix(mat) -> None:
         for j in range(len(mat[0])):
             for k in range(len(mat[0][0])):
                 # print(i, j, k)
-                print(mat[i,j,k], end=", ")
+                print(mat[i, j, k], end=", ")
             print("\n")
         print("\n")
+
 
 def printTop(mat):
     print("Top")
     for j in range(len(mat[0])):
         for k in range(len(mat[0][0])):
             # print(i, j, k)
-            print(mat[0, j,k], end=", ")
+            print(mat[0, j, k], end=", ")
         print("\n")
+
 
 def printFront(mat):
     print("Front")
     for i in range(len(mat)):
         for j in range(len(mat[0])):
             # print(i, j, k)
-            print(mat[i, j,0], end=", ")
-        print("\n")  
+            print(mat[i, j, 0], end=", ")
+        print("\n")
+
 
 def printSide(mat):
     print("Side")
     for i in range(len(mat)):
         for k in range(len(mat[0][0])):
             # print(i, j, k)
-            print(mat[i, 0,k], end=", ")
-        print("\n")    
+            print(mat[i, 0, k], end=", ")
+        print("\n")
+
 
 if __name__ == "__main__":
     print(timeit.Timer(test_performance).timeit(number=1))
@@ -411,7 +393,3 @@ if __name__ == "__main__":
     #         output = csv.writer(file)
     #         output.writerows([align2, align3, align1, align2_to_align1, align3_to_align1])
     #     print(f"{file_code} has been written.\n")
-
-
-
-
