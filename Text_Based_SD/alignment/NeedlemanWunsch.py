@@ -32,7 +32,7 @@ def edit_distance(token1: str, token2: str) -> int:
 
 
 @jit(nopython=True)
-def compare(token1: str, token2: str, distance_bound: int = 2) -> int:
+def compare(token1: str, token2: str, distance_bound: int = 2, match=2, mis_match=-1, gap=-1) -> int:
     """
     Compare two string and determine if they are match,
     if the levenshtein distance is below the distance bound then count as match
@@ -41,9 +41,6 @@ def compare(token1: str, token2: str, distance_bound: int = 2) -> int:
     :param distance_bound: bound of levenshtein distance
     :return: integer represent the score of match, mis-match, or a gap
     """
-    match = 2
-    mis_match = -1
-    gap = -1
     if edit_distance(token1, token2) <= distance_bound:
         return match
     elif token1 == '-' or token2 == '-':
@@ -53,7 +50,7 @@ def compare(token1: str, token2: str, distance_bound: int = 2) -> int:
 
 
 @jit(nopython=True)
-def get_scoring_matrix(seq1: List[str], seq2: List[str], gap=-1) -> ndarray:
+def get_scoring_matrix(seq1: List[str], seq2: List[str], match=2, mis_match=-1, gap=-1) -> ndarray:
     """
     Compute the scoring matrix for Needleman-Wunsch algorithm
     :param seq1: list of words from the dialogue
@@ -68,13 +65,14 @@ def get_scoring_matrix(seq1: List[str], seq2: List[str], gap=-1) -> ndarray:
         score[0][j] = gap * j
     for i in range(1, len(seq1) + 1):
         for j in range(1, len(seq2) + 1):
-            score[i][j] = max(score[i - 1][j - 1] + compare(seq1[i - 1], seq2[j - 1]),
+            score[i][j] = max(score[i - 1][j - 1] + compare(seq1[i - 1], seq2[j - 1], match, mis_match, gap),
                               score[i - 1][j] + gap, score[i][j - 1] + gap)
     return score
 
 
 @jit(nopython=True)
-def backtrack(seq1: List[str], seq2: List[str], score: ndarray) -> Tuple[List[str], ndarray, List[str], ndarray]:
+def backtrack(seq1: List[str], seq2: List[str], score: ndarray, match, mis_match, gap) -> Tuple[
+    List[str], ndarray, List[str], ndarray]:
     """
     Backtrack according to the scoring matrix to get the alignment result
     :param seq1: list of words from the dialogue, same as get scoring matrix
@@ -82,7 +80,6 @@ def backtrack(seq1: List[str], seq2: List[str], score: ndarray) -> Tuple[List[st
     :param score: the scoring matrix from get scoring matrix
     :return: a tuple containing the list of aligned two sequence and their mapping to each other result
     """
-    gap = -1
     i = len(seq1)
     j = len(seq2)
     align1 = []
@@ -90,7 +87,7 @@ def backtrack(seq1: List[str], seq2: List[str], score: ndarray) -> Tuple[List[st
     align2 = []
     align2_to_align1 = np.zeros(j + 1, dtype="int32")
     while i > 0 and j > 0:
-        if score[i][j] == score[i - 1][j - 1] + compare(seq1[i - 1], seq2[j - 1]):
+        if score[i][j] == score[i - 1][j - 1] + compare(seq1[i - 1], seq2[j - 1], match, mis_match, gap):
             align1.append(seq1[i - 1])
             align1_to_align2[i] = j
             align2.append(seq2[j - 1])
@@ -122,9 +119,10 @@ def backtrack(seq1: List[str], seq2: List[str], score: ndarray) -> Tuple[List[st
     return align1, align1_to_align2, align2, align2_to_align1
 
 
-def needleman_wunsch(seq1: List[str], seq2: List[str]) -> Tuple[List[str], ndarray, List[str], ndarray]:
-    score = get_scoring_matrix(seq1, seq2)
-    return backtrack(seq1, seq2, score)
+def needleman_wunsch(seq1: List[str], seq2: List[str], match=2, mis_match=-1, gap=-1) -> Tuple[
+    List[str], ndarray, List[str], ndarray]:
+    score = get_scoring_matrix(seq1, seq2, match, mis_match, gap)
+    return backtrack(seq1, seq2, score, match, mis_match, gap)
 
 
 def test_needleman_wunsch():
@@ -141,30 +139,33 @@ def test_needleman_wunsch():
     print(align32)
 
 
-def write_csv_combined(file_code: str):
+def write_csv_combined(file_code: str, match, mis_match, gap):
     seq1 = [token.value for token in CallHome(f"../data/CallHome_eval/transcripts/{file_code}.cha").get_token_list()]
     seq2 = [token.value for token in RevAI(f"../data/CallHome_eval/rev/{file_code}_cut.json").get_token_list()]
-    align12, map12, align21, map21 = needleman_wunsch(seq1, seq2)
+    align12, map12, align21, map21 = needleman_wunsch(seq1, seq2, match, mis_match, gap)
     with open(f"../alignment/ResultRevAI/Result2DCombined/{file_code}_result_revai.csv", 'w') as file:
+        output = csv.writer(file)
+        output.writerows([align12, align21, map12, map21])
+
+
+def test_scoring(param_list: list[int]):
+    file_code = "4074"
+    seq1 = [token.value for token in CallHome(f"../data/CallHome_eval/transcripts/{file_code}.cha").get_token_list()]
+    seq2 = [token.value for token in RevAI(f"../data/CallHome_eval/rev/{file_code}_cut.json").get_token_list()]
+    align12, map12, align21, map21 = needleman_wunsch(seq1, seq2, param_list[0], param_list[1], param_list[2])
+    with open(
+            f"../alignment/ResultRevAI/TestScoringResult/{file_code}_match{param_list[0]}_mismatch{param_list[1]}_gap{param_list[2]}.csv",
+            'w') as file:
         output = csv.writer(file)
         output.writerows([align12, align21, map12, map21])
     print(f"{file_code} has been written.\n")
 
 
-def write_csv_separate(file_code: str):
-    seq1 = [token.value for token in CallHome(f"../data/CallHome_eval/transcripts/{file_code}.cha").get_token_list() if
-            token.spk_id == 'A']
-    seq2 = [token.value for token in CallHome(f"../data/CallHome_eval/transcripts/{file_code}.cha").get_token_list() if
-            token.spk_id == 'B']
-    target = [token.value for token in Amazon(f"../data/CallHome_eval/amazon/{file_code}.json").get_token_list()]
-    align13, map13, align31, map31 = needleman_wunsch(seq1, target)
-    align23, map23, align32, map32 = needleman_wunsch(seq2, target)
-    with open(f"../alignment/Result2DSeparated/{file_code}_result_amazon.csv", 'w') as file:
-        output = csv.writer(file)
-        output.writerows([align13, align31, align23, align32, map13, map31, map23, map32])
-    print(f"{file_code} has been written.\n")
-
-
 if __name__ == "__main__":
-    with Pool(5) as pool:
-        pool.map(write_csv_combined, ["4315", "4074", "4093", "4247", "4325", "4335", "4571", "4595", "4660", "4290"])
+    parameter_list = []
+    for i in range(-10, 11):
+        for j in range(-10, 11):
+            for k in range(-10, 11):
+                parameter_list.append([i, j, k])
+    with Pool(12) as pool:
+        pool.map(test_scoring, parameter_list)
