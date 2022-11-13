@@ -51,10 +51,13 @@ class Eval_3d:
         self.type = type
         if type == "Amazon":
             self.resultPath = f"ResultAmazon/Result3D/{self.file_code}_result_amazon.csv"
-            self.hyp_tokens = Amazon(f"../data/CallHome_eval/amazon/{self.file_code}.json").get_token_list()
+            self.hyp_raw_file = Amazon(f"../data/CallHome_eval/amazon/{self.file_code}.json")
+            self.hyp_tokens = self.hyp_raw_file.get_token_list()
+            
         if type == "Rev":
             self.resultPath = f"ResultRevAI/Result3D/{self.file_code}_result_revai.csv"
-            self.hyp_tokens = RevAI(f"../data/CallHome_eval/rev/{self.file_code}_cut.json").get_token_list()
+            self.hyp_raw_file = RevAI(f"../data/CallHome_eval/rev/{self.file_code}_cut.json")
+            self.hyp_tokens = self.hyp_raw_file.get_token_list()
         if path:
             self.resultPath = path  # if specified result csv path
 
@@ -72,6 +75,28 @@ class Eval_3d:
         spk2_align = removeNan(spk2_align_raw)
         return spk1_align, spk2_align
 
+    def getHyp2SpkAlignment(self):
+        """base on two speakers alignment, generate hyp_to_spk alignment
+
+        Returns:
+            [a-1, a-2, b-1, b-2,...]
+        """
+        hyp_length = len(self.hyp_tokens)
+        hyp_align = ["-" for i in range(hyp_length)]
+        for i, align in enumerate(self.spk1_align):
+            align = int(align-1)
+            if align > 0:
+                hyp_align[align] = str(self.gt_spk_ids[0]) + "-" + str(i)
+            
+        for i, align in enumerate(self.spk2_align):
+            align = int(align-1)
+            if align > 0:
+                hyp_align[align] = str(self.gt_spk_ids[1]) + "-" + str(i)
+            
+            
+        return hyp_align
+        
+    
     def calculate(self):
         error_count, correct_count, gap = 0, 0, 0
         spk1_error, spk2_error = [], []
