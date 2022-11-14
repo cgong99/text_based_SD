@@ -304,6 +304,20 @@ class RevAI:
                 if token["type"] != "punct":
                     res.append((spk_id, token["ts"], token["end_ts"], token["value"]))
         return res
+
+    def get_utterances_by_spkID(self):
+        res = []
+        for monologue in self.data["monologues"]:
+            spk_id = monologue["speaker"]
+            utterance = ""
+            for element in monologue["elements"]:
+                if element["type"] != "punct":
+                    # if element["value"][0] == "<":
+                    #     continue
+                    value = element["value"].replace(" ", "")  # some element has " " in it e.g "10 30"
+                    utterance = utterance + " " + value
+            res.append((spk_id, utterance))
+        return res
     
     def get_token_list(self):
         if self.istxt:
@@ -313,8 +327,8 @@ class RevAI:
                 spk = arr[1]
                 utt = arr[9:-2]
                 for word in utt:
-                    if word[0] == "<":
-                        continue
+                    # if word[0] == "<":
+                    #     continue
                     new_word = "".join(e for e in word if e.isalnum())
                     new_word = new_word.lower()
                     tokens.append(Token(new_word, spk))

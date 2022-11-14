@@ -34,7 +34,27 @@ def mapSpeaker(gt_tokens: list[Token], hyp_tokens: list[Token], type):
                 hyp_spk2 = rev_spk[1]
             else:
                 hyp_spk2 = rev_spk[0]
-    return {gt_spk1: hyp_spk1, gt_spk2: hyp_spk2}
+    # tmp_map = {gt_spk1: hyp_spk1, gt_spk2: hyp_spk2}
+    spk1_count, spk2_count = 0, 0
+    for i in range(len(gt_tokens)):
+        tk = gt_tokens[i]
+        if tk.spk_id == gt_spk1:
+            spk1_count += 1
+        else:
+            spk2_count += 1
+    hyp_spk1_count, hyp_spk2_count = 0, 0
+    for i in range(len(hyp_tokens)):
+        tk = hyp_tokens[i]
+        if tk.spk_id == hyp_spk1:
+            hyp_spk1_count += 1
+        else:
+            hyp_spk2_count += 1
+    
+    if (spk1_count > spk2_count and hyp_spk1_count > hyp_spk2_count)or(spk1_count< spk2_count and hyp_spk1_count < hyp_spk2_count):
+        return {gt_spk1: hyp_spk1, gt_spk2: hyp_spk2}
+    else:
+        return {gt_spk1: hyp_spk2, gt_spk2: hyp_spk1}
+
 
 
 def get_speaker_list(token_list):
@@ -51,15 +71,19 @@ class Eval_3d:
         self.type = type
         if type == "Amazon":
             self.resultPath = f"ResultAmazon/Result3D/{self.file_code}_result_amazon.csv"
-            self.hyp_tokens = Amazon(f"../data/CallHome_eval/amazon/{self.file_code}.json").get_token_list()
+            self.hyp_raw_file = Amazon(f"../data/CallHome_eval/amazon/{self.file_code}.json")
+            self.hyp_tokens = self.hyp_raw_file.get_token_list()
+            
         if type == "Rev":
             self.resultPath = f"ResultRevAI/Result3D/{self.file_code}_result_revai.csv"
-            self.hyp_tokens = RevAI(f"../data/CallHome_eval/rev/{self.file_code}_cut.json").get_token_list()
+            self.hyp_raw_file = RevAI(f"../data/CallHome_eval/rev/{self.file_code}_cut.json")
+            self.hyp_tokens = self.hyp_raw_file.get_token_list()
         if path:
             self.resultPath = path  # if specified result csv path
 
         self.spk1_align, self.spk2_align = self.read3dResult()
-        self.gt_tokens = CallHome(f"../data/CallHome_eval/transcripts/{self.file_code}.cha").get_token_list()
+        self.gt_file =  CallHome(f"../data/CallHome_eval/transcripts/{self.file_code}.cha")
+        self.gt_tokens = self.gt_file.get_token_list()
         self.gt_spk_ids = get_speaker_list(self.gt_tokens)
         self.hyp_spk_ids = get_speaker_list(self.hyp_tokens)
         self.spk_map = mapSpeaker(self.gt_tokens, self.hyp_tokens, type)
@@ -72,6 +96,29 @@ class Eval_3d:
         spk2_align = removeNan(spk2_align_raw)
         return spk1_align, spk2_align
 
+    def getHyp2SpkAlignment(self):
+        """base on two speakers alignment, generate hyp_to_spk alignment
+
+        Returns:
+            [a-1, a-2, b-1, b-2,...]
+        """
+        hyp_length = len(self.hyp_tokens)
+        hyp_align = ["-" for i in range(hyp_length)]
+        for i, align in enumerate(self.spk1_align):
+            align = int(align-1)
+            if align > 0:
+                # hyp_align[align] = str(self.gt_spk_ids[0]) + "-" + str(i)
+                hyp_align[align] =  "A-" + str(i)
+            
+        for i, align in enumerate(self.spk2_align):
+            align = int(align-1)
+            if align > 0:
+                # hyp_align[align] = str(self.gt_spk_ids[1]) + "-" + str(i)
+                hyp_align[align] =  "B-" + str(i)
+            
+        return hyp_align
+        
+    
     def calculate(self):
         error_count, correct_count, gap = 0, 0, 0
         spk1_error, spk2_error = [], []
@@ -230,7 +277,7 @@ def compare_with_window(start, end, hyp_start, hyp_end):
 
 def output_3d_eval_csv():
     header = ["file", "error_rate", "correct_rate (recall)", "Gap_rate", "error_count", "correct_count", "Gap",
-              "total_token", "recall", "precision", "F1"]
+              "total_token", "recall", "precision", "F1", "Hyp_correct", "Hyp_error", "Hyp_gap", "hyp_token_len"]
     pool = ["4074", "4315", "4093", "4247", "4325", "4335", "4571", "4595"]  # deleted 4290 4660
     # with open("ResultAmazon/Amazon_3D_eval.csv", 'w') as file:
     with open("ResultRevAI/Rev_3D_eval.csv", 'w') as file:
@@ -248,7 +295,7 @@ def output_3d_eval_csv():
             row = [file_code, error / token_len, correct / token_len, gap / token_len, error, correct, gap, token_len,
                    recall, precision, F1, hyp_correct, hyp_error, hyp_gap, hyp_token_len]
             output.writerow(row)
-
+ 
 
 def output_2d_eval_csv():
     header = ["file", "error_rate", "correct_rate (recall)", "Gap_rate", "error_count", "correct_count", "Gap",
@@ -271,7 +318,7 @@ if __name__ == "__main__":
     file_code = 4074
     eval = Eval_3d(file_code=file_code, type="Rev", path=f"../alignment/ResultRevAI/Result3D/{file_code}_result_revai.csv")
     error, correct, gap, recall = eval.calculate()
-    precision = eval.precision()
+    precision, correct, error, gap= eval.precision()
     print("precision: ", precision)
     print("F1: ",   2* precision * recall/ (precision + recall))
 
