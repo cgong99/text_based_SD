@@ -242,7 +242,27 @@ def writeDERcsv(type:str, output_file:str):
       row = [code, hyp_der, gt_der]
       output.writerow(row)
       
-    
+def writeAllScoreCSV(type:str, output_file:str):
+    header = ["file", "error_rate", "correct_rate (recall)", "Gap_rate", "error_count", "correct_count", "Gap",
+              "total_token", "recall", "precision", "F1", "Hyp_correct", "Hyp_error", "Hyp_gap", "hyp_token_len", "Precision_DER", "Recall_DER"]
+    pool = ["4074", "4315", "4093", "4247", "4325", "4335", "4571", "4595"]  # deleted 4290 4660
+    # with open("ResultAmazon/Amazon_3D_eval.csv", 'w') as file:
+    with open(output_file, 'w') as file:
+        output = csv.writer(file)
+        output.writerow(header)
+        for file_code in pool:
+            print("======= ", file_code)
+            eval = Eval_3d(file_code=file_code, type="Rev")
+            # eval = Eval_3d(file_code=file_code, type="Amazon")
+            error, correct, gap, recall = eval.calculate()
+            precision, hyp_correct, hyp_error, hyp_gap = eval.precision()
+            gt_der, hyp_der = computeTwoDER(file_code=file_code, type=type)
+            token_len = len(eval.gt_tokens)
+            hyp_token_len = len(eval.hyp_tokens)
+            F1 = 2 * precision * recall / (precision + recall)
+            row = [file_code, error / token_len, correct / token_len, gap / token_len, error, correct, gap, token_len,
+                   recall, precision, F1, hyp_correct, hyp_error, hyp_gap, hyp_token_len, gt_der, hyp_der]
+            output.writerow(row)
   
 if __name__ == "__main__":
   # Amazon_spk_map = {"spk_0": "A", "spk_1": "B"}
@@ -256,4 +276,5 @@ if __name__ == "__main__":
   # computeTwoDER(file_code=4093,type="Rev")
   # computeTwoDER(file_code=4074,type="Amazon")
   # writeDERcsv("Rev", "ResultRevAI/Rev_3D_DER.csv")
-  writeDERcsv("Amazon", "ResultAmazon/Amazon_3D_DER.csv")
+  # writeDERcsv("Amazon", "ResultAmazon/Amazon_3D_DER.csv")
+  writeAllScoreCSV("Rev", "ResultRevAI/Rev_3D_All_Score.csv")
