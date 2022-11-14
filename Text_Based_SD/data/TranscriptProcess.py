@@ -314,7 +314,8 @@ class RevAI:
                 if element["type"] != "punct":
                     # if element["value"][0] == "<":
                     #     continue
-                    utterance = utterance + " " + element["value"]
+                    value = element["value"].replace(" ", "")  # some element has " " in it e.g "10 30"
+                    utterance = utterance + " " + value
             res.append((spk_id, utterance))
         return res
     
@@ -326,8 +327,8 @@ class RevAI:
                 spk = arr[1]
                 utt = arr[9:-2]
                 for word in utt:
-                    if word[0] == "<":
-                        continue
+                    # if word[0] == "<":
+                    #     continue
                     new_word = "".join(e for e in word if e.isalnum())
                     new_word = new_word.lower()
                     tokens.append(Token(new_word, spk))
