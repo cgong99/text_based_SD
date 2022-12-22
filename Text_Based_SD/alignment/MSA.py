@@ -9,30 +9,30 @@ from typing import Iterable
 from NeedlemanWunsch import edit_distance
 
 
-def compare(reference: str, hypothesis_list: list[str]) -> int:
+def compare(hypothesis: str, reference_list: list[str]) -> int:
     """
     fully match: 2, non-fully match: 1, others (gap or mismatch): -1
     Args:
-        reference: single token for reference text
-        *hypothesis_list: iterable of hypothesis token, each token represent one speaker
+        hypothesis: single token for reference text
+        *reference_list: iterable of hypothesis token, each token represent one speaker
     Returns: score as integer
     """
     gap = '-'
-    hypothesis = gap
-    for token in hypothesis_list:
+    reference = gap
+    for token in reference_list:
         if token == gap:
             continue
         else:
-            if hypothesis == gap:
-                hypothesis = token
+            if reference == gap:
+                reference = token
             else:
                 return -1
     if reference == gap:
         return -1
     else:
-        if reference == hypothesis:
+        if hypothesis == reference:
             return 2
-        elif edit_distance(reference, hypothesis) < 2:
+        elif edit_distance(hypothesis, reference) < 2:
             return 1
         else:
             return -1
@@ -84,9 +84,9 @@ def get_compare_parameter(current_index: tuple | list, parameter_index: tuple | 
     return compare_parameter[0], compare_parameter[1:]
 
 
-def multi_sequence_alignment(reference: list[str], hypothesis: list[list[str]]):
-    speaker_sequence = copy.deepcopy(hypothesis)
-    speaker_sequence.insert(0, copy.deepcopy(reference))
+def multi_sequence_alignment(hypothesis: list[str], reference: list[list[str]]):
+    speaker_sequence = copy.deepcopy(reference)
+    speaker_sequence.insert(0, copy.deepcopy(hypothesis))
     matrix_size = [len(speaker) + 1 for speaker in speaker_sequence]
     score = np.zeros(tuple(matrix_size), dtype="int32")
 
@@ -94,27 +94,30 @@ def multi_sequence_alignment(reference: list[str], hypothesis: list[list[str]]):
         for current_index in get_current_index(sequence_position, matrix_size):
             parameter = []
             for parameter_index in get_parameter_index_list(sequence_position, current_index):
-                ref, hypo = get_compare_parameter(current_index, parameter_index, speaker_sequence)
-                parameter.append(score[parameter_index] + compare(ref, hypo))
+                hypo, ref = get_compare_parameter(current_index, parameter_index, speaker_sequence)
+                parameter.append(score[parameter_index] + compare(hypo, ref))
             score[current_index] = max(parameter)
 
     # backtracking
     align_sequence = [[] for _ in speaker_sequence]
     mappings = [np.zeros(i) for i in matrix_size]
-    current_index = copy.deepcopy(matrix_size)
+    current_index = [size - 1 for size in matrix_size]
     while sum(current_index) > 0:
         sequence_position = tuple([i for i, j in enumerate(current_index) if j != 0])
         for parameter_index in get_parameter_index_list(sequence_position, current_index):
-            ref, hypo = get_compare_parameter(current_index, parameter_index, speaker_sequence)
-            if score[tuple(current_index)] == compare(ref, hypo) + score[parameter_index]:
+            hypo, ref = get_compare_parameter(current_index, parameter_index, speaker_sequence)
+            if score[tuple(current_index)] == compare(hypo, ref) + score[parameter_index]:
                 # append word to aligned sequence
-                align_sequence[0].append(ref)
+                align_sequence[0].append(hypo)
                 for i in range(1, len(align_sequence)):
-                    align_sequence[i].append(hypo[i - 1])
+                    align_sequence[i].append(ref[i - 1])
+                current_index = parameter_index
+    align_sequence = [sequence[::-1] for sequence in align_sequence]
     return align_sequence
 
 
 if __name__ == "__main__":
-    ref = ["I", "am", "a", "fish", "Are", "you"]
-    hypo = [["I", "am", "a", "fish"], ["Are", "you"]]
-    print(multi_sequence_alignment(ref, hypo))
+    ref = ["I", "am", "a", "fish", "Are", "you", "Hello", "there", "How", "are", "you"]
+    hypo = [["I", "am", "a", "fish"], ["Are", "you"], ["Hello", "there"], ["How", "are", "you"]]
+    for seq in multi_sequence_alignment(ref, hypo):
+        print(seq)
