@@ -112,12 +112,13 @@ def multi_sequence_alignment(hypothesis: list[str], reference: list[list[str]]):
                 for i in range(1, len(align_sequence)):
                     align_sequence[i].append(ref[i - 1])
                 current_index = parameter_index
+                break
     align_sequence = [sequence[::-1] for sequence in align_sequence]
     return align_sequence
 
 
 if __name__ == "__main__":
-    ref = ["I", "am", "a", "fish", "Are", "you", "Hello", "there", "How", "are", "you"]
-    hypo = [["I", "am", "a", "fish"], ["Are", "you"], ["Hello", "there"], ["How", "are", "you"]]
-    for seq in multi_sequence_alignment(ref, hypo):
+    hypo = ["ok", "I", "am", "a", "fish", "Are", "you", "Hello", "there", "How", "are", "you", "ok"]
+    ref = [["I", "am", "a", "fish"], ["Are", "you"], ["ok"], ["Hello", "there"], ["How", "are", "you"]]
+    for seq in multi_sequence_alignment(hypo, ref):
         print(seq)
