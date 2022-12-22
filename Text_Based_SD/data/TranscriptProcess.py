@@ -1,4 +1,3 @@
-from curses import newwin
 import json
 import os
 from tokenize import String

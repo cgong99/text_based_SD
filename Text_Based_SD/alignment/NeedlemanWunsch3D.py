@@ -89,10 +89,12 @@ def get_scoring_matrix_3d(target_seq: list[str], seq1: list[str], seq2: list[str
         for k in range(1, len(seq2) + 1):
             score[i][0][k] = max(score[i - 1][0][k - 1] + compare_3d(target_seq[i - 1], "-", seq2[k - 1]),
                                  score[i - 1][0][k] + gap, score[i][0][k - 1] + gap)
-    for j in range(1, len(seq1) + 1):
-        for k in range(1, len(seq2) + 1):
-            score[0][j][k] = max(score[0][j - 1][k - 1] + compare_3d("-", seq1[j - 1], seq2[k - 1]),
-                                 score[0][j - 1][k] + gap, score[0][j][k - 1] + gap)
+    # for j in range(1, len(seq1) + 1):
+    #     for k in range(1, len(seq2) + 1):
+    #         score[0][j][k] = max(score[0][j - 1][k - 1] + compare_3d("-", seq1[j - 1], seq2[k - 1]),
+    #                              score[0][j - 1][k] + gap, score[0][j][k - 1] + gap)
+    #         print([0, j, k])
+    #         print(score[(0, j, k)])
 
     for i in range(1, len(target_seq) + 1):
         for j in range(1, len(seq1) + 1):
@@ -367,7 +369,7 @@ def printSide(mat):
 
 
 if __name__ == "__main__":
-    print(timeit.Timer(test_performance).timeit(number=1))
+    # print(timeit.Timer(test_performance).timeit(number=1))
     # with Pool(1) as pool:
     #     pool.map(write_csv, ["4074", "4093", "4247", "4315", "4325", "4335", "4571", "4595", "4660", "4290"])
     # pool.map(write_csv, ["4315", "4325", "4335", "4571", "4595", "4660", "4290"])
@@ -393,3 +395,13 @@ if __name__ == "__main__":
     #         output = csv.writer(file)
     #         output.writerows([align2, align3, align1, align2_to_align1, align3_to_align1])
     #     print(f"{file_code} has been written.\n")
+    ref = ["I", "am", "a", "fish", "Are", "you"]
+    hypo = [["I", "am", "a", "fish"], ["Are", "you"]]
+    # print(compare(ref, hypo))
+    align1, align2, align3, align2_to_align1, align3_to_align1 = backtrack(ref, hypo[0], hypo[1],
+                                                                           get_scoring_matrix_3d(ref, hypo[0], hypo[1],
+                                                                                                 "1"), "1")
+    print(align2)
+    print(align3)
+    print(align1)
+    print(get_scoring_matrix_3d(ref, hypo[0], hypo[1], "1"))
