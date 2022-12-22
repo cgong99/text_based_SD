@@ -26,8 +26,12 @@ def writeDERcsv(type:str, output_file:str):
       hypothesis = Annotation()
       for segment in CallHome(f"../data/CallHome_eval/transcripts/{file_code}.cha").get_file_annotation():
           reference[Segment(segment[1], segment[2])] = segment[0]
-      for segment in RevAI(f"../data/CallHome_eval/rev/{file_code}_cut.json").get_file_annotation():
-          hypothesis[Segment(segment[1], segment[2])] = segment[0]
+      if type == "Rev":
+        for segment in RevAI(f"../data/CallHome_eval/rev/{file_code}_cut.json").get_file_annotation():
+            hypothesis[Segment(segment[1], segment[2])] = segment[0]
+      else:
+        for segment in Amazon(f"../data/CallHome_eval/amazon/{file_code}.json").get_file_annotation():
+            hypothesis[Segment(segment[1], segment[2])] = segment[0]
 
       metric = DiarizationErrorRate()
       der = metric(reference, hypothesis)
@@ -35,7 +39,8 @@ def writeDERcsv(type:str, output_file:str):
       output.writerow(row)
       
 
-writeDERcsv("Rev", "ResultRevAI/Rev_audio_DER.csv")
+# writeDERcsv("Rev", "ResultRevAI/Rev_audio_DER.csv")
+writeDERcsv("Amazon", "ResultAmazon/Amazon_audio_DER.csv")
   
   # with open(output_file, 'w') as file:
   #   output = csv.writer(file)

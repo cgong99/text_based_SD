@@ -252,8 +252,8 @@ def writeAllScoreCSV(type:str, output_file:str):
         output.writerow(header)
         for file_code in pool:
             print("======= ", file_code)
-            eval = Eval_3d(file_code=file_code, type="Rev")
-            # eval = Eval_3d(file_code=file_code, type="Amazon")
+            # eval = Eval_3d(file_code=file_code, type="Rev")
+            eval = Eval_3d(file_code=file_code, type="Amazon")
             error, correct, gap, recall = eval.calculate()
             precision, hyp_correct, hyp_error, hyp_gap = eval.precision()
             gt_der, hyp_der = computeTwoDER(file_code=file_code, type=type)
@@ -277,4 +277,5 @@ if __name__ == "__main__":
   # computeTwoDER(file_code=4074,type="Amazon")
   # writeDERcsv("Rev", "ResultRevAI/Rev_3D_DER.csv")
   # writeDERcsv("Amazon", "ResultAmazon/Amazon_3D_DER.csv")
-  writeAllScoreCSV("Rev", "ResultRevAI/Rev_3D_All_Score.csv")
+  # writeAllScoreCSV("Rev", "ResultRevAI/Rev_3D_All_Score.csv")
+  writeAllScoreCSV("Amazon", "ResultAmazon/Amazon_3D_All_Score.csv")
