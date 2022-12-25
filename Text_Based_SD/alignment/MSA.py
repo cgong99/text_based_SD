@@ -100,7 +100,7 @@ def multi_sequence_alignment(hypothesis: list[str], reference: list[list[str]]):
 
     # backtracking
     align_sequence = [[] for _ in speaker_sequence]
-    mappings = [np.zeros(i) for i in matrix_size]
+    mappings = [np.zeros(i) for i in matrix_size[1:]]
     current_index = [size - 1 for size in matrix_size]
     while sum(current_index) > 0:
         sequence_position = tuple([i for i, j in enumerate(current_index) if j != 0])
@@ -111,14 +111,19 @@ def multi_sequence_alignment(hypothesis: list[str], reference: list[list[str]]):
                 align_sequence[0].append(hypo)
                 for i in range(1, len(align_sequence)):
                     align_sequence[i].append(ref[i - 1])
+                    mappings[i - 1][current_index[i]] = parameter_index[0]
                 current_index = parameter_index
                 break
     align_sequence = [sequence[::-1] for sequence in align_sequence]
-    return align_sequence
+    mappings = [mapping[1:] for mapping in mappings]
+    return align_sequence, mappings
 
 
 if __name__ == "__main__":
     hypo = ["ok", "I", "am", "a", "fish", "Are", "you", "Hello", "there", "How", "are", "you", "ok"]
     ref = [["I", "am", "a", "fish"], ["Are", "you"], ["ok"], ["Hello", "there"], ["How", "are", "you"]]
-    for seq in multi_sequence_alignment(hypo, ref):
+    text, mappings = multi_sequence_alignment(hypo, ref)
+    for seq in text:
         print(seq)
+    for mapping in mappings:
+        print(mapping)
