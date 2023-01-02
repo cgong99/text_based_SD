@@ -1,0 +1,1141 @@
+C	0.22-1.68	 Yeah we had a long discussion about
+C	2.67-6.32	 how much how easy we want to make it for people to bleep things out So
+F	6.26-6.86	 Right
+F	7.52-8.76	 OK So this is
+C	8.17-11.1	 Morgan wants to make it hard
+F	9.75-13.55	 The uh counter is not moving again It
+D	13.21-14.48	 It it doesn't
+F	14.46-15.84	 It doesn't like me but
+C	16.43-19.07	 Did did did it I didn't even check yesterday whether it was moving
+D	18.07-19.98	 It didn't move yesterday either when I started it
+F	19.54-20.46	 Oh it didn't OK
+C	20.3-20.57	 So
+D	20.48-21.93	 So I don't know if it doesn't like both of us
+F	20.72-25.54	 It didn't move on me on one other meeting and it did on one and both recorded the same so
+C	21.44-21.95	 Channel three
+C	22.68-23.21	 Channel three
+D	25.84-29.21	 You know I discovered something yesterday on these um wireless ones
+B	28.33-30.5	 Channel two
+C	28.94-29.43	 Mm hmm
+D	29.87-32.99	 You can tell if it picking up breath noise and stuff
+C	32.89-35.21	 Yeah it has a little indicator on it on the AF
+D	34.0-34.44	 Mm hmm
+F	34.19-34.94	 Oh really
+F	35.99-40.3	 Oh that the gains I've left here as the sort of normal ones but
+D	36.74-44.64	 So if you yeah if you breathe under breathe and then you see AF go off then you know it picking up your mouth noise
+F	44.81-47.14	 Oh that good Cuz we have a lot of breath noises
+C	46.57-47.22	 Yep Test
+F	48.6-55.71	 In fact if you listen to just the channels of people not talking it like
+F	55.71-57.41	 It very Sorry
+C	56.13-59.36	 What Did you see Hannibal recently or something
+F	58.32-60.67	 Exactly It very disconcerting OK
+F	61.23-66.96	 So um I was gonna try to get out of here like in half an hour um cuz I
+F	67.53-71.62	 really appreciate people coming and the main thing that I was
+F	73.19-77.25	 gonna ask people to help with today is to
+F	78.13-83.73	 give input on what kinds of database format we should use in
+F	84.29-89.87	 starting to link up things like word transcripts and annotations of word transcripts so anything that
+F	90.02-94.16	 transcribers or discourse coders or whatever put in the signal
+F	94.2-100.29	 with time marks for like words and phone boundaries and all the stuff we get out of the forced alignments and the recognizer
+F	101.13-103.86	 So we have this um
+F	103.86-112.26	 I think a starting point is clearly the the channelized output of Dave Gelbart program which Don brought a copy of
+C	110.53-112.02	 Yeah
+C	112.12-116.64	 Yeah I'm I'm familiar with that I mean we I sort of already have developed an XML format
+F	113.18-114.7	 um which
+D	114.57-114.93	 Can I see it
+C	117.34-120.18	 for this sort of stuff And so the only question
+C	120.68-123.32	 is it the sort of thing that you want to use or not
+C	123.68-125.66	 Have you looked at that I mean I had a web page up
+F	125.47-126.55	 Right So
+F	127.47-131.6	 I actually mostly need to be able to link up or
+C	127.83-128.2	 So
+C	131.56-132.12	 You mean this
+F	131.6-134.66	 it it a question both of what the representation is and
+C	133.68-136.37	 I guess I am gonna be standing up and drawing on the board
+F	135.18-136.85	 OK yeah So you should definitely
+C	136.98-141.35	 Um so so it definitely had that as a concept So it has a single time line
+F	141.33-141.79	 Mm hmm
+C	141.96-148.88	 and then you can have lots of different sections each of which have Ds attached to it and then you can refer from other sections to those Ds
+C	149.28-149.99	 if you want to
+C	150.7-151.89	 So that um
+C	152.9-155.08	 so that you start with with a time line tag
+C	157.7-159.0	 Time line
+C	159.52-160.94	 And then you have a bunch of times
+C	161.5-164.67	 I don't I don't remember exactly what my notation was but it
+A	163.8-166.45	 Oh I remember seeing an example of this Yeah
+F	164.74-165.85	 Right right
+C	166.36-168.31	 Yeah equals one point
+C	169.8-171.14	 three two uh
+C	171.12-173.99	 And then I I also had optional things like accuracy
+C	174.58-180.22	 and then ID equals one uh one seven And then
+C	181.56-187.12	 I also wanted to to be to be able to not specify specifically what the time was and just have a stamp
+F	186.09-186.45	 Right
+C	189.91-194.5	 Yeah so these are arbitrary assigned by a program not not by a user So you have a whole bunch of those
+C	194.54-198.57	 And then somewhere further down you might have something like an utterance tag
+C	199.48-200.41	 which has start
+C	202.02-206.1	 equals seventeen end equals eighteen
+C	206.33-210.37	 So what that saying is we know it starts at this particular time We don't know when it ends
+F	210.68-211.53	 OK
+C	211.5-217.07	 Right But it ends at this eighteen which may be somewhere else We say there another utterance
+C	218.28-222.71	 We don't know what the time actually is but we know that it the same time as this end time
+A	225.31-225.6	 Mmm
+C	226.16-227.77	 You know thirty eight whatever you want
+A	227.95-230.55	 So you're essentially defining a lattice
+C	228.94-229.18	 OK
+C	231.21-231.9	 Yes exactly
+A	232.16-232.48	 Yeah
+C	233.61-236.45	 And then uh and then these also have Ds
+C	240.33-247.11	 Right So you could you could have some sort of other other tag later in the file that would be something like um
+C	248.68-249.83	 oh I don't know uh
+C	253.49-255.84	 noise type equals
+C	257.74-259.37	 door slam You know
+C	260.89-261.73	 And then uh
+C	262.36-267.79	 you could either say time equals a particular time mark or you could do other sorts of references
+C	267.79-269.55	 So or or you might have a prosody
+C	270.52-273.98	 Prosody right
+F	273.48-276.04	 It an instead of an but the is good
+C	276.55-278.06	 You like the That a good
+F	276.61-277.78	 Yeah
+C	278.06-278.94	 Um
+C	279.35-281.23	 you know so you could have some sort of type here
+C	282.17-284.35	 and then you could have um
+C	284.39-288.21	 the utterance that it referring to could be seventeen or something like that
+F	289.42-291.94	 OK So I mean that seems
+F	293.0-293.62	 that seems
+F	294.49-295.81	 great for all of the
+F	297.54-299.77	 encoding of things with time and
+C	300.22-300.49	 Oh well
+F	300.71-301.12	 um
+F	301.66-304.23	 I I guess my question is more
+F	305.03-311.32	 uh what what do you do with say a forced alignment I mean you've got all these phone labels and what do you do if you
+A	305.33-306.0	 How
+F	311.95-318.26	 just conceptually if you get um transcriptions where the words are staying
+F	318.65-324.5	 but the time boundaries are changing cuz you've got a new recognition output or sort of what the um
+F	325.25-327.8	 sequence of going from the
+F	328.42-333.39	 waveforms that stay the same the transcripts that may or may not change and then the
+F	333.97-337.26	 utterance which where the time boundaries that may or may not change
+A	334.04-335.24	 Oh that
+A	337.0-342.31	 That actually very nicely handled here because you could you could all you'd have to change is the
+F	338.36-338.75	 Um
+A	342.47-348.2	 um time stamps in the time line without without uh changing the Ds
+F	345.71-347.68	 And you'd be able to propagate all of the
+C	347.88-351.06	 Right That the that why you do that extra level of indirection
+F	348.17-349.05	 the information
+C	353.27-355.19	 So that you can just change the time line
+A	355.68-362.22	 Except the time line is gonna be huge If you say suppose you have a phone level alignment You'd have you'd have
+C	357.83-358.23	 Yes
+F	357.88-362.76	 Yeah yeah especially at the phone level The we we have phone level backtraces
+C	361.23-363.64	 Yeah this I don't think I would do this for phone level
+F	363.51-364.37	 Um
+C	363.64-368.2	 I think for phone level you want to use some sort of binary representation because it'll be too dense otherwise
+F	367.45-375.85	 OK So if you were doing that and you had this sort of companion uh thing that gets called up for phone level uh what would that look like How would you
+C	375.23-377.12	 I would use just an existing
+A	375.43-376.43	 Why
+A	378.19-384.15	 Mmm But but why not use it for phone level It just a matter of it just a matter of it being bigger But if you have
+C	378.41-379.55	 an existing way of doing it
+A	385.0-388.6	 you know barring memory limitations uh I mean this is still the
+C	387.84-393.69	 It parsing limitations I don't want to have this text file that you have to read in the whole thing to do something very simple for
+A	394.74-401.08	 Oh no You would use it only for purposes where you actually want the phone level information I'd imagine
+F	400.68-406.74	 So you could have some file that configures how much information you want in your in your XML or something
+C	406.97-412.34	 Right I mean you'd I I am imagining you'd have multiple versions of this depending on the information that you want
+A	407.44-408.54	 You
+F	407.47-410.15	 Um cuz it does get very with
+F	410.94-411.33	 Right
+C	412.39-417.95	 Um I'm just what I'm wondering is whether I think for word level this would be OK
+F	417.12-419.34	 Yeah Yeah Definitely
+C	418.19-419.67	 For word level it alright
+A	419.33-419.71	 Mm hmm
+C	419.67-424.95	 For lower than word level you're talking about so much data that I just I don't know I don't know if that
+F	424.93-429.54	 I mean we actually have So one thing that Don is doing is we're we're running
+D	427.45-428.39	 Lattices are big too
+F	429.54-435.06	 For every frame you get a pitch value and not only one pitch value but different kinds of pitch values depending on
+C	434.29-440.13	 Yeah I mean for something like that I would use file or or any frame level stuff I would use file
+F	440.23-441.2	 Meaning
+C	441.17-447.03	 Uh that a well or something like it It uh ICSI has a format for frame level representation of features
+F	447.81-452.69	 OK That you could call that you would tie into this representation with like an ID
+C	448.22-448.67	 Um
+C	451.18-451.53	 Right
+C	452.75-457.6	 Right Or or there a there a particular way in XML to refer to external resources
+F	453.66-454.25	 And
+F	457.81-458.25	 OK
+C	458.45-461.42	 So you would say refer to this external file
+C	462.46-465.23	 Um so that external file wouldn't be in
+F	463.43-464.71	 So that might that might work
+D	465.15-469.17	 But what what the advantage of doing that versus just putting it into this format
+C	468.1-473.69	 More compact which I think is is better I mean if you did it at this
+D	470.44-470.69	 Uh huh
+F	472.19-475.84	 I mean these are long meetings and with for every frame um
+C	474.29-479.05	 You don't want to do it with that Anything at frame level you had better encode binary or it gonna be really painful
+A	478.5-484.53	 Or you just I mean I like text formats Um you can always uh zip them
+A	484.57-489.27	 and um you know decompress them on the fly if if space is really a concern
+D	485.46-486.45	 Yeah I was
+D	488.55-491.45	 I was thinking the advantage is that we can share this with other people
+C	489.05-492.2	 Well but if you're talking about one per frame
+C	492.91-499.02	 you're talking about gigabyte size files You're gonna actually run out of space in your filesystem for one file
+F	496.57-499.12	 These are big files These are really I mean
+C	499.66-502.4	 Right Because you have a two gigabyte limit on most Ss
+A	499.89-506.99	 Right OK I would say OK so frame level is probably not a good idea But for phone level stuff it perfectly
+F	504.19-505.32	 And it
+A	508.45-510.5	 Like phones or syllables or anything like that
+F	509.53-511.69	 Phones are every five frames though so
+F	512.51-513.38	 Or something like that
+A	512.98-517.08	 But but but most of the frames are actually not speech
+A	517.54-519.87	 So you know people don't
+F	519.32-521.01	 Yeah but we actually
+A	519.43-525.96	 Look at it words times the average The average number of phones in an English word is I don't know five maybe
+A	526.81-530.61	 So look at it number of words times five That not that not
+F	528.95-532.44	 Oh so you mean pause phones take up a lot of the long pause phones
+C	532.5-532.74	 Yep
+A	532.74-533.65	 Exactly Yeah
+F	532.87-536.59	 Yeah OK That true But you do have to keep them in there yeah OK
+C	535.56-542.5	 So I think it it debatable whether you want to do phone level in the same thing But I think anything at frame level even file
+F	539.69-540.1	 OK
+F	541.5-542.16	 So
+C	542.95-546.04	 is too verbose I would use something tighter than files
+F	545.97-549.38	 Do you Are you familiar with it I haven't seen this particular format but
+C	546.81-547.07	 So
+A	548.48-552.38	 I mean I've I've used them I don't know what their structure is I've forgot what the
+F	549.98-550.48	 OK
+D	551.7-557.55	 But wait a minute file for each frame is storing a vector of cepstral or PLP values right
+C	557.22-561.36	 It whatever you want actually So that what nice about the file It
+D	558.12-558.53	 Right
+C	562.14-567.92	 Built into it is the concept of frames utterances sentences that sort of thing that structure
+C	568.32-572.93	 And then also attached to it is an arbitrary vector of values
+F	573.39-573.75	 Oh
+C	573.61-579.86	 And it can take different types So it they don't all have to be floats You know you can have integers and you can have doubles and all that sort of stuff
+F	578.6-581.62	 So that that sounds that sounds about what I
+C	580.75-581.1	 Um
+C	581.82-587.72	 Right And it has a header it has a header format that describes it to some extent So
+C	587.95-595.02	 the only problem with it is it actually storing the utterance numbers and the frame numbers in the file
+C	595.33-598.89	 even though they're always sequential And so it does waste a lot of space
+A	599.78-599.98	 Hmm
+C	599.79-604.07	 But it still a lot tighter than than ASCII And we have a lot of tools already to deal with it
+F	603.79-608.73	 You do OK Is there some documentation on this somewhere OK great So
+C	606.69-610.65	 Yeah there a ton of it Man pages and uh source code and
+F	611.3-617.1	 I mean that sounds good I I was just looking for something I'm not a database person but something sort of standard enough that
+C	611.33-612.52	 me
+F	617.8-622.15	 you know if we start using this we can give it out other people can work on it or Is it
+C	620.26-623.73	 Yeah it not standard I mean it something that we developed at ICSI
+C	624.6-625.79	 But uh
+F	625.93-629.61	 But it been used here and people've
+C	627.8-634.8	 But it been used here and and you know we have a well configured system that you can distribute for free and
+D	633.88-640.12	 I mean it must be the equivalent of whatever you guys used to store your computed features in right
+F	635.21-636.24	 OK
+A	640.1-641.15	 Yeah we have
+A	641.67-646.75	 Actually we we use a generalization of the the Sphere format
+D	645.51-645.98	 Mmm
+A	647.29-649.33	 Um but
+A	650.55-654.38	 Yeah so there is something like that but it um probably not as
+D	652.75-653.78	 And I think there
+C	653.26-657.21	 Well what does K do for features Or does it even have a concept of features
+A	655.84-657.45	 They it has its own
+A	657.92-664.24	 I mean Entropic has their own feature format that called like SD or some SF or something like that
+F	662.12-662.72	 Yeah
+D	664.04-664.52	 Yeah
+C	664.41-666.88	 I'm just wondering would it be worth while to use that instead
+A	665.16-665.51	 Hmm
+F	666.88-670.61	 Yeah Th this is exactly the kind of decision It just whatever
+D	668.02-673.27	 But I mean people don't typically share this kind of stuff right I mean
+A	672.67-672.98	 Right
+C	673.17-674.63	 They generate their own
+F	674.07-675.58	 Actually I
+D	674.27-674.63	 Yeah
+F	676.04-679.87	 I just you know we we've done this stuff on prosodics and
+F	680.21-684.02	 three or four places have asked for those prosodic files and we just have an ASCII
+F	684.34-687.01	 uh output of frame by frame Which is fine
+C	684.64-685.12	 Ah right
+F	687.59-692.4	 but it gets unwieldy to go in and and query these files with really huge files
+C	692.74-693.05	 Right
+F	693.07-697.6	 I mean we could do it I was just thinking if there something that where all the frame values are Hmm
+C	695.21-696.92	 And and again if you have a
+C	697.51-701.66	 if you have a two hour long meeting that gonna
+F	701.13-707.24	 They're they're they're quite large And these are for ten minute Switchboard conversations and
+C	702.71-704.18	 Yeah I mean they'd be enormous
+C	705.99-706.26	 Right
+F	707.3-713.08	 So it doable it just that you can only store a feature vector at frame by frame and it doesn't have any kind of
+F	714.51-715.37	 um
+D	714.87-722.15	 Is is the sharing part of this a pretty important consideration or does that just sort of uh a nice thing to have
+F	722.99-730.09	 I I don't know enough about what we're gonna do with the data But I thought it would be good to get something that
+F	731.28-735.14	 we can that other people can use or adopt for their own kinds of
+F	735.89-742.47	 encoding And just I mean we have to use we have to make some decision about what to do And especially for the prosody work what
+C	739.73-739.97	 Yeah
+F	742.8-744.17	 what it ends up being is you get
+F	744.89-750.51	 features from the signal and of course those change every time your alignments change So you re run a recognizer you want to recompute
+F	751.22-756.93	 your features um and then keep the database up to date Or you change a word or you change a
+C	754.86-755.06	 Right
+F	757.21-760.04	 utterance boundary segment which is gonna happen a lot
+F	760.74-765.97	 And so I wanted something where all of this can be done in a elegant way and that if somebody
+F	766.93-770.75	 wants to try something or compute something else that it can be done flexibly
+F	771.38-774.23	 Um it doesn't have to be pretty it just has to be
+F	775.4-776.82	 you know easy to use and
+C	777.09-778.39	 Yeah the other thing
+C	779.2-781.77	 We should look at ATLAS the NIST thing
+F	781.29-781.41	 Oh
+A	781.98-782.3	 Mmm
+F	782.16-783.44	 Uh
+C	783.01-788.68	 and see if they have anything at that level I mean I'm not sure what to do about this with ATLAS because they chose a different route
+C	789.21-793.36	 I chose something that Th there are sort of two choices Your your file format
+C	794.03-795.12	 can know about
+C	795.87-800.13	 know that you're talking about language and speech which is what I chose and time
+C	800.2-803.23	 or your file format can just be a graph representation
+C	803.8-806.25	 And then the application has to impose the structure on top
+C	806.88-811.31	 So what it looked like ATLAS chose is they chose the other way which was their file format is just
+C	811.95-815.63	 nodes and links and you have to interpret what they mean yourself
+F	816.8-819.7	 And why did you not choose that type of approach
+C	818.16-821.57	 Uh because I knew that we were doing speech and I thought it was better
+F	820.74-821.17	 OK
+C	822.35-828.13	 if you're looking at a raw file to be for the tags to say it an utterance as opposed to the tag to say it a link
+F	828.72-829.15	 OK
+F	829.49-832.31	 But other than that are they compatible I mean you could sort of
+C	829.85-830.35	 So but
+C	832.17-833.52	 Yeah they're reasonably compatible
+F	832.91-834.48	 I mean you you could
+D	833.86-835.25	 You could probably translate between them
+F	835.57-837.42	 Yeah that So OK
+C	835.78-836.04	 Yep
+C	836.42-838.6	 So well the other thing is
+C	838.63-844.88	 if we choose to use ATLAS which maybe we should just do we should just throw this out before we invest a lot of time in it
+F	842.35-842.76	 I don't
+F	845.1-852.09	 So this is what the meeting about just sort of how to Um cuz we need to come up with a database like this just to do our work And I actually don't
+C	846.61-846.84	 Yeah
+F	852.73-856.65	 care as long as it something useful to other people what we choose So maybe it
+C	855.08-855.29	 Yeah
+F	857.13-860.44	 maybe you know if if you have any idea of how to choose cuz I don't
+C	858.0-859.09	 The only thing
+C	860.42-861.47	 Yeah
+A	861.45-862.48	 Do they already have tools
+C	861.47-865.85	 I mean I I chose this for a couple reasons One of them is that it easy to parse
+C	866.52-871.57	 You don't need a full XML parser It very easy to just write a Perl script to parse it
+A	871.66-876.14	 As long as uh each tag is on one line
+C	874.04-877.22	 Exactly Exactly Which I always do
+F	876.4-879.91	 And you can have as much information in the tag as you want right
+C	880.18-886.33	 Well I have it structured Right So each type tag has only particular items that it can take
+F	886.53-889.28	 Can you But you can add to those structures
+C	889.25-889.58	 Sure
+F	889.79-890.88	 if you
+C	890.98-892.2	 If you have more information So what
+F	891.87-893.38	 Yeah So
+C	892.32-895.82	 What NIST would say is that instead of doing this you would say something like link
+C	898.08-904.48	 start equals um you know some node ID end equals some other node ID
+C	905.68-909.48	 and then type would be utterance
+A	910.53-910.7	 Hmm
+C	911.14-912.29	 You know so it very similar
+F	913.43-918.82	 So why would it be a a waste to do it this way if it similar enough that we can always translate it
+D	918.32-921.98	 It probably wouldn't be a waste It would mean that at some point if we wanted to switch we'd just have to
+C	922.19-923.4	 Write a translator But it
+D	922.98-923.96	 translate everything
+F	923.82-925.26	 But it but that sounds
+C	923.91-925.79	 Since they are developing a big
+D	924.98-926.45	 But that I don't think that a big deal
+F	925.78-927.16	 As long as it is
+C	926.99-930.32	 they're developing a big infrastructure And so it seems to me that if
+C	930.32-935.13	 if we want to use that we might as well go directly to what they're doing rather than
+A	930.61-931.57	 If we want to
+A	933.98-937.76	 Do they already have something that that would be useful for us in place
+D	936.5-939.63	 Yeah See that the question I mean how stable is their
+D	940.2-941.61	 Are they ready to go or
+C	940.89-945.12	 The I looked at it The last time I looked at it was a while ago probably a year ago
+D	945.47-945.72	 Hmm
+C	945.84-949.04	 uh when we first started talking about this And at that time at least
+C	949.59-951.98	 it was still not very complete
+C	952.04-956.77	 And so specifically they didn't have any external format representation at that time
+C	957.07-960.61	 They just had the sort of conceptual node
+C	960.66-965.29	 uh annotated transcription graph which I really liked And that exactly what this stuff is based on
+C	965.86-968.56	 Since then they've developed their own external file format
+C	969.14-972.04	 which is uh you know this sort of this sort of thing
+C	972.6-976.35	 Um and apparently they've also developed a lot of tools but I haven't looked at them Maybe I should
+A	976.21-978.0	 We should we should find out
+F	976.86-981.36	 I mean would the tools would the tools run on something like this if you can translate them anyway
+C	981.69-988.19	 Um what would would would what would worry me is that maybe we might miss a little detail
+F	982.66-984.58	 I mean that I guess it a question that uh yeah
+A	982.77-983.66	 It a hassle
+A	984.69-985.24	 if
+C	988.3-990.89	 that would make it very difficult to translate from one to the other
+F	988.6-989.08	 OK
+A	990.11-998.79	 I I think if it conceptually close and they already have or will have tools that everybody else will be using I mean
+F	990.9-991.29	 OK
+C	998.92-999.68	 Yeah we might as well
+A	999.23-1003.66	 it would be crazy to do something you know separate that
+C	1003.32-1003.57	 Yep
+F	1004.08-1004.27	 Yeah
+C	1004.6-1006.72	 So I'll I'll take a closer look at it
+F	1005.83-1012.04	 Actually so it that that would really be the question is just what you would feel is in the long run the best thing Cuz
+C	1008.2-1008.75	 And
+C	1009.85-1010.11	 Right
+C	1011.78-1012.28	 The
+F	1012.04-1019.48	 once we start sort of doing this I don't we don't actually have enough time to probably have to rehash it out again and
+C	1014.97-1015.19	 Yep
+C	1019.57-1026.36	 The other thing the other way that I sort of established this was as easy translation to and from the Transcriber format
+F	1026.81-1028.01	 Right Right
+C	1027.47-1029.19	 Um but
+F	1029.21-1035.32	 I mean I like this This is sort of intuitively easy to actually read as easy it could as it could be But
+C	1032.07-1032.27	 Yep
+F	1035.97-1040.22	 I suppose that as long as they have a type here that specifies utt
+F	1040.64-1040.94	 um
+C	1041.25-1047.4	 It almost the same The the the the point is with this though is that you can't really add any supplementary information
+F	1042.08-1043.64	 it yeah close enough that
+C	1048.49-1050.64	 Right So if you suddenly decide that you want
+F	1050.36-1052.11	 You have to make a different type
+C	1051.75-1053.62	 Yeah You'd have to make a different type
+F	1053.46-1055.25	 So Well if you look at it and
+F	1055.76-1059.4	 Um I guess in my mind I don't know enough Jane would know better about
+F	1060.2-1063.23	 the types of annotations and and
+F	1063.23-1068.15	 But I imagine that those are things that would well you guys mentioned this that could span any
+F	1068.79-1076.4	 it could be in its own channel it could span time boundaries of any type it could be instantaneous things like that Um
+C	1072.56-1072.86	 Right
+F	1076.89-1078.86	 and then from the recognition side we have
+F	1079.97-1084.8	 backtraces at the phone level If if it can handle that it could handle states or whatever
+C	1081.8-1082.14	 Right
+F	1084.84-1087.09	 And then at the prosody level we have
+F	1087.91-1089.72	 frame sort of like cepstral
+C	1089.19-1089.47	 Yep
+F	1090.33-1095.4	 feature files uh like these files or anything like that And that sort of the world of things that I
+F	1095.79-1098.99	 And then we have the aligned channels of course and
+C	1097.59-1097.84	 Right
+A	1098.79-1101.55	 It seems to me you want to keep the frame level stuff separate
+F	1101.82-1109.45	 Yeah I I definitely agree and I wanted to find actually a a nicer format or a maybe a more compact format than what we used before Just cuz you've got
+A	1102.18-1103.02	 And then
+C	1107.69-1107.97	 Right
+F	1109.92-1115.07	 ten channels or whatever and two hours of a meeting It it a lot of
+A	1112.09-1115.27	 Now now how would you
+C	1113.9-1114.44	 Huge
+A	1115.6-1123.28	 how would you represent um multiple speakers in this framework Were You would just represent them as
+C	1121.52-1122.22	 Um
+A	1123.42-1125.45	 You would have like a speaker tag or something
+C	1124.93-1128.68	 there a speaker tag up at the top which identifies them and then each
+C	1128.73-1135.54	 the way I had it is each turn or each utterance I don't even remember now had a speaker ID tag attached to it
+A	1129.72-1130.17	 Mm hmm
+C	1136.16-1139.53	 And in this format you would have a different tag
+A	1136.26-1136.69	 OK
+C	1140.16-1142.87	 which which would uh be linked to the link
+F	1143.86-1144.18	 Yeah
+C	1143.96-1148.53	 So so somewhere else you would have another thing that would be um
+C	1150.24-1152.66	 Let see would it be a node or a link Um
+C	1153.52-1158.2	 And so so this one would have um an ID is link
+C	1158.97-1164.66	 link seventy four or something like that And then somewhere up here you would have a link that that uh
+A	1161.01-1161.48	 Mm hmm
+C	1166.05-1172.85	 you know was referencing seventy four and had speaker Adam
+A	1173.25-1174.12	 Is
+F	1173.41-1175.58	 Actually it the channel I think that
+C	1173.62-1174.83	 You know or something like that
+A	1176.13-1178.59	 Well channel or speaker or whatever It doesn't
+F	1176.17-1179.52	 I mean yeah channel is what the channelized output
+C	1179.15-1181.01	 This isn't quite right I have to look at it again
+A	1180.15-1184.29	 Right But but so how in the NIST format do we express
+F	1180.21-1181.24	 Yeah but
+A	1184.44-1190.47	 a hierarchical relationship between um say an utterance and the words within it
+A	1190.47-1195.86	 So how do you tell that these are the words that belong to that utterance
+C	1196.92-1203.66	 Um you would have another structure lower down than this that would be saying they're all belonging to this ID
+A	1200.33-1200.74	 Mm hmm
+D	1205.5-1209.53	 So each thing refers to the utterance that it belongs to
+C	1209.44-1209.76	 Right
+D	1211.01-1213.04	 So it it not it sort of bottom up
+C	1211.02-1215.79	 And then each utterance could refer to a turn and each turn could refer to something higher up
+F	1215.83-1217.67	 And what if you actually have
+F	1218.03-1223.61	 So right now what you have as utterance um the closest thing that comes out of the channelized is the
+F	1224.03-1228.43	 stuff between the segment boundaries that the transcribers put in or that Thilo put in
+F	1229.25-1235.93	 which may or may not actually be like a it usually not um the beginning and end of a sentence say
+C	1235.91-1238.93	 Well that why I didn't call it sentence
+F	1236.66-1240.32	 So right Um so it like a segment or something So
+C	1239.4-1239.65	 Yeah
+F	1241.3-1246.77	 I mean I assume this is possible that if you have someone annotates the punctuation or whatever when they transcribe
+F	1247.51-1249.0	 you can say you know from
+F	1249.55-1256.11	 for from the beginning of the sentence to the end of the sentence from the annotations this is a unit even though it never actually
+F	1256.87-1260.82	 It only a unit by virtue of the annotations at the word level
+C	1260.94-1263.25	 Sure I mean so you would you would have yet another tag
+F	1261.5-1264.62	 And then that would get a tag somehow OK
+C	1264.2-1266.66	 You'd have another tag which says this is of type sentence
+F	1266.62-1267.1	 OK
+C	1267.3-1268.95	 And what
+F	1267.95-1270.47	 But it just not overtly in the
+A	1269.1-1270.47	 OK
+F	1271.93-1273.77	 Um cuz this is exactly the kind of
+A	1273.06-1273.92	 So
+F	1274.98-1277.7	 I think that should be possible as long as the
+F	1278.1-1283.13	 But uh what I don't understand is where the where in this type of file that would be expressed
+C	1284.91-1286.59	 Right You would have another tag somewhere
+C	1286.71-1289.3	 It well there're two ways of doing it
+F	1287.37-1291.94	 so it would just be floating before the sentence or floating after the sentence without a time mark
+C	1290.64-1292.93	 You could have some sort of link type
+C	1294.02-1295.16	 type equals sentence
+C	1296.8-1300.12	 and ID is whatever
+C	1300.12-1305.35	 And then lower down you could have an utterance So the type is utterance
+C	1306.47-1308.77	 equals utt And you could either say that
+C	1309.57-1311.31	 No I don't know I take that back
+A	1310.38-1312.63	 So here the thing Um
+F	1312.9-1313.86	 See cuz it
+C	1313.24-1315.6	 Can you can you say that this is
+A	1315.17-1316.09	 Hhh
+F	1315.68-1316.74	 it
+D	1316.77-1317.62	 You would just have a
+C	1317.18-1319.79	 part of this or do you say this is part of this I think
+F	1319.8-1320.43	 But they're
+D	1319.92-1321.28	 You would refer up to the sentence
+A	1320.72-1321.64	 Well the thing
+F	1321.14-1323.08	 they're actually overlapping each other sort of
+C	1321.73-1322.24	 So
+A	1323.14-1325.87	 the thing is that something may be a part of
+C	1323.31-1325.01	 Right
+A	1326.77-1329.28	 one thing for one purpose and another thing of another purpose
+F	1330.06-1332.0	 You have to have another type then I guess
+A	1330.31-1330.66	 So
+A	1332.39-1335.58	 Um well let let so let
+C	1333.22-1337.54	 Well I think I'm I think I had better look at it again because I I'm
+F	1333.81-1334.45	 Yeah
+F	1336.24-1337.27	 OK OK
+A	1336.39-1337.15	 so
+C	1337.81-1341.89	 There one level there one more level of indirection that I'm forgetting
+A	1337.82-1340.1	 So for instance
+A	1341.12-1349.22	 Suppose you have a word sequence and you have two different segmentations of that same word sequence Say one segmentation is in terms of
+A	1350.99-1351.46	 um
+A	1352.52-1359.28	 you know uh sentences And another segmentation is in terms of um I don't know prosodic phrases
+A	1360.15-1364.89	 And let say that they don't nest So you know a prosodic phrase may cross
+C	1365.27-1365.48	 Right
+A	1366.51-1369.87	 two sentences or something I don't know if that true or not but let
+F	1368.8-1374.75	 Well it definitely true with the segment That what I exactly what I meant by the utterances versus the sentence could be sort of
+A	1370.62-1370.82	 Right
+A	1371.36-1371.59	 Yeah
+A	1373.32-1379.71	 So you want to be you want to say this this word is part of that sentence and this prosodic phrase
+F	1375.31-1375.43	 Yeah
+F	1381.0-1381.16	 Yeah
+A	1381.07-1384.4	 But the phrase is not part of the sentence and neither is the sentence part of the phrase
+F	1383.62-1384.02	 Right
+C	1384.17-1388.09	 I'm pretty sure that you can do that but I'm forgetting the exact level of nesting
+A	1386.42-1392.81	 So you would have to have two different pointers from the word up one level up one to the
+C	1391.18-1396.41	 So so what you would end up having is a tag saying here a word and it starts here and it ends here
+A	1394.96-1396.28	 Right
+C	1396.45-1400.3	 And then lower down you would say here a prosodic boundary and it has these words in it
+C	1401.05-1403.78	 And lower down you'd have here a sentence and it has these words in it
+F	1401.44-1402.32	 An Right
+A	1401.88-1402.27	 Right
+F	1403.12-1408.59	 So you would be able to go in and say you know give me all the words in the in the prosodic phrase and give me all the words in the Yeah
+C	1407.86-1408.22	 Yep
+C	1409.32-1411.81	 So I think that that would Let me look at it again
+F	1409.5-1410.46	 Um OK
+A	1411.14-1411.93	 Mm hmm
+F	1411.66-1412.09	 OK
+A	1411.93-1418.5	 The the the other issue that you had was how do you actually efficiently extract um
+C	1412.2-1412.41	 So
+F	1413.28-1414.17	 That good
+A	1419.6-1423.88	 find and extract information in a structure of this type
+A	1424.51-1427.15	 So you gave some examples like
+F	1426.88-1430.0	 Well uh and I mean you guys might
+F	1430.94-1438.17	 I don't know if this is premature because I suppose once you get the representation you can do this but the kinds of things I was worried about is
+F	1439.15-1439.78	 uh
+A	1439.21-1442.88	 No that not clear I mean yeah you sure you can do it but can you do it
+F	1440.22-1442.24	 Well OK So if it
+F	1443.44-1446.64	 I mean I can't do it but I can um
+A	1444.03-1445.57	 sort of you know
+A	1446.07-1446.27	 it
+A	1446.77-1450.82	 you gotta you gotta do this you you're gonna want to do this very quickly
+C	1447.07-1447.59	 Well
+A	1450.88-1456.28	 or else you'll spend all your time sort of searching through very complex data structures
+F	1454.0-1458.44	 Right You'd need a sort of a paradigm for how to do it But an example would be
+F	1460.27-1463.57	 find all the cases in which Adam
+F	1465.19-1471.88	 started to talk while Andreas was talking and his pitch was rising Andreas pitch That kind of thing
+C	1472.42-1473.77	 Right I mean that gonna be
+C	1474.35-1478.66	 Is the rising pitch a feature or is it gonna be in the same file
+F	1478.59-1486.82	 Well the rising pitch will never be hand annotated So the all the prosodic features are going to be automatically So they're gonna be in those
+C	1484.14-1485.07	 But the
+C	1485.47-1492.06	 I mean that gonna be hard regardless right Because you're gonna have to write a program that goes through your feature file and looks for rising pitches
+A	1489.68-1489.95	 Yeah
+F	1491.1-1494.46	 So Right So normally what we would do is we would say
+F	1494.46-1499.15	 what do we wanna assign rising pitch to Are we gonna assign it to words Are we gonna just assign it to sort of
+F	1499.51-1504.59	 when it rising we have a begin end rise representation But suppose we dump out this file and we say
+F	1505.07-1509.36	 uh for every word we just classify it as you know rise or fall or neither
+C	1509.65-1513.23	 OK Well in that case you would add that to this format
+F	1510.08-1510.46	 OK
+F	1512.78-1514.68	 So we would basically be sort of um
+F	1515.67-1518.83	 taking the format and enriching it with things that we wanna
+F	1519.37-1524.29	 query in relation to the words that are already in the file and then querying it OK
+C	1522.07-1522.3	 Right
+A	1523.86-1527.38	 You want sort of a grep that that works at the structural
+C	1527.3-1528.31	 You have that
+A	1527.83-1529.51	 on the structural representation
+C	1528.82-1538.46	 There a standard again in XML specifically for searching XML documents structured XML documents where you can specify both the content and the structural position
+A	1539.57-1542.17	 Yeah but it it not clear that that
+F	1542.49-1543.2	 If
+A	1542.93-1548.27	 That relative to the structure of the XML document not to the structure of what you're representing in the document
+C	1545.36-1546.53	 You use it as a tool
+C	1546.99-1553.85	 You use it as a tool not an end user It not an end user thing It it you would use that to build your tool to do that sort of search
+A	1549.8-1550.31	 Right
+A	1552.48-1552.73	 Right
+A	1553.41-1553.85	 Be
+F	1554.02-1554.95	 Uh
+A	1554.18-1558.04	 Because here you're specifying a lattice So the underlying
+A	1558.09-1562.32	 that the underlying data structure And you want to be able to search in that lattice
+F	1559.58-1561.22	 But as long as the
+C	1561.58-1562.93	 It a graph but
+A	1563.24-1565.44	 That different from searching through the text
+F	1564.37-1566.94	 But it seems like as long as the features that
+C	1566.28-1570.32	 Well no no no The whole point is that the text and the lattice are isomorphic
+C	1571.01-1573.49	 They represent each other completely
+A	1573.89-1574.66	 Um
+C	1575.07-1575.87	 So that
+F	1577.58-1585.77	 That true if the features from your acoustics or whatever that are not explicitly in this are at the level of these types
+C	1577.58-1577.87	 I mean
+A	1578.55-1579.75	 Hhh
+F	1586.29-1587.24	 That that if you can
+C	1587.47-1589.36	 Yeah but that gonna be the trouble no matter what
+F	1588.29-1589.0	 do that
+C	1589.78-1593.97	 Right No matter what format you choose you're gonna have the you're gonna have the difficulty of relating
+F	1594.02-1600.61	 That right That true That why I was trying to figure out what the best format for this representation And it still gonna be
+C	1594.38-1597.13	 the the frame level features
+C	1599.21-1599.43	 Yep
+F	1601.93-1604.73	 it still gonna be uh not direct You know it
+A	1602.4-1602.86	 Hmm
+C	1604.23-1604.46	 Right
+F	1605.66-1611.19	 Or another example was you know uh where in the language where in the word sequence
+F	1612.56-1614.74	 are people interrupting So
+F	1615.92-1617.24	 I guess that one actually easier
+D	1618.38-1621.21	 What about what about um
+D	1621.78-1632.35	 the idea of using a relational database to uh store the information from the XML So you would have XML basically would
+D	1633.67-1637.14	 Uh you you could use the XML to put the data in
+D	1637.25-1640.92	 and then when you get data out you put it back in XML So use XML as sort of the
+C	1640.23-1641.05	 Transfer
+D	1640.98-1644.66	 the transfer format uh but then you store the data in the database which
+C	1645.37-1646.36	 The uh
+D	1645.45-1648.63	 allows you to do all kinds of good search things in there
+C	1648.35-1653.59	 One of the things that ATLAS is doing is they're trying to define an API which is independent of the back store
+F	1649.49-1649.74	 Huh
+C	1654.94-1661.46	 so that uh you could define a single API and the the storage could be flat XML files or a database
+D	1658.97-1660.59	 Mm hmm
+C	1661.51-1668.97	 My opinion on that is for the sort of stuff that we're doing I suspect it overkill to do a full relational database that um
+A	1668.58-1670.35	 But
+C	1670.2-1674.88	 just a flat file and uh search tools I bet will be enough
+C	1675.78-1678.39	 But that the advantage of ATLAS is that if we actually take
+C	1679.07-1685.48	 decide to go that route completely and we program to their API then if we wanted to add a database later it would be pretty easy
+D	1680.53-1680.98	 Mm hmm
+D	1682.84-1683.13	 Mm hmm
+F	1688.04-1696.13	 It seems like the kind of thing you'd do if I don't know if people start adding all kinds of bells and whistles to the data And so that might be
+F	1696.09-1698.89	 I mean it'd be good for us to know to use a format where
+F	1700.13-1705.18	 we know we can easily um input that to some database if other people are using it
+C	1703.99-1704.25	 Yep
+F	1705.62-1706.21	 Something like that
+C	1706.26-1711.63	 I guess I'm just a little hesitant to try to go whole hog on sort of the
+F	1707.32-1708.09	 So
+C	1712.67-1718.1	 the whole framework that that NIST is talking about with ATLAS and a database and all that sort of stuff cuz it a big learning curve
+D	1718.66-1719.02	 Hmm
+C	1719.21-1721.98	 just to get going Whereas if we just do a flat file format
+A	1719.33-1719.69	 Hmm
+C	1723.03-1727.23	 sure it may not be as efficient but everyone can program in Perl and and use it
+F	1726.83-1727.89	 OK
+C	1729.12-1731.14	 Right So as opposed to
+A	1729.42-1732.9	 But this is I I'm still um
+A	1732.96-1740.8	 not convinced that you can do much at all on the text on the flat file that that you know the text representation
+A	1742.05-1744.32	 Because the text representation is gonna be
+A	1745.46-1750.66	 uh not reflecting the structure of of your words and annotations
+A	1751.51-1752.76	 It just it
+C	1751.73-1758.49	 Well if it not representing it then how do you recover it Of course it representing it That the whole point
+A	1754.83-1758.37	 No You you have to what you have to do is you have to basically
+A	1758.77-1765.0	 yeah You can use Perl to read it in and construct a internal representation that is essentially a lattice
+A	1766.57-1766.94	 But
+D	1767.35-1768.56	 Yeah
+A	1767.36-1769.15	 the and then
+C	1768.41-1770.89	 OK Well that was a different point Right So what I was saying
+A	1770.05-1770.99	 Right
+C	1771.34-1772.82	 is that
+A	1772.4-1773.56	 But that what you'll have to do
+C	1774.04-1785.54	 For Perl if you want to just do Perl If you wanted to use the structured XML query language that a different thing And it a set of tools that let you specify given the DDT DTD of the document
+A	1774.31-1774.72	 Bec
+C	1786.32-1789.34	 um what sorts of structural searches you want to do
+C	1790.38-1792.48	 So you want to say that you know you're looking for
+C	1793.47-1798.24	 um a tag within a tag within a particular tag that has this particular text in it
+C	1798.81-1801.69	 um and uh refers to a particular value
+C	1802.79-1811.43	 And so the point isn't that an end user who is looking for a query like you specified wouldn't program it in this language What you would do is
+C	1811.51-1814.48	 someone would build a tool that used that as a library
+C	1816.36-1820.4	 So that they so that you wouldn't have to construct the internal representations yourself
+F	1819.03-1819.49	 Is a
+F	1822.33-1827.67	 See I think the kinds of questions at least in the next to the end of this year are
+F	1828.3-1831.5	 there may be a lot of different ones but they'll all have a similar nature They'll be
+F	1832.41-1835.44	 looking at either a word level prosodic
+F	1836.96-1841.7	 uh an a value like a continuous value like the slope of something But
+C	1839.06-1839.45	 Mm hmm
+F	1842.33-1844.26	 you know we'll do something where we
+F	1844.79-1850.13	 some kind of data reduction where the prosodic features are sort uh either at the word level or at the
+F	1850.63-1856.0	 segment level or or something like that They're not gonna be at the phone level and they're not gonna be at the frame level when we get done with
+C	1851.48-1851.77	 Right
+F	1856.96-1859.43	 sort of giving them simpler shapes and things
+F	1860.22-1862.96	 And so the main thing is just being able
+F	1864.97-1867.69	 Well I guess the two goals Um one that Chuck mentioned is
+F	1867.99-1874.02	 starting out with something that we don't have to start over that we don't have to throw away if other people want to extend it for other kinds of questions
+C	1872.57-1872.84	 Right
+F	1874.03-1878.17	 and being able to at least get enough uh information out on
+F	1879.81-1886.68	 where we condition the location of features on information that in the kind of file that you put up there
+F	1887.24-1889.45	 And that would that would do it I mean for me
+C	1888.73-1895.37	 Yeah I think that there are quick and dirty solutions and then there are long term big infrastructure solutions And so
+C	1895.63-1898.17	 we want to try to pick something that lets us do a little bit of both
+F	1897.47-1903.33	 In the between right And especially that the representation doesn't have to be thrown away even if your tools change
+C	1898.95-1899.91	 Um
+C	1901.3-1901.61	 Right
+C	1903.56-1907.94	 And so it seems to me that I mean I have to look at it again to see whether it can really do what we want
+C	1908.01-1911.62	 but if we use the ATLAS external file representation
+C	1912.84-1913.36	 um
+C	1914.07-1918.97	 it seems like it rich enough that you could do quick tools just as I said in Perl
+F	1919.01-1919.4	 Yeah
+C	1919.08-1925.1	 and then later on if we choose to go up the learning curve we can use the whole ATLAS infrastructure
+F	1925.34-1927.5	 I mean that sounds good to me I I don't
+C	1926.21-1927.45	 which has all that built in
+F	1928.07-1931.38	 So if if you would look at that and let us know what you think I mean
+C	1930.5-1930.69	 Sure
+F	1931.57-1937.1	 I think we're sort of guinea pigs cuz I I want to get the prosody work done but I don't want to waste time you know
+A	1936.5-1937.22	 Oh maybe
+F	1937.98-1938.8	 getting the Yeah
+A	1939.27-1939.77	 um
+C	1940.0-1943.39	 Well I wouldn't wait for the formats because anything you pick we'll be able to translate
+A	1941.36-1942.58	 Well
+C	1944.37-1945.14	 to another form
+A	1945.42-1950.44	 Ma well maybe you should actually look at it yourself too to get a sense of
+F	1946.0-1946.41	 OK
+A	1951.21-1953.25	 what it is you'll you'll be dealing with because
+A	1954.2-1954.77	 um
+A	1955.82-1959.11	 you know Adam might have one opinion but you might have another so
+B	1958.21-1958.54	 Yeah
+F	1958.79-1959.54	 Yeah definitely
+A	1960.63-1962.47	 I think the more eyes look at this the better
+F	1962.66-1967.47	 Especially if there um you know if someone can help with at least the
+F	1968.34-1970.32	 the setup of the right
+F	1970.32-1972.04	 Oh hi
+C	1970.53-1971.02	 Hi Jane
+A	1971.73-1972.01	 Mmm
+F	1974.51-1982.74	 the right representation then you know I hope it won't We don't actually need the whole full blown thing to be ready so
+C	1980.44-1981.7	 Can you Oh well
+F	1984.13-1989.17	 Um so maybe if you guys can look at it and sort of see what
+C	1987.22-1987.38	 Sure
+B	1987.6-1987.88	 Yeah
+F	1989.48-1990.14	 um
+F	1990.97-1995.38	 I think we're we're we're actually just yeah wrapping up but um
+B	1991.37-1994.65	 Hmm
+C	1992.13-1993.71	 We're about done
+E	1994.85-1995.7	 Oh you are Oh
+F	1995.38-1998.42	 Yeah sorry it a uh short meeting but um
+F	1998.89-2000.58	 Well I don't know Is there anything else like
+F	2001.12-2002.69	 I mean that helps me a lot but
+C	2001.49-2009.92	 Well I think the other thing we might want to look at is alternatives to file I mean the reason I like file is I'm already familiar with it we have expertise here
+C	2010.41-2015.66	 and so if we pick something else there the learning curve problem But I mean it is just something we developed at ICSI
+C	2016.21-2016.94	 And so
+A	2016.31-2018.11	 Is there an is there an IP API
+C	2019.13-2021.45	 Yeah There an API for it And uh
+A	2019.7-2020.1	 OK
+A	2021.66-2024.57	 There used to be a problem that they get too large
+C	2022.13-2024.0	 a bunch of libraries file utilities
+A	2024.97-2028.44	 and so basically the uh the filesystem
+C	2028.78-2032.92	 Well that gonna be a problem no matter what You have the two gigabyte limit on the filesystem size
+A	2029.1-2029.75	 wouldn't
+C	2033.14-2035.15	 And we definitely hit that with Broadcast News
+A	2036.45-2040.99	 Maybe you could extend the API to uh support uh like splitting up
+A	2041.65-2047.1	 you know conceptually one file into smaller files on disk so that you can essentially
+C	2047.5-2047.78	 Yep
+A	2047.85-2049.85	 you know have arbitrarily long
+C	2048.51-2050.69	 Most of the tools can handle that So that
+A	2050.15-2050.61	 Yeah
+C	2051.2-2059.01	 we didn't do it at the API level We did it at the tool level That that most many of them can you can specify several files and they'll just be done sequentially
+A	2059.68-2060.04	 OK
+C	2060.25-2060.45	 So
+F	2062.04-2068.61	 So I guess yeah if if you and Don can if you can show him the file stuff and see So this would be like for the zero
+C	2065.99-2066.25	 Sure
+C	2066.39-2070.32	 I mean if you do man file or apropos file you'll see a lot
+B	2067.05-2067.47	 True
+B	2068.87-2073.52	 I've used the file I think I've looked at it at least briefly I think when we were doing
+A	2074.17-2075.67	 What does the stand for anyway
+B	2074.69-2076.03	 something
+C	2075.53-2079.42	 I have no idea
+B	2078.26-2078.54	 Oh in there
+C	2080.04-2083.12	 I didn't I didn't develop it You know it was I think it was Dave Johnson
+C	2084.02-2087.28	 So it all part of the Quicknet library It has all the utilities for it
+A	2088.29-2090.9	 No files were around way before Quicknet
+C	2090.87-2091.24	 Oh were they
+A	2090.95-2094.67	 files were were around when with um RAP
+D	2094.85-2095.37	 Mm hmm
+F	2094.87-2098.11	 It like the history of ICSI Like
+A	2095.41-2095.81	 Right
+A	2096.47-2100.77	 You worked with files I worked with files
+C	2097.58-2097.98	 Mm hmm
+D	2097.67-2098.12	 No
+F	2098.55-2098.79	 Yeah
+D	2101.06-2102.32	 I don't remember what the is though
+E	2102.16-2103.67	 Is it related to make
+A	2103.66-2104.05	 No
+C	2105.01-2106.28	 But there are they're
+C	2107.0-2111.07	 The Quicknet library has a bunch of things in it to handle files so it works pretty well
+A	2109.57-2109.87	 Yeah
+F	2112.14-2117.38	 And that isn't really I guess as important as the the main I don't know what you call it the
+F	2117.38-2119.07	 the main sort of word level
+C	2117.74-2118.21	 Neither do I
+D	2118.31-2119.56	 Probably stands for Phil
+D	2120.96-2121.51	 Phil Kohn
+C	2122.94-2124.54	 It a Phil file
+D	2124.05-2124.34	 Yeah
+D	2125.84-2127.6	 That my guess
+F	2126.96-2127.15	 Huh
+F	2128.61-2135.22	 OK Well that really useful I mean this is exactly the kind of thing that I wanted to settle Um so
+C	2136.12-2140.27	 Yeah I've been meaning to look at the ATLAS stuff again anyway So just keep
+F	2136.62-2137.08	 Great
+F	2139.16-2139.48	 Yeah
+F	2140.25-2144.97	 I guess it also sort of a political I mean if if you feel like that a community that would
+F	2146.37-2148.63	 be good to tie into anyway then it
+F	2149.75-2150.86	 sounds like it worth doing
+C	2149.92-2150.68	 Yeah I think it it
+A	2150.57-2151.99	 I think there
+C	2151.03-2157.5	 And uh as I said I what I did with this stuff I based it on theirs It just they hadn't actually come up with an external format yet
+C	2158.13-2159.91	 So now that they have come up with a format
+A	2160.62-2161.89	 Mmm
+C	2160.96-2162.99	 it doesn't it seems pretty reasonable to use it
+C	2163.96-2165.05	 But let me look at it again
+F	2164.91-2165.72	 OK great
+C	2165.56-2166.92	 As I said that
+F	2166.23-2167.75	 Cuz we actually can start
+C	2167.09-2171.63	 There one level there one more level of indirection and I'm just blanking on exactly how it works
+C	2171.67-2173.37	 I gotta look at it again
+F	2174.88-2183.19	 I mean we can start with um I guess this input from Dave which you had printed out the channelized input Cuz he has all of the
+F	2183.78-2188.55	 channels you know with the channels in the tag and stuff like that So that would be directly
+C	2185.28-2185.91	 Yeah I've seen it
+C	2189.03-2189.21	 Yep
+F	2189.29-2189.87	 um
+C	2189.71-2190.66	 Easy easy to map
+F	2190.3-2192.48	 Yeah And so then it would just be a matter of getting
+F	2192.89-2198.32	 making sure to handle the annotations that are you know not at the word level and um
+B	2198.84-2200.44	 Where are those annotations coming from
+F	2199.0-2200.04	 to import
+F	2200.73-2203.89	 Well right now I Jane would would
+C	2202.38-2202.91	 Mm hmm
+F	2204.62-2204.82	 Yeah
+E	2207.66-2209.32	 Are you talking about the overlap annotations
+F	2209.29-2214.77	 Yeah any kind of annotation that like isn't already there Uh you know anything you can envision
+E	2213.18-2214.61	 Yeah
+E	2215.07-2219.91	 So what I was imagining was um so Dave says we can have unlimited numbers of green ribbons
+E	2220.42-2223.9	 And so put uh a a green ribbon on for an overlap code
+E	2223.95-2230.83	 And since we we I I think it important to remain flexible regarding the time bins for now
+E	2231.26-2233.22	 And so it nice to have
+E	2233.64-2241.16	 However you know you want to have it uh uh located in the discourse So um
+E	2241.66-2246.41	 if we if we tie the overlap code to the first word in the overlap
+E	2247.15-2250.74	 then you'll have a time marking It won't it'll be independent of the time bins
+E	2250.87-2257.09	 however these evolve shrink or whatever increase or Also you could have different time bins for different purposes
+E	2257.12-2264.3	 And having it tied to the first word in an overlap segment is unique uh you know anchored clear
+E	2265.08-2266.83	 And it would just end up on a separate ribbon
+E	2267.41-2269.56	 So the overlap coding is gonna be easy with respect to that
+C	2267.59-2267.86	 Right
+E	2271.86-2272.92	 You look puzzled
+D	2272.89-2277.13	 I I just I don't quite understand what these things are Uh
+E	2274.95-2279.7	 OK What the codes themselves Or the
+D	2278.11-2281.16	 Well overlap codes I'm not sure what that
+C	2280.14-2281.15	 Well I mean is that
+E	2281.6-2285.35	 Well we don't have to go into the codes We don't have to go into the codes But let me just
+D	2282.2-2283.96	 It probably doesn't matter No I
+C	2283.36-2286.0	 I mean it doesn't I mean that not for the topic of this meeting
+E	2286.11-2288.34	 No the idea is just to have a separate green ribbon
+E	2288.76-2294.74	 you know and and and let say that this is a time bin There a word here This is the first word of an overlapping segment of any length
+E	2295.51-2300.57	 overlapping with any other uh word uh segment of any length And um
+E	2301.53-2304.36	 then you can indicate that this here was perhaps a a backchannel
+E	2304.36-2310.95	 or you can say that it was um a usurping of the turn or you can you know any any number of categories But the fact is you have it time tagged
+E	2311.44-2315.76	 in a way that independent of the uh particular time bin that the word ends up in
+E	2316.13-2320.08	 If it a large unit or a small unit or we change the boundaries of the units
+A	2316.9-2317.3	 Mm hmm
+F	2320.09-2320.38	 Right
+E	2320.53-2323.51	 it still unique and and uh fits with the format
+E	2324.32-2325.33	 flexible all that
+A	2325.72-2326.14	 Um
+A	2328.32-2329.54	 it would be nice um
+A	2329.71-2331.93	 eh this is sort of regarding
+A	2331.92-2338.5	 uh uh it related but not directly germane to the topic of discussion but when it comes to annotations um
+A	2339.8-2349.22	 you often find yourself in the situation where you have different annotations of the same say word sequence
+E	2349.8-2350.49	 Yeah
+A	2350.24-2357.14	 OK And sometimes the word sequences even differ slightly because they were edited at one place but not the other
+E	2350.91-2351.43	 Yeah
+A	2357.21-2361.56	 So once this data gets out there some people might start annotating this for
+A	2363.53-2367.53	 I don't know dialogue acts or um
+A	2368.98-2374.88	 you know topics or what the heck You know there a zillion things that people might annotate this for
+A	2374.92-2376.87	 And the only thing that
+A	2377.32-2383.42	 is really sort of common among all the the various versions of this data is the word sequence
+E	2383.23-2383.82	 Yep
+A	2383.84-2385.2	 or approximately
+F	2384.74-2385.42	 Or the time
+A	2386.35-2392.64	 Or the times But see if you'd annotate dialogue acts you don't necessarily want to or topics you don't really want to be dealing with time marks
+F	2387.1-2387.66	 I guess
+A	2392.74-2396.03	 You'd it much more efficient for them to just see the word sequence right
+F	2394.7-2395.06	 Mm hmm
+A	2397.09-2404.15	 I mean most people aren't as sophisticated as as we are here with you know uh time alignments and stuff So
+A	2405.8-2408.59	 So the the the point is
+C	2407.48-2410.17	 Should should we mention some names on the people who are
+A	2409.82-2410.16	 Right
+A	2410.97-2416.13	 So um the my point is that you're gonna end up with
+A	2417.05-2422.37	 uh word sequences that are differently annotated And you want some tool
+A	2423.27-2428.09	 uh that is able to sort of merge these different annotations back into a single
+A	2428.96-2430.04	 uh version
+A	2430.81-2431.68	 OK
+A	2432.15-2438.39	 Um and we had this problem very massively uh at SRI when we worked uh a while back on
+A	2439.02-2440.37	 uh
+A	2440.4-2445.09	 well on dialogue acts as well as uh you know um what was it uh
+F	2445.38-2446.98	 Well all the Switchboard in it Yeah
+A	2445.86-2451.03	 utterance types There uh automatic uh punctuation and stuff like that
+A	2451.07-2454.94	 Because we had one set of annotations that were based on
+A	2455.63-2462.86	 uh one version of the transcripts with a particular segmentation and then we had another version that was based on
+A	2463.6-2468.46	 uh a different slightly edited version of the transcripts with a different segmentation So
+A	2468.94-2470.23	 we had these two different
+A	2471.35-2477.43	 versions which were you know you could tell they were from the same source but they weren't identical So it was extremely hard
+A	2478.03-2483.27	 to reliably merge these two back together to correlate the information from the different annotations
+C	2483.09-2488.03	 Yep I I don't see any way that file formats are gonna help us with that It it all a question of semantic
+A	2486.09-2486.5	 No
+A	2487.35-2491.33	 No But once you have a file format I can imagine writing
+F	2488.66-2489.0	 Mm hmm
+A	2491.95-2496.92	 not personally but someone writing a tool that is essentially an alignment tool
+C	2496.91-2497.16	 Yeah
+A	2497.39-2501.27	 um that mediates between various versions and
+A	2501.37-2505.5	 uh sort of like uh you know you have this thing in UNIX where you have uh
+C	2505.37-2505.97	 Diff
+F	2505.94-2507.31	 diff or diff Yeah
+A	2506.02-2506.18	 diff
+A	2506.68-2512.34	 There the uh diff that actually tries to reconcile different
+E	2511.64-2512.82	 Is it diff
+A	2512.34-2514.7	 two diffs based on the same original
+C	2514.15-2514.38	 Yep
+E	2514.65-2515.56	 Mmm
+A	2515.51-2516.36	 Something like that
+A	2516.84-2523.63	 um but operating on these lattices that are really what behind this uh this annotation format
+C	2522.36-2522.63	 Yep
+A	2523.63-2524.36	 So
+F	2523.68-2525.37	 You could definitely do that with the
+C	2523.8-2527.98	 There actually a diff library you can use to do things like that that
+A	2528.65-2534.96	 So somewhere in the API you would like to have like a merge or some some function that merges two
+C	2529.12-2530.22	 so you have different formats
+C	2535.6-2538.02	 Yeah I think it gonna be very hard Any sort of structured
+A	2535.69-2536.26	 two versions
+A	2538.84-2539.06	 Right
+C	2538.95-2542.43	 anything when you try to merge is really really hard because you
+C	2542.54-2547.74	 The hard part isn't the file format The hard part is specifying what you mean by merge
+A	2544.94-2545.74	 Is
+A	2546.68-2548.11	 Exactly
+F	2547.19-2552.74	 But the one thing that would work here actually for that is more reliable than the utterances is the
+C	2547.74-2549.47	 And that very difficult
+F	2553.77-2558.32	 the speaker ons and offs So if you have a good um
+C	2558.41-2561.67	 But this is exactly what I mean is that that the problem
+F	2559.16-2559.57	 Yeah
+F	2560.71-2562.65	 You just have to know what to tie it to
+C	2562.56-2568.04	 Yeah exactly The problem is saying what are the semantics what do you mean by merge So
+F	2563.3-2564.1	 And
+F	2566.23-2567.09	 Right right
+A	2566.74-2567.05	 Right
+A	2567.78-2572.94	 So so just to let you know what we where we kluged it by uh doing
+A	2573.72-2575.26	 uh by doing Hhh
+A	2575.3-2582.68	 Both were based on words so we have two versions of the same words you know sprinkled with with different tags for annotations
+C	2581.98-2585.44	 And then you did diff Yeah that just what I thought
+A	2582.82-2584.67	 And we did diff Exactly
+A	2585.03-2587.5	 And that how Yeah
+C	2585.44-2590.29	 That just how I would have done it
+A	2587.56-2592.7	 But you know it had lots of errors and things would end up in the wrong order and so forth Uh so
+C	2592.91-2593.18	 Yep
+A	2593.15-2595.65	 um if you had a more
+A	2595.71-2602.26	 Uh it it was a kluge because it was basically reducing everything to uh to uh uh to textual alignment
+C	2600.42-2601.3	 A textual
+A	2602.93-2604.29	 Um so
+F	2603.88-2608.29	 But isn't that something where whoever if if the people
+F	2608.72-2613.89	 who are making changes say in the transcripts cuz this all happened when the transcripts were different
+F	2614.18-2619.51	 um if they tie it to something like if they tied it to the acoustic segment if they
+F	2619.97-2627.49	 You know what I mean Then Or if they tied it to an acoustic segment and we had the time marks that would help But the problem is exactly as Adam said that you get
+C	2625.15-2625.39	 Yep
+F	2628.52-2632.86	 you know you don't have that information or it lost in the merge somehow so
+E	2632.01-2638.56	 Well can I ask one question It it seems to me that um we will have an official version of the corpus which will be only one
+E	2638.94-2641.25	 one version in terms of the words where the words are concerned
+E	2641.25-2645.05	 We'd still have the the merging issue maybe if coding were done independently of the
+A	2645.19-2650.57	 And you're gonna get that because if the data gets out people will do all kinds of things to it
+E	2645.45-2646.7	 But but
+A	2651.31-2656.96	 And uh you know several years from now you might want to look into um
+A	2657.68-2659.0	 the prosody of
+A	2661.12-2668.2	 referring expressions And someone at the university of who knows where has annotated the referring expressions
+C	2668.39-2668.67	 Right
+A	2668.42-2672.5	 So you want to get that annotation and bring it back in line with your data
+E	2672.36-2673.85	 OK then
+C	2672.72-2675.4	 But unfortunately they've also hand edited it
+A	2673.04-2673.76	 OK
+F	2674.27-2680.57	 But they've also Exactly And so that exactly what we should somehow when you distribute the data say that you know
+A	2675.96-2676.23	 Yeah
+C	2676.73-2676.97	 Yep
+A	2677.44-2677.69	 Right
+E	2678.19-2678.93	 Well then the
+F	2681.39-2686.05	 that have some way of knowing how to merge it back in and asking people to try to do that
+D	2684.99-2687.78	 What what wrong with doing times I
+E	2687.26-2688.66	 I agree That was what I was wondering
+F	2687.66-2693.97	 Uh yeah time is the Time is passing
+E	2689.75-2693.59	 Time is unique You were saying that you didn't think we should Andreas was saying Yeah
+C	2690.07-2690.35	 Well
+A	2692.06-2694.55	 Time time times are
+C	2694.93-2697.05	 what if they haven't notated with them times
+F	2695.38-2695.83	 Yeah
+A	2695.41-2696.09	 ephemeral
+F	2696.07-2698.83	 He he a language modeling person though
+A	2697.79-2698.47	 Um
+C	2698.05-2705.96	 So so imagine I think his his example is a good one Imagine that this person who developed the corpus of the referring expressions didn't include time
+A	2704.64-2705.09	 Mm hmm
+A	2706.21-2706.48	 Yeah
+E	2706.53-2707.24	 Ach
+C	2706.72-2712.29	 He included references to words He said that at this word is when when it happened Or she
+E	2708.06-2708.97	 Well then
+A	2708.66-2709.04	 Yeah
+A	2710.99-2711.51	 Or she
+E	2711.57-2715.22	 But then couldn't you just indirectly figure out the time tied to the word
+F	2712.01-2713.27	 But still they
+F	2713.76-2714.77	 Exactly Yeah
+C	2714.42-2716.58	 Sure But what if what if they change the words
+E	2716.76-2720.68	 Not Well but you'd have some anchoring point He couldn't have changed all the words
+D	2720.47-2722.98	 But can they change the words without changing the time of the word
+C	2721.02-2722.7	 Sure But they could have changed it a little
+C	2723.79-2732.74	 The the point is that that they may have annotated it off a word transcript that isn't the same as our word transcript so how do you merge it back in I understand what you're saying
+A	2731.84-2732.7	 Mmm Mm hmm
+C	2732.78-2734.7	 And I I guess the answer is
+C	2735.5-2737.77	 um it gonna be different every time
+C	2738.2-2739.89	 It it just gonna be
+F	2738.33-2738.74	 Yeah
+E	2738.64-2739.33	 Yeah
+F	2739.76-2741.84	 You only know the boundaries of the
+C	2740.13-2744.38	 it exactly what I said before which is that what do you mean by merge
+C	2744.48-2748.95	 So in this case where you have the words and you don't have the times well what do you mean by merge
+F	2749.14-2749.35	 Right
+C	2749.18-2751.64	 If you tell me what you mean I can write a program to do it
+F	2751.16-2755.98	 Right You can merge at the level of the representation that the other person preserved and that it
+C	2755.5-2757.32	 Right And that about all you can do
+F	2756.11-2760.12	 And beyond that all you know is is relative ordering and sometimes even that is wrong
+C	2760.15-2765.56	 So so in so in this one you would have to do a best match between the word sequences
+F	2761.08-2761.37	 So
+A	2765.37-2765.85	 Mm hmm
+C	2765.64-2770.06	 extract the times from the best match of theirs to yours and use that
+F	2769.33-2772.69	 And then infer that their time marks are somewhere in between Yeah exactly
+C	2771.2-2771.44	 Right
+E	2772.18-2779.15	 But it could be that they just uh I mean it could be that they chunked they they lost certain utterances and all that stuff or
+C	2777.55-2781.41	 Right exactly So it could get very very ugly
+F	2779.02-2780.45	 Definitely Definitely
+E	2780.28-2780.57	 Yeah
+F	2781.52-2789.07	 Alright Well I guess I I didn't want to keep people too long and Adam wanted people I'll read the digits If anyone else offers to that'd be great And
+E	2781.73-2783.01	 That interesting
+A	2789.41-2795.16	 Ah well For for the for the benefit of science we'll read the digits
+F	2789.62-2790.87	 if not I guess
+C	2789.69-2789.85	 Yeah
+C	2790.56-2792.64	 More digits the better OK this is
+F	2791.86-2797.75	 Thanks thanks a lot It really helpful I mean Adam and Don will sort of meet and I think that great Very useful
+C	2797.89-2800.27	 transcript two seven three one two seven five
+C	2801.11-2802.6	 eight five five one
+C	2803.02-2804.68	 nine five zero six one
+C	2805.04-2806.01	 seven eight
+C	2806.01-2806.63	 zero
+F	2806.45-2807.34	 Go next
+C	2806.63-2807.6	 one
+C	2807.6-2808.57	 two zero two
+C	2809.01-2811.21	 four four three four four two seven
+C	2811.51-2812.63	 five five six
+C	2812.63-2814.87	 six six nine eight five
+C	2815.2-2816.42	 seven six five
+C	2816.79-2817.84	 eight eight four
+C	2817.84-2818.42	 nine
+C	2818.62-2820.27	 one nine one
+C	2820.59-2822.09	 one five six one four
+C	2822.4-2824.91	 two seven four eight five six zero
+C	2825.31-2826.22	 three four
+C	2826.22-2827.32	 four five
+C	2827.32-2828.12	 five
+C	2828.12-2828.76	 six
+C	2828.76-2829.73	 seven
+D	2829.86-2833.36	 Transcript one five one one dash one five three zero
+F	2830.06-2830.99	 Let me
+D	2834.07-2834.74	 zero
+D	2835.42-2837.71	 one six six seven three nine
+D	2838.34-2840.41	 three one zero five eight eight one
+D	2841.28-2842.66	 four five three eight
+D	2843.29-2844.98	 five nine four three four
+D	2845.37-2847.64	 six six one three four eight
+D	2848.22-2848.83	 seven
+D	2849.36-2851.57	 eight zero one one two four three
+D	2852.28-2853.68	 eight seven two nine
+D	2854.92-2855.76	 Scratch that
+D	2855.76-2857.24	 nine seven two nine
+D	2858.06-2859.13	 zero one
+D	2859.91-2861.38	 one three nine four
+D	2861.76-2862.88	 two two five
+D	2863.37-2864.72	 three eight seven
+D	2865.04-2865.78	 four
+D	2866.15-2866.79	 five
+D	2867.39-2868.52	 seven two two
+D	2869.02-2870.12	 eight one zero
+D	2870.53-2871.84	 nine five one
+D	2872.34-2873.37	 nine eight
+D	2873.58-2874.45	 zero
+E	2876.38-2879.24	 Transcript one four five one one four seven
+E	2879.65-2881.3	 nine five two
+E	2881.52-2883.21	 three four seven
+E	2884.06-2886.51	 zero seven one three six
+E	2887.28-2888.64	 one nine two
+E	2889.09-2889.91	 two
+E	2889.91-2892.27	 three six seven three two
+C	2890.7-2891.69	 Oh right
+E	2892.65-2894.51	 four zero one zero four
+E	2895.11-2896.94	 six two one
+E	2897.34-2898.55	 seven five one
+E	2899.01-2901.35	 eight five one two four five five
+E	2901.9-2903.49	 nine five seven one
+E	2903.76-2905.26	 four nine
+E	2905.57-2906.33	 zero
+E	2906.91-2909.1	 one zero eight one seven nine zero
+E	2909.81-2911.33	 three three six one three
+E	2911.65-2913.32	 four four five eight zero
+E	2913.77-2915.26	 five two five one
+E	2915.43-2916.67	 six six zero
+E	2916.86-2918.57	 seven seven four three seven
+E	2918.69-2919.19	 eight
+F	2920.61-2924.45	 Transcript number three three three one three three five zero
+F	2925.04-2927.37	 one three seven seven eight one zero
+F	2927.92-2929.67	 two five nine five five
+F	2929.99-2930.85	 three eight
+F	2931.12-2932.59	 four eight nine two
+F	2932.92-2933.57	 five
+F	2933.97-2934.89	 six
+F	2934.89-2936.59	 seven zero five one
+F	2936.9-2937.7	 nine one
+F	2938.1-2939.2	 three three
+F	2939.6-2941.18	 zero eight five eight three
+F	2941.69-2943.06	 one four one
+F	2943.51-2944.05	 two
+F	2944.47-2945.91	 three three six
+F	2946.16-2946.99	 four zero
+F	2947.29-2948.55	 six one three zero
+F	2948.85-2950.09	 seven six five
+F	2950.53-2951.85	 eight three seven
+F	2951.85-2953.18	 nine nine three
+F	2954.32-2955.2	 zero
+A	2955.84-2959.8	 Transcript thirty six eleven thirty six thirty
+A	2960.33-2962.68	 two two five two five nine
+A	2963.18-2964.3	 three four two
+A	2964.57-2965.07	 four
+A	2965.4-2966.01	 five
+A	2966.01-2966.75	 six
+A	2966.75-2968.35	 seven eight
+A	2968.35-2969.98	 nine four eight two six
+A	2969.98-2970.89	 three
+A	2970.89-2972.4	 zero eight eight zero
+A	2972.4-2973.04	 one
+A	2973.04-2973.66	 two
+A	2973.66-2974.18	 three
+A	2974.18-2975.03	 four
+A	2975.03-2975.97	 six one
+A	2975.97-2977.29	 seven five seven
+A	2977.29-2979.71	 eight four five three seven nine one
+A	2979.71-2981.08	 nine five seven zero
+A	2981.38-2982.59	 two five
+A	2982.59-2983.21	 zero
+A	2983.21-2984.21	 one
+B	2984.49-2988.07	 Transcript two nine seven one dash two nine nine zero
+B	2988.78-2990.18	 seven seven nine
+B	2990.18-2991.07	 eight nine
+B	2991.07-2992.35	 nine two
+B	2993.28-2994.82	 one one zero one
+B	2995.29-2996.94	 two four five two
+B	2996.94-2998.05	 three seven
+B	2998.05-2999.18	 four four
+B	2999.18-2999.94	 five
+B	2999.94-3000.78	 six
+B	3000.78-3001.89	 seven
+B	3002.51-3004.39	 nine one four six zero
+B	3004.39-3006.06	 three nine four
+B	3006.06-3006.88	 zero
+B	3007.31-3009.57	 one eight one nine nine five eight
+B	3010.24-3012.26	 two eight three seven five nine
+B	3012.26-3013.08	 three
+B	3013.08-3014.67	 four seven three
+B	3014.98-3016.77	 six two six two six
+B	3016.77-3018.76	 seven three zero one
